@@ -4,7 +4,7 @@ start:
 	./game
 
 build: game.c
-	gcc -o game game.c -lncurses
+	g++ -o game game.cpp -lncurses
 
 clean:
 	rm -f *.o game
