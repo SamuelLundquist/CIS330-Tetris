@@ -12,14 +12,8 @@ Qi Han
 
 using namespace std;
 
-int main(){
-
-   int height,width, start_x, start_y;
-   height = 35;    
-   width = 50; 
-   start_x = start_y = 1;
-
-
+int main()
+{
    initscr();
 
    WINDOW * gameWin, *scoreWin, *hintWin;
