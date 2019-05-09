@@ -12,11 +12,15 @@ Qi Han
 
 using namespace std;
 
+//Where the information for occupancy of cells will be stored
+char** block_data;
+
+//Define all windows
+WINDOW * gameWin, *scoreWin, *hintWin;
+
 int main()
 {
    initscr();
-
-   WINDOW * gameWin, *scoreWin, *hintWin;
     
    gameWin = newwin(gameWin_height, gameWin_width, gameWin_y, gameWin_x);
    scoreWin = newwin(scoreWin_height, scoreWin_width, scoreWin_y, scoreWin_x);

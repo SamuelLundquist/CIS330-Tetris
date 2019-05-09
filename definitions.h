@@ -17,3 +17,9 @@ const int hintWin_x = 58;
 const int hintWin_y = 1;
 
 #endif
+
+struct block{
+
+
+
+} BLOCK;
