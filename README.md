@@ -7,4 +7,8 @@ THE GOAL: A version of tetris using ncurses and C++
 - Samuel Lundquist - slundqui@uoregon.edu
 - Qi Han - qhan@uoregon.edu
 
+##Makefile Usage
+- $ make build //compiles the c code
+- $ make run //runs the game
+- $ make clean //removes game object file
 

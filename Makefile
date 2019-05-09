@@ -1,12 +1,12 @@
 .PHONY: run, build, clean
 
-start:
+run:
 	./game
 
-build: game.c
-	g++ -o game game.cpp -lncurses
+build: Tetris-windows.cpp
+	g++ -o game Tetris-windows.cpp -lncurses
 
 clean:
-	rm -f *.o game
+	rm -f game
 
 default: build
