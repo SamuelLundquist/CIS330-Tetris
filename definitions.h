@@ -38,3 +38,8 @@ typedef struct block{
 	unsigned char y;
 	unsigned char color;
 } BLOCK;
+
+typedef struct score{
+	int pts;
+	int lns;
+} SCORE;

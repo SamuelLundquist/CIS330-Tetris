@@ -116,6 +116,14 @@ void initColors()
     init_pair(10, COLOR_BLACK, COLOR_WHITE);  //Title Color
 }
 
+void updateScore(SCORE score)
+{
+    mvwprintw(scoreWin, 2, 9, "%d", score.pts);
+    mvwprintw(scoreWin, 4, 9, "%d", score.lns);
+    wrefresh(scoreWin);
+    refresh();
+}
+
 void initWindows()
 {
     gameWin = newwin(gameWin_height, gameWin_width, gameWin_y, gameWin_x);
@@ -174,6 +182,8 @@ void initWindows()
     //Init Score Win
     box(scoreWin, 0, 0);
     mvwprintw(scoreWin, 0, 6, " SCORE ");
+    mvwprintw(scoreWin, 2, 2, "Score: 0");
+    mvwprintw(scoreWin, 4, 2, "Lines: 0");
     wrefresh(scoreWin);
 
     //Init Controls Win
@@ -199,6 +209,12 @@ int main()
    initWindows();
 
    initBlockData();
+
+   getch();
+
+   SCORE sc = {10, 10};
+
+   updateScore(sc);
 
    getch();
 
