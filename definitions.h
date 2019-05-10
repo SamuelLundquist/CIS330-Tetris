@@ -27,7 +27,7 @@ const int controlsWin_x = 54;
 const int controlsWin_y = 21;
 
 const int titleWin_height = 35;
-const int titleWin_width = 20;
+const int titleWin_width = 16;
 const int titleWin_x = 76;
 const int titleWin_y = 1;
 
