@@ -11,15 +11,20 @@ const int gameWin_width = 50;
 const int gameWin_x = 2;
 const int gameWin_y = 1;
 
-const int scoreWin_height = 25;
-const int scoreWin_width = 20;
-const int scoreWin_x = 54;
-const int scoreWin_y = 11;
-
 const int hintWin_height = 10;
 const int hintWin_width = 20;
 const int hintWin_x = 54;
 const int hintWin_y = 1;
+
+const int scoreWin_height = 10;
+const int scoreWin_width = 20;
+const int scoreWin_x = 54;
+const int scoreWin_y = 11;
+
+const int controlsWin_height = 15;
+const int controlsWin_width = 20;
+const int controlsWin_x = 54;
+const int controlsWin_y = 21;
 
 const int titleWin_height = 35;
 const int titleWin_width = 20;

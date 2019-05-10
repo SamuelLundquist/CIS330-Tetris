@@ -16,13 +16,14 @@ using namespace std;
 char** block_data;
 
 //Define all windows
-WINDOW * gameWin, *scoreWin, *hintWin, *titleWin;
+WINDOW * gameWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
 
 
 void windowsInit()
 {
     gameWin = newwin(gameWin_height, gameWin_width, gameWin_y, gameWin_x);
     scoreWin = newwin(scoreWin_height, scoreWin_width, scoreWin_y, scoreWin_x);
+    controlsWin = newwin(controlsWin_height, controlsWin_width, controlsWin_y, controlsWin_x);
     hintWin = newwin(hintWin_height, hintWin_width, hintWin_y, hintWin_x);
     titleWin = newwin(titleWin_height, titleWin_width, titleWin_y, titleWin_x);
     refresh();
@@ -73,13 +74,18 @@ void windowsInit()
     wrefresh(titleWin);
 
     //Init Score Win
-    box(scoreWin,0,0);
-    mvwprintw(scoreWin, 19, 5, "Controls:");
-    mvwprintw(scoreWin, 20, 2, "Left: left arr");
-    mvwprintw(scoreWin, 21, 2, "Right: right arr");
-    mvwprintw(scoreWin, 22, 2, "Drop: down arr");
-    mvwprintw(scoreWin, 23, 2, "Rotate: up arr");
+    box(scoreWin, 0, 0);
+    mvwprintw(scoreWin, 0, 6, " SCORE ");
     wrefresh(scoreWin);
+
+    //Init Controls Win
+    box(controlsWin,0,0);
+    mvwprintw(controlsWin, 0, 5, " CONTROLS ");
+    mvwprintw(controlsWin, 2, 2, "Left: left arr");
+    mvwprintw(controlsWin, 4, 2, "Right: right arr");
+    mvwprintw(controlsWin, 6, 2, "Drop: down arr");
+    mvwprintw(controlsWin, 8, 2, "Rotate: up arr");
+    wrefresh(controlsWin);
 
     refresh();
 }
