@@ -1,7 +1,0 @@
-- make funtion to return pointer to location in game window from coordinates
-- function to update game window
-- function check rows
-- function to draw block
-- function to drop block
-- funtion to fix block (if rotate would cause issue)
-- function to keep track of points
