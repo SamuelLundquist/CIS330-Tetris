@@ -13,7 +13,7 @@ Qi Han
 using namespace std;
 
 //Where the information for occupancy of cells will be stored
-unsigned char** block_data;
+char** block_data;
 
 //Define all windows
 WINDOW * gameWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
@@ -77,6 +77,28 @@ const BLOCK blocks[7][4][4] =
    }
 
 };
+
+void initBlockData()
+{
+    block_data = (char**)malloc(sizeof(char*) * gameWin_height);
+    for(int i = 0; i < gameWin_height; i++)
+    {
+        block_data[i] = (char*)malloc(sizeof(char) * gameWin_width);
+        for(int j = 0; j < gameWin_width; j++)
+        {
+            block_data[i][j] = 0;
+        }
+    }
+}
+
+void freeBlockData()
+{
+    for(int i = 0; i < gameWin_height; i++)
+    {
+        free(block_data[i]);
+    }
+    free(block_data);
+}
 
 void windowsInit()
 {
@@ -157,7 +179,12 @@ int main()
 
    windowsInit();
 
+   initBlockData();
+
    getch();
+
+   freeBlockData();
+   
    endwin();
    return 0;
 }
