@@ -1,3 +1,8 @@
+#define MOVE_LEFT = 68 //key left
+#define MOVE_RIGHT = 67 //key right
+#define DROP_BLOCK = 66 //key down
+#define ROTATE_BLOCK = 65 //key up
+
 #if !defined(DEFINITIONS_H)
 #define DEFINITIONS_H 1
 
