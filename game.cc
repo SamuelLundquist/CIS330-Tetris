@@ -116,12 +116,13 @@ void initColors()
     init_pair(10, COLOR_BLACK, COLOR_WHITE);  //Title Color
 }
 
+//Given a new score value, updates to score window
 void updateScore(SCORE score)
 {
     mvwprintw(scoreWin, 2, 9, "%d", score.pts);
     mvwprintw(scoreWin, 4, 9, "%d", score.lns);
     wrefresh(scoreWin);
-    refresh();
+    move(0, 0);//move cursor back to 0,0 so next input isnt accidentally entered in score window
 }
 
 void initWindows()
@@ -195,7 +196,7 @@ void initWindows()
     mvwprintw(controlsWin, 8, 2, "Rotate: up arr");
     wrefresh(controlsWin);
 
-    refresh();
+    move(0, 0);//move cursor back to 0,0
 }
 
 
