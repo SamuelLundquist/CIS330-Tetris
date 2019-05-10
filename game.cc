@@ -13,10 +13,11 @@ Qi Han
 using namespace std;
 
 //Where the information for occupancy of cells will be stored
+//max index: block_data[blockHeight - 1][blockWidth-1]
 char** block_data;
 
 //Define all windows
-WINDOW * gameWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
+WINDOW *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
 
 /*
 Defines different types of blocks we might have
@@ -83,11 +84,11 @@ const BLOCK blocks[7][4][4] =
 
 void initBlockData()
 {
-    block_data = (char**)malloc(sizeof(char*) * gameWin_height);
-    for(int i = 0; i < gameWin_height; i++)
+    block_data = (char**)malloc(sizeof(char*) * blockWin_height);
+    for(int i = 0; i < blockWin_height; i++)
     {
-        block_data[i] = (char*)malloc(sizeof(char) * gameWin_width);
-        for(int j = 0; j < gameWin_width; j++)
+        block_data[i] = (char*)malloc(sizeof(char) * blockWin_width);
+        for(int j = 0; j < blockWin_width; j++)
         {
             block_data[i][j] = 0;
         }
@@ -96,7 +97,7 @@ void initBlockData()
 
 void freeBlockData()
 {
-    for(int i = 0; i < gameWin_height; i++)
+    for(int i = 0; i < blockWin_height; i++)
     {
         free(block_data[i]);
     }
@@ -106,13 +107,14 @@ void freeBlockData()
 void initColors()
 {
     start_color();
-    init_pair(0, COLOR_BLACK, COLOR_CYAN);    //Block 1 Color
-    init_pair(1, COLOR_BLACK, COLOR_MAGENTA); //Block 2 Color
-    init_pair(2, COLOR_BLACK, COLOR_YELLOW);  //Block 3 Color
-    init_pair(3, COLOR_BLACK, COLOR_RED);     //Block 4 Color
-    init_pair(4, COLOR_BLACK, COLOR_BLUE);    //Block 5 Color
-    init_pair(5, COLOR_BLACK, COLOR_GREEN);   //Block 6 Color
-    init_pair(6, COLOR_BLACK, COLOR_WHITE);   //Block 7 Color
+    init_pair(0, COLOR_WHITE, COLOR_BLACK);   //Empty Color
+    init_pair(1, COLOR_BLACK, COLOR_CYAN);    //Block 1 Color
+    init_pair(2, COLOR_BLACK, COLOR_MAGENTA); //Block 2 Color
+    init_pair(3, COLOR_BLACK, COLOR_YELLOW);  //Block 3 Color
+    init_pair(4, COLOR_BLACK, COLOR_RED);     //Block 4 Color
+    init_pair(5, COLOR_BLACK, COLOR_BLUE);    //Block 5 Color
+    init_pair(6, COLOR_BLACK, COLOR_GREEN);   //Block 6 Color
+    init_pair(7, COLOR_BLACK, COLOR_WHITE);   //Block 7 Color
     init_pair(10, COLOR_BLACK, COLOR_WHITE);  //Title Color
 }
 
@@ -125,9 +127,24 @@ void updateScore(SCORE score)
     move(0, 0);//move cursor back to 0,0 so next input isnt accidentally entered in score window
 }
 
+void updateBlockWindow()
+{
+    for (int y = 0; y < blockWin_height; y++)
+    {
+        for (int x = 0; x < blockWin_width; x++)
+        {
+            wattrset(blockWin, COLOR_PAIR(block_data[y][x]));
+            mvwprintw(blockWin, y, x * 2, "  ");
+        }
+    }
+    wrefresh(blockWin);
+    move(0,0);
+}
+
 void initWindows()
 {
     gameWin = newwin(gameWin_height, gameWin_width, gameWin_y, gameWin_x);
+    blockWin = newwin(blockWin_height, blockWin_width * 2, blockWin_y, blockWin_x);
     scoreWin = newwin(scoreWin_height, scoreWin_width, scoreWin_y, scoreWin_x);
     controlsWin = newwin(controlsWin_height, controlsWin_width, controlsWin_y, controlsWin_x);
     hintWin = newwin(hintWin_height, hintWin_width, hintWin_y, hintWin_x);
@@ -137,6 +154,9 @@ void initWindows()
     //Init Game Win
     box(gameWin,0,0);
     wrefresh(gameWin);
+
+    //Init Block Win
+    wrefresh(blockWin);
 
     //Init Hint Win
     box(hintWin,0,0);
@@ -213,9 +233,16 @@ int main()
 
    getch();
 
-   SCORE sc = {10, 10};
-
+   //Test for updating score data
+   SCORE sc = {1000, 10};
    updateScore(sc);
+
+   //Tests for updating block data
+   block_data[0][0] = 3;
+   block_data[2][4] = 2;
+   block_data[14][20] = 2;
+   block_data[32][23] = 3; 
+   updateBlockWindow();
 
    getch();
 

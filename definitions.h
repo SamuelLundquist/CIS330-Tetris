@@ -6,6 +6,11 @@
 #if !defined(DEFINITIONS_H)
 #define DEFINITIONS_H 1
 
+const int blockWin_height = 33;
+const int blockWin_width = 24;
+const int blockWin_x = 3;
+const int blockWin_y = 2;
+
 const int gameWin_height = 35;
 const int gameWin_width = 50;
 const int gameWin_x = 2;
