@@ -32,3 +32,9 @@ const int titleWin_x = 76;
 const int titleWin_y = 1;
 
 #endif
+
+typedef struct block{
+	unsigned char x;
+	unsigned char y;
+	unsigned char color;
+} BLOCK;
