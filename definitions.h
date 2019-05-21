@@ -39,10 +39,6 @@ const int titleWin_width = 16;
 const int titleWin_x = hintWin_x+22;
 const int titleWin_y = 1;
 
-#endif
-
-
-
 typedef struct piece {
 	char** blocks;
 	char* origin;
@@ -54,3 +50,5 @@ typedef struct score {
 	int pts;
 	int lns;
 } SCORE;
+
+#endif

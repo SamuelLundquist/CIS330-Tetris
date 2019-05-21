@@ -83,13 +83,18 @@ void initPieceData()
 void freePieceData()
 {
 	free(piece.origin);
+
+  for(int i = 0; i < piece_size; i++) 
+  {
+      free(piece.blocks[i]);
+  }
 	free(piece.blocks);
 }
 
 void initColors()
 {
     start_color();
-	init_pair(0, COLOR_WHITE, COLOR_BLACK);   //Empty Color
+    init_pair(0, COLOR_WHITE, COLOR_BLACK);   //Empty Color
     init_pair(1, COLOR_BLACK, COLOR_CYAN);    //Block 1 Color
     init_pair(2, COLOR_BLACK, COLOR_MAGENTA); //Block 2 Color
     init_pair(3, COLOR_BLACK, COLOR_YELLOW);  //Block 3 Color
@@ -116,7 +121,7 @@ void updateBlockWindow()
         {
             wattrset(blockWin, COLOR_PAIR(block_data[y][x]));
             mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
-			mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
+            mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
         }
     }
     wrefresh(blockWin);
@@ -223,6 +228,18 @@ void rmLine(int y)
 	}
 }
 
+//
+// Given array of x y coordinates, sets those coordinates
+// to zero in block_data, which removes the piece
+//
+void clearPiece(char** blocks)
+{
+  for(int i = 0; i < piece_size; i++)
+  {
+    block_data[blocks[i][1]][blocks[i][0]] = 0;
+  }
+}
+
 //rotate piece if space available
 //positive input = clockwise, negative = counterclockwise
 //
@@ -253,12 +270,7 @@ void rotate(int n)
 	int* newloc = (int*)malloc(sizeof(int)*2*piece_size);
 
 
-	//clear the original blocks from block data
-	for(int i = piece_size; i--;) 
-	{
-		block_data[piece.blocks[i][1]][piece.blocks[i][0]] = 0;
-	}
-
+	clearPiece(piece.blocks);
 
 	for(int i = piece_size; i--;) 
 	{
