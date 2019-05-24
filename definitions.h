@@ -40,15 +40,16 @@ const int titleWin_x = hintWin_x+22;
 const int titleWin_y = 1;
 
 typedef struct piece {
-	char** blocks;
-	char* origin;
+	unsigned int** blocks;
+	unsigned int* origin;
+	unsigned int color;
 	
 } PIECE;
 
 
 typedef struct score {
-	int pts;
-	int lns;
+	unsigned int pts;
+	unsigned int lns;
 } SCORE;
 
 #endif

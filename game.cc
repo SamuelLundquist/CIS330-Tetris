@@ -15,7 +15,7 @@ using namespace std;
 //Where the information for occupancy of cells will be stored
 //max index: block_data[blockHeight - 1][blockWidth-1]
 
-char **block_data;
+unsigned int **block_data;
 
 //Where the current movable piece is stored
 
@@ -50,10 +50,10 @@ const int pieces[7][3 + 2 * piece_size]
 
 void initBlockData()
 {
-    block_data = (char**)malloc(sizeof(char*) * blockWin_width*blockWin_height/4);	
+    block_data = (unsigned int**)malloc(sizeof(unsigned int*) * blockWin_width*blockWin_height/4);	
 	for(int i = 0; i < blockWin_height/2 + 4; i++) //want to be able to store blocks 													//that go above the screen
     {
-        block_data[i] = (char*)malloc(sizeof(char) * blockWin_width/2);
+        block_data[i] = (unsigned int*)malloc(sizeof(unsigned int) * blockWin_width/2);
         for(int j = 0; j < blockWin_width/2; j++)
         {
             block_data[i][j] = 0;
@@ -72,22 +72,22 @@ void freeBlockData()
 
 void initPieceData() 
 {
-	piece.blocks = (char**)malloc(sizeof(char*) * piece_size);
+	piece.blocks = (unsigned int**)malloc(sizeof(unsigned int*) * piece_size);
 	for(int i = 0; i < piece_size; i++) 
 	{
-		piece.blocks[i] = (char*)malloc(sizeof(char) * 2);
+		piece.blocks[i] = (unsigned int*)malloc(sizeof(unsigned int) * 2);
 	}
-	piece.origin = (char*)malloc(sizeof(char) * 2);
+	piece.origin = (unsigned int*)malloc(sizeof(unsigned int) * 2);
 }
 
 void freePieceData()
 {
 	free(piece.origin);
 
-  for(int i = 0; i < piece_size; i++) 
-  {
-      free(piece.blocks[i]);
-  }
+	for(int i = 0; i < piece_size; i++) 
+	{ 
+	free(piece.blocks[i]);
+	}
 	free(piece.blocks);
 }
 
@@ -209,11 +209,12 @@ void makePiece(int n)
 {
 	piece.origin[0] = pieces[n][1];
 	piece.origin[1] = pieces[n][2];
+	piece.color = pieces[n][0];
 	for(int i = 0; i < piece_size; i++) 
 	{
 		int y = pieces[n][2*i+4];
 		int x = pieces[n][2*i+3];
-		block_data[y][x] = pieces[n][0];
+		block_data[y][x] = piece.color;
 		piece.blocks[i][0] = x;				
 		piece.blocks[i][1] = y;
 	}
@@ -232,7 +233,7 @@ void rmLine(int y)
 // Given array of x y coordinates, sets those coordinates
 // to zero in block_data, which removes the piece
 //
-void clearPiece(char** blocks)
+void clearPiece(unsigned int** blocks)
 {
   for(int i = 0; i < piece_size; i++)
   {
@@ -260,14 +261,13 @@ void rotate(int n)
 	unsigned int originx = piece.origin[0];
 	unsigned int originy = piece.origin[1];
 
-	unsigned int color = block_data[originy][originx];
-
-	if(color == 7) //don't rotate squares
+	if(piece.color == 7) //don't rotate squares
 	{
 		return;
 	}
 
-	int* newloc = (int*)malloc(sizeof(int)*2*piece_size);
+	unsigned int* newloc = (unsigned int*)malloc(sizeof(unsigned int)*2*piece_size);
+
 
 
 	clearPiece(piece.blocks);
@@ -282,21 +282,25 @@ void rotate(int n)
 		
 		int nlx = newloc[2*i] = piece.blocks[i][0] + (newx - oldx);
 		int nly = newloc[2*i+1] = piece.blocks[i][1] - (newy - oldy);
+		
+		/*
 		printf("co(%d,%d)o(%d,%d)n(%d,%d),cn(%d,%d)",
 				piece.blocks[i][0] ,piece.blocks[i][1], oldx, oldy,
 		     		newx, newy, nlx, nly);
 		printf("%d",blockWin_width);
 		fflush(stdout);
+		*/
+
 		//if there's a block there, or if the block is
 		//outside of the window, stop the function
-		if(block_data[nly][nly] || nlx < 0 || nly < 0 
+		if(block_data[nly][nlx] || nlx < 0 || nly < 0 
 						|| nlx >= blockWin_width/2 || nly >= blockWin_height/2) 
 			
 		{
 			//reconstruct the piece
 			for(int i = piece_size; i--;) 
 			{
-				block_data[piece.blocks[i][1]][piece.blocks[i][0]] = color;
+				block_data[piece.blocks[i][1]][piece.blocks[i][0]] = piece.color;
 			}
 			free(newloc);
 			return;
@@ -308,7 +312,7 @@ void rotate(int n)
 	//update the block data and piece data
 	for(int i = piece_size; i--;) 
 	{
-		block_data[newloc[2*i+1]][newloc[2*i]] = color;
+		block_data[newloc[2*i+1]][newloc[2*i]] = piece.color;
 		
 		//update blocks in piece, origin should stay the same
 		piece.blocks[i][0] = newloc[2*i];
@@ -317,6 +321,44 @@ void rotate(int n)
 	}	
 
 	free(newloc);
+}
+
+//drops a piece, returns 1 if piece is dropped, 0 if it hits the ground
+int dropPiece() 
+{
+	unsigned int* newloc = (unsigned int*)malloc(sizeof(unsigned int)*2*piece_size);
+	clearPiece(piece.blocks);
+	for(int i = piece_size; i--;) 
+	{
+		unsigned int nly = piece.blocks[i][1]+1;
+		unsigned int x = piece.blocks[i][0];
+		newloc[2*i] = x;
+		newloc[2*i+1] = nly;
+		if(block_data[nly][x] || nly < 0) 	
+		{
+			//reconstruct the piece
+			for(int i = piece_size; i--;) 
+			{
+				block_data[piece.blocks[i][1]][piece.blocks[i][0]] = piece.color;
+			}
+			free(newloc);
+			return 0;
+		}
+	}
+	//update the block data and piece data
+	piece.origin[1] =  piece.origin[1] + 1;
+	for(int i = piece_size; i--;) 
+	{
+		block_data[newloc[2*i+1]][newloc[2*i]] = piece.color;
+		
+		//update blocks in piece, origin should stay the same
+		piece.blocks[i][0] = newloc[2*i];
+		piece.blocks[i][1] = newloc[2*i+1];
+			
+	}	
+
+	free(newloc);
+	return 1;
 }
 
 
@@ -372,10 +414,16 @@ int main()
 	  rotate(1);
 	  updateBlockWindow();
 	  getch();
+	  dropPiece();
+	  updateBlockWindow();
+	  getch();
 	  rotate(1);
 	  updateBlockWindow();
 	  getch();
 	  rotate(-1);
+	  updateBlockWindow();
+	  getch();
+	  dropPiece();
 	  updateBlockWindow();
 	  getch();
 	  rmLine(2);
