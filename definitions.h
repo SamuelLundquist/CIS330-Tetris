@@ -7,6 +7,8 @@
 #if !defined(DEFINITIONS_H)
 #define DEFINITIONS_H 1
 
+#include <ncurses.h>
+
 const int piece_size = 4;
 
 const int blockWin_height = 40;
@@ -51,5 +53,57 @@ typedef struct score {
 	unsigned int pts;
 	unsigned int lns;
 } SCORE;
+
+extern WINDOW *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
+
+//2d array of integers representing color of block at that location
+extern unsigned int **block_data;
+
+//where the current movable piece is stored
+extern PIECE piece;
+
+//================
+//   windows.cc
+//================
+
+void initColors();
+
+void initWindows();
+
+void updateBlockWindow();
+
+//================
+//   score.cc
+//================
+
+void updateScore(SCORE score);
+
+
+//================
+//   board.cc
+//================
+
+void initBlockData();
+
+void freeBlockData();
+
+void rmLine(int y);
+
+
+//================
+//   pieces.cc
+//================
+
+void initPieceData();
+
+void freePieceData();
+
+void makePiece(int n);
+
+void clearPiece(unsigned int** blocks);
+
+void rotate(int n);
+
+int dropPiece();
 
 #endif

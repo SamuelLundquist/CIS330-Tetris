@@ -1,10 +1,12 @@
 .PHONY: run, build, clean
 
+sources = $(wildcard *.cc)
+
 run:
 	./test
 
-build: game.cc
-	g++ -o test game.cc -lncurses
+build: $(sources)
+	g++ -o test $(sources) -lncurses
 
 clean:
 	rm -f test
