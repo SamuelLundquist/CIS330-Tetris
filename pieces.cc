@@ -142,20 +142,7 @@ void rotate(int n)
 		}
 	}
 
-
-
-	//update the block data and piece data
-	for(int i = piece_size; i--;)
-	{
-		block_data[newloc[2*i+1]][newloc[2*i]] = piece.color;
-
-		//update blocks in piece, origin should stay the same
-		piece.blocks[i][0] = newloc[2*i];
-		piece.blocks[i][1] = newloc[2*i+1];
-
-	}
-
-	free(newloc);
+	updateBlocks(newloc);
 }
 
 //drops a piece, returns 1 if piece is dropped, 0 if it hits the ground
@@ -180,8 +167,14 @@ int dropPiece()
 			return 0;
 		}
 	}
-	//update the block data and piece data
 	piece.origin[1] =  piece.origin[1] + 1;
+	updateBlocks(newloc);
+	return 1;
+}
+
+void updateBlocks(unsigned int* newloc)
+{
+	//update the block data and piece data
 	for(int i = piece_size; i--;)
 	{
 		block_data[newloc[2*i+1]][newloc[2*i]] = piece.color;
@@ -193,5 +186,4 @@ int dropPiece()
 	}
 
 	free(newloc);
-	return 1;
 }

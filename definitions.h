@@ -45,7 +45,7 @@ typedef struct piece {
 	unsigned int** blocks;
 	unsigned int* origin;
 	unsigned int color;
-	
+
 } PIECE;
 
 
@@ -105,5 +105,7 @@ void clearPiece(unsigned int** blocks);
 void rotate(int n);
 
 int dropPiece();
+
+void updateBlocks(unsigned int* newloc);
 
 #endif
