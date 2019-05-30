@@ -108,4 +108,6 @@ int dropPiece();
 
 void updateBlocks(unsigned int* newloc);
 
+void reconstructPiece(unsigned int* newloc);
+
 #endif

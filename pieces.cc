@@ -118,26 +118,13 @@ void rotate(int n)
 		int nlx = newloc[2*i] = piece.blocks[i][0] + (newx - oldx);
 		int nly = newloc[2*i+1] = piece.blocks[i][1] - (newy - oldy);
 
-		/*
-		printf("co(%d,%d)o(%d,%d)n(%d,%d),cn(%d,%d)",
-				piece.blocks[i][0] ,piece.blocks[i][1], oldx, oldy,
-		     		newx, newy, nlx, nly);
-		printf("%d",blockWin_width);
-		fflush(stdout);
-		*/
-
 		//if there's a block there, or if the block is
 		//outside of the window, stop the function
 		if(block_data[nly][nlx] || nlx < 0 || nly < 0
 						|| nlx >= blockWin_width/2 || nly >= blockWin_height/2)
 
 		{
-			//reconstruct the piece
-			for(int i = piece_size; i--;)
-			{
-				block_data[piece.blocks[i][1]][piece.blocks[i][0]] = piece.color;
-			}
-			free(newloc);
+			reconstructPiece(newloc);
 			return;
 		}
 	}
@@ -158,12 +145,7 @@ int dropPiece()
 		newloc[2*i+1] = nly;
 		if(block_data[nly][x] || nly < 0)
 		{
-			//reconstruct the piece
-			for(int i = piece_size; i--;)
-			{
-				block_data[piece.blocks[i][1]][piece.blocks[i][0]] = piece.color;
-			}
-			free(newloc);
+			reconstructPiece(newloc);
 			return 0;
 		}
 	}
@@ -185,5 +167,14 @@ void updateBlocks(unsigned int* newloc)
 
 	}
 
+	free(newloc);
+}
+
+void reconstructPiece(unsigned int* newloc)
+{
+	for(int i = piece_size; i--;)
+	{
+		block_data[piece.blocks[i][1]][piece.blocks[i][0]] = piece.color;
+	}
 	free(newloc);
 }
