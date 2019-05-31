@@ -100,6 +100,12 @@ void freeBlockData();
 
 void rmLine(int y);
 
+int* checkLines();
+
+void drop(int row, int dropNum);
+
+void insertionSort(int arr[], int n);
+
 
 //================
 //   pieces.cc
