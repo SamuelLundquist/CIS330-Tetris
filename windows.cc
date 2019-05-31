@@ -26,6 +26,21 @@ void updateBlockWindow()
             wattrset(blockWin, COLOR_PAIR(block_data[y][x]));
             mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
             mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
+	    
+	//optional checkerboard pattern
+	/*if(block_data[y][x]) {
+		for(int i = 0; i < 4; i++) {
+			mvwaddch(blockWin, 2*y-8, x*4 + i, ACS_CKBOARD);
+		}		
+		for(int i = 0; i < 4; i++) {
+		mvwaddch(blockWin, 2*y-7, x*4 + i, ACS_CKBOARD);
+		}
+          }
+	    
+	  else {	
+        	mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
+            	mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
+	  }*/
         }
     }
     wrefresh(blockWin);
