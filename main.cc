@@ -50,47 +50,39 @@ int main()
 
    getch();
 
-   for (int i = 0; i < 7; i++)
-   {
-      makePiece(i);
-	  updateBlockWindow();
-	  getch();
-	  rotate(1);
-	  updateBlockWindow();
-	  getch();
-	  rotate(1);
-	  updateBlockWindow();
-	  getch();
-	  rotate(1);
-	  updateBlockWindow();
-	  getch();
-	  dropPiece();
-	  updateBlockWindow();
-	  getch();
-	  rotate(1);
-	  updateBlockWindow();
-	  getch();
-	  rotate(-1);
-	  updateBlockWindow();
-	  getch();
-	  dropPiece();
-	  updateBlockWindow();
-	  getch();
-	  rmLine(2);
-	  rmLine(3);
-	  rmLine(4);
-	  rmLine(5);
-	  rmLine(6);
-	  rmLine(7);
-	  rmLine(8);
-	  rmLine(9);
-   }
+   makePiece(1);
+   updateBlockWindow();
+   block_data[19][8] = 3;
+   block_data[19][6] = 2;
+   block_data[20][8] = 2;
+   block_data[20][6] = 3;
+   block_data[21][8] = 3;
+   block_data[21][6] = 2;
+   for(int x = 0; x < blockWin_width; x++)
+ 	 {
+ 	  block_data[22][x] = 1;
+ 	 }
+   block_data[22][3] = 0;
+   block_data[22][4] = 0;
+   block_data[22][5] = 0;
+   block_data[23][6] = 2;
 
+   updateBlockWindow();
+   getch();
+   for (int i = 0; i < 18; i++)
+   {
+     dropPiece();
+   }
+   updateBlockWindow();
+   getch();
+   checkLines();
+   updateBlockWindow();
+   getch();
    freePieceData();
 
    freeBlockData();
 
-   endwin(); 
+   endwin();
 
    dropThread.join();
 

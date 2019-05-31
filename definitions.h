@@ -100,11 +100,15 @@ void freeBlockData();
 
 void rmLine(int y);
 
-int* checkLines();
+int* mallocFullLines();
+
+int* fullLines();
 
 void drop(int row, int dropNum);
 
 void insertionSort(int arr[], int n);
+
+void checkLines();
 
 
 //================
