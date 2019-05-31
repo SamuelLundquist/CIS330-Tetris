@@ -19,9 +19,9 @@ void initColors()
 
 void updateBlockWindow()
 {
-    for (int y = 4; y < blockWin_height/2 + 4; y++)
+    for (int y = 4; y < blockWin_height + 4; y++)
     {
-        for (int x = 0; x < blockWin_width/2; x++)
+        for (int x = 0; x < blockWin_width; x++)
         {
             wattrset(blockWin, COLOR_PAIR(block_data[y][x]));
             mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
@@ -34,7 +34,7 @@ void updateBlockWindow()
 void initWindows()
 {
     gameWin = newwin(gameWin_height, gameWin_width, gameWin_y, gameWin_x);
-    blockWin = newwin(blockWin_height, blockWin_width * 2, blockWin_y, blockWin_x);
+    blockWin = newwin(blockWin_height * 2, blockWin_width * 4, blockWin_y, blockWin_x);
     scoreWin = newwin(scoreWin_height, scoreWin_width, scoreWin_y, scoreWin_x);
     controlsWin = newwin(controlsWin_height, controlsWin_width, controlsWin_y, controlsWin_x);
     hintWin = newwin(hintWin_height, hintWin_width, hintWin_y, hintWin_x);
@@ -51,7 +51,7 @@ void initWindows()
     //Init Hint Win
     box(hintWin,0,0);
     mvwprintw(hintWin, 0, 4, " NEXT BLOCK ");
-    wrefresh(hintWin);  
+    wrefresh(hintWin);
 
     //Init Title Win
     mvwprintw(titleWin, 1, 2,  " __________");
@@ -106,4 +106,3 @@ void initWindows()
     mvwprintw(controlsWin, 8, 2, "Rotate: up arr");
     wrefresh(controlsWin);
 }
-

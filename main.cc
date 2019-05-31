@@ -43,21 +43,9 @@ int main()
    SCORE sc = {1000, 10};
    updateScore(sc);
 
-   //Tests for updating block data
-   /*
-   block_data[4][0] = 3;
-   block_data[4][1] = 4;
-   block_data[5][1] = 3;
-   block_data[4][19] = 3;
-   block_data[5][4] = 2;
-   block_data[10][6] = 2;
-   block_data[23][9] = 3; 
-   updateBlockWindow();
-   */
-
    getch();
-   
-   for (int i = 0; i < 7; i++) 
+
+   for (int i = 0; i < 7; i++)
    {
       makePiece(i);
 	  updateBlockWindow();
@@ -96,8 +84,7 @@ int main()
    freePieceData();
 
    freeBlockData();
-   
+
    endwin();
    return 0;
 }
-

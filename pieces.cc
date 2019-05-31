@@ -103,8 +103,6 @@ void rotate(int n)
 
 	unsigned int* newloc = (unsigned int*)malloc(sizeof(unsigned int)*2*piece_size);
 
-
-
 	clearPiece(piece.blocks);
 
 	for(int i = piece_size; i--;)
@@ -121,14 +119,13 @@ void rotate(int n)
 		//if there's a block there, or if the block is
 		//outside of the window, stop the function
 		if(block_data[nly][nlx] || nlx < 0 || nly < 0
-						|| nlx >= blockWin_width/2 || nly >= blockWin_height/2)
-
+						|| nlx >= blockWin_width || nly >= blockWin_height)
 		{
 			reconstructPiece(newloc);
 			return;
 		}
-	}
 
+	}
 	updateBlocks(newloc);
 }
 
@@ -143,7 +140,7 @@ int dropPiece()
 		unsigned int x = piece.blocks[i][0];
 		newloc[2*i] = x;
 		newloc[2*i+1] = nly;
-		if(block_data[nly][x] || nly < 0)
+		if(block_data[nly][x] || nly >= 24)
 		{
 			reconstructPiece(newloc);
 			return 0;

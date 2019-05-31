@@ -11,13 +11,13 @@
 
 const int piece_size = 4;
 
-const int blockWin_height = 40;
-const int blockWin_width = 20;
+const int blockWin_height = 20;
+const int blockWin_width = 10;
 const int blockWin_x = 3;
 const int blockWin_y = 2;
 
-const int gameWin_height = blockWin_height+2;
-const int gameWin_width = blockWin_width*2+2;
+const int gameWin_height = blockWin_height*2+2;
+const int gameWin_width = blockWin_width*4+2;
 const int gameWin_x = 2;
 const int gameWin_y = 1;
 
