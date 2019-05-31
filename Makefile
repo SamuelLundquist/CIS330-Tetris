@@ -6,7 +6,7 @@ run:
 	./test
 
 build: $(sources)
-	g++ -o test $(sources) -lncurses
+	g++ -o test $(sources) -lncurses -lpthread
 
 clean:
 	rm -f test

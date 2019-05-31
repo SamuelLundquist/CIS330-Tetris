@@ -9,6 +9,7 @@ Qi Han
 #include <ncurses.h>
 #include <iostream>
 #include <time.h>
+#include <thread>
 #include "definitions.h"
 
 using namespace std;
@@ -42,6 +43,10 @@ int main()
    //Test for updating score data
    SCORE sc = {1000, 10};
    updateScore(sc);
+
+   thread dropThread(dropFunc);
+
+   thread inputThread(inputFunc);
 
    getch();
 
@@ -85,6 +90,11 @@ int main()
 
    freeBlockData();
 
-   endwin();
+   endwin(); 
+
+   dropThread.join();
+
+   inputThread.join();
+
    return 0;
 }

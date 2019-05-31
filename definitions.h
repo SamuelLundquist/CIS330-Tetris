@@ -62,6 +62,17 @@ extern unsigned int **block_data;
 //where the current movable piece is stored
 extern PIECE piece;
 
+//moves added by the threads to be executed by the main
+extern int moveQueue[5];
+
+//===============
+//   threads.cc
+//===============
+
+void dropFunc();
+
+void inputFunc();
+
 //================
 //   windows.cc
 //================
