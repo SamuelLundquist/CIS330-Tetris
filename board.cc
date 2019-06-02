@@ -68,6 +68,15 @@ int* fullLines()
     }
   }
   insertionSort(fullLines, piece_size);
+  int linesDestr = 0, i = 0, points;
+  while(fullLines[i] != -1)
+  {
+      linesDestr++;
+      i++;
+  }
+  //points per line times bonus multiplier times number of lines destroyed
+  points = linePoints * linesDestr * linesDestr;
+  updateScore(points, linesDestr);
   return fullLines;
 }
 

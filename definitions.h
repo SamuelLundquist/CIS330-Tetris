@@ -50,6 +50,8 @@ const int menuWin_width = hintWin_x + 18;
 const int menuWin_x = 2;
 const int menuWin_y = 1;
 
+const int linePoints = 10;
+
 typedef struct piece {
 	unsigned int** blocks;
 	unsigned int* origin;
@@ -70,6 +72,8 @@ extern unsigned int **block_data;
 
 //where the current movable piece is stored
 extern PIECE piece;
+
+extern SCORE sc;
 
 //moves added by the threads to be executed by the main
 extern int moveQueue[5];
@@ -106,7 +110,9 @@ void updateBlockWindow();
 //   score.cc
 //================
 
-void updateScore(SCORE score);
+void updateScoreWin();
+
+void updateScore(int points, int lines);
 
 
 //================

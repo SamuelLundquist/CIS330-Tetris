@@ -16,6 +16,7 @@ using namespace std;
 
 unsigned int **block_data;
 PIECE piece;
+SCORE sc = {0,0};
 
 //Define all windows
 WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
@@ -40,8 +41,7 @@ int main()
    getch();
 
    //Test for updating score data
-   SCORE sc = {1000, 10};
-   updateScore(sc);
+   updateScore(1000, 10);
 
    thread dropThread(dropFunc);
 
