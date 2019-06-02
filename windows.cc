@@ -26,18 +26,18 @@ void updateBlockWindow()
             wattrset(blockWin, COLOR_PAIR(block_data[y][x]));
             mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
             mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
-	    
+
 	//optional checkerboard pattern
 	/*if(block_data[y][x]) {
 		for(int i = 0; i < 4; i++) {
 			mvwaddch(blockWin, 2*y-8, x*4 + i, ACS_CKBOARD);
-		}		
+		}
 		for(int i = 0; i < 4; i++) {
 		mvwaddch(blockWin, 2*y-7, x*4 + i, ACS_CKBOARD);
 		}
           }
-	    
-	  else {	
+
+	  else {
         	mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
             	mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
 	  }*/
@@ -46,27 +46,30 @@ void updateBlockWindow()
     wrefresh(blockWin);
 }
 
-void initWindows()
+void initControls()
 {
-    gameWin = newwin(gameWin_height, gameWin_width, gameWin_y, gameWin_x);
-    blockWin = newwin(blockWin_height * 2, blockWin_width * 4, blockWin_y, blockWin_x);
-    scoreWin = newwin(scoreWin_height, scoreWin_width, scoreWin_y, scoreWin_x);
-    controlsWin = newwin(controlsWin_height, controlsWin_width, controlsWin_y, controlsWin_x);
-    hintWin = newwin(hintWin_height, hintWin_width, hintWin_y, hintWin_x);
+    controlsWin = newwin(controlsWin_height, controlsWin_width, controlsWin_y - 2, controlsWin_x - 4);
+
+    box(controlsWin,0,0);
+    mvwprintw(controlsWin, 0, 5, " CONTROLS ");
+    mvwprintw(controlsWin, 2, 2, "Left: A");
+    mvwprintw(controlsWin, 4, 2, "Right: D");
+    mvwprintw(controlsWin, 6, 2, "Drop: SPACE");
+    mvwprintw(controlsWin, 8, 2, "Rotate: W");
+    wrefresh(controlsWin);
+}
+
+void initMenu()
+{
+    menuWin = newwin(titleWin_height, menuWin_width, menuWin_y, menuWin_x);
     titleWin = newwin(titleWin_height, titleWin_width, titleWin_y, titleWin_x);
     refresh();
 
-    //Init Game Win
-    box(gameWin,0,0);
-    wrefresh(gameWin);
-
-    //Init Block Win
-    wrefresh(blockWin);
-
-    //Init Hint Win
-    box(hintWin,0,0);
-    mvwprintw(hintWin, 0, 4, " NEXT BLOCK ");
-    wrefresh(hintWin);
+    //Init menuWin
+    box(menuWin, 0, 0);
+    mvwprintw(menuWin, 0, 27, " MAIN MENU ");
+    mvwprintw(menuWin, titleWin_height - 1, (menuWin_width - 49)/2, " ESC - EXIT | SELECT - ENTER | W - UP | S - DOWN ");
+    wrefresh(menuWin);
 
     //Init Title Win
     mvwprintw(titleWin, 1, 2,  " __________");
@@ -104,6 +107,28 @@ void initWindows()
     mvwprintw(titleWin, 33, 2, "|__________/");
     wbkgd(titleWin, COLOR_PAIR(10));
     wrefresh(titleWin);
+}
+
+void initGameWindows()
+{
+    gameWin = newwin(gameWin_height, gameWin_width, gameWin_y, gameWin_x);
+    blockWin = newwin(blockWin_height * 2, blockWin_width * 4, blockWin_y, blockWin_x);
+    scoreWin = newwin(scoreWin_height, scoreWin_width, scoreWin_y, scoreWin_x);
+    controlsWin = newwin(controlsWin_height, controlsWin_width, controlsWin_y, controlsWin_x);
+    hintWin = newwin(hintWin_height, hintWin_width, hintWin_y, hintWin_x);
+    refresh();
+
+    //Init Game Win
+    box(gameWin,0,0);
+    wrefresh(gameWin);
+
+    //Init Block Win
+    wrefresh(blockWin);
+
+    //Init Hint Win
+    box(hintWin,0,0);
+    mvwprintw(hintWin, 0, 4, " NEXT BLOCK ");
+    wrefresh(hintWin);
 
     //Init Score Win
     box(scoreWin, 0, 0);
@@ -115,9 +140,9 @@ void initWindows()
     //Init Controls Win
     box(controlsWin,0,0);
     mvwprintw(controlsWin, 0, 5, " CONTROLS ");
-    mvwprintw(controlsWin, 2, 2, "Left: left arr");
-    mvwprintw(controlsWin, 4, 2, "Right: right arr");
-    mvwprintw(controlsWin, 6, 2, "Drop: down arr");
-    mvwprintw(controlsWin, 8, 2, "Rotate: up arr");
+    mvwprintw(controlsWin, 2, 2, "Left: A");
+    mvwprintw(controlsWin, 4, 2, "Right: D");
+    mvwprintw(controlsWin, 6, 2, "Drop: SPACE");
+    mvwprintw(controlsWin, 8, 2, "Rotate: W");
     wrefresh(controlsWin);
 }

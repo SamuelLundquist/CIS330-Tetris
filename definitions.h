@@ -1,13 +1,17 @@
-#define MOVE_LEFT = 68 //key left
-#define MOVE_RIGHT = 67 //key right
-#define DROP_BLOCK = 66 //key down
-#define ROTATE_BLOCK = 65 //key up
-
-
 #if !defined(DEFINITIONS_H)
 #define DEFINITIONS_H 1
 
 #include <ncurses.h>
+
+const char MOVE_LEFT = 97; //a
+const char MOVE_RIGHT = 100; //d
+const char DROP_BLOCK = 32; //space
+const char ROTATE_BLOCK_RIGHT = 119; //w
+const char ROTATE_BLOCK_LEFT = 115; //s
+const char MENU_UP = 119; //w
+const char MENU_DOWN = 115; //s
+const char MENU_SELECT = 10; //enter key
+const char EXIT = 27; //esc
 
 const int piece_size = 4;
 
@@ -41,6 +45,11 @@ const int titleWin_width = 16;
 const int titleWin_x = hintWin_x+22;
 const int titleWin_y = 1;
 
+const int menuWin_height = titleWin_height;
+const int menuWin_width = hintWin_x + 18;
+const int menuWin_x = 2;
+const int menuWin_y = 1;
+
 typedef struct piece {
 	unsigned int** blocks;
 	unsigned int* origin;
@@ -54,7 +63,7 @@ typedef struct score {
 	unsigned int lns;
 } SCORE;
 
-extern WINDOW *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
+extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
 
 //2d array of integers representing color of block at that location
 extern unsigned int **block_data;
@@ -64,6 +73,12 @@ extern PIECE piece;
 
 //moves added by the threads to be executed by the main
 extern int moveQueue[5];
+
+//===============
+//   main.cc
+//===============
+
+int menu();
 
 //===============
 //   threads.cc
@@ -79,7 +94,11 @@ void inputFunc();
 
 void initColors();
 
-void initWindows();
+void initMenu();
+
+void initControls();
+
+void initGameWindows();
 
 void updateBlockWindow();
 
