@@ -183,3 +183,23 @@ void reconstructPiece(unsigned int* newloc)
 	free(newloc);
 
 }
+
+void moveLeft(){
+	unsigned int* newloc = (unsigned int*)malloc(sizeof(unsigned int)*2*piece_size);
+	clearPiece(piece.blocks);
+	for(int i = 0; i < piece_size; i ++ ){
+		int newx = piece.blocks[i][0] - 1;
+		int y = piece.blocks[i][1]; 
+		if( newx >= 0 && block_data[newx][y] == 0){
+			newloc[2*i] = newx;
+			newloc[2*i + 1] = y;
+		}
+		else{
+			reconstructPiece(newloc);
+			return;
+		}
+	}
+	piece.origin[0] -= 1;
+	updateBlocks(newloc);
+	return;
+}

@@ -178,4 +178,6 @@ void updateBlocks(unsigned int* newloc);
 
 void reconstructPiece(unsigned int* newloc);
 
+void moveLeft();
+
 #endif

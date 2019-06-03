@@ -32,9 +32,9 @@ void game()
    	    int move = moveQueue.Dequeue();
    	    switch(move)
    	    {
-   	        case(DROP_BLOCK):
-   	            dropPiece();
-
+            case(DROP_BLOCK):
+               dropPiece();
+               moveLeft();
             case(AUTO_DROP):
                 dropPiece();
 
