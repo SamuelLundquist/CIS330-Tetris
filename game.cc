@@ -16,7 +16,7 @@ void game()
 
    //Test for updating score data
    updateScore(1000, 10);
-   
+
    thread dropThread(dropFunc);
 
    thread inputThread(inputFunc);
@@ -25,19 +25,33 @@ void game()
 
    makePiece(1);
 
-   while(alive) 
+   while(alive)
    {
-   	if(moveQueue.HasMove())
-   	{
-   	int move = moveQueue.Dequeue();
-   	switch(move)
-   	{
-   	case(DROP_BLOCK): 
-   	dropPiece();	
-   	}
-   	updateBlockWindow();	
-   	}
+      if(moveQueue.HasMove())
+   	  {
+   	    int move = moveQueue.Dequeue();
+   	    switch(move)
+   	    {
+   	        case(DROP_BLOCK):
+   	            dropPiece();
+
+            case(AUTO_DROP):
+                dropPiece();
+
+            case(MOVE_LEFT):
+
+            case(MOVE_RIGHT):
+
+            case(ROTATE_BLOCK_LEFT):
+                rotate(-1);
+
+            case(ROTATE_BLOCK_RIGHT):
+                rotate(1);
+   	    }
+   	    updateBlockWindow();
+      }
    }
+
 /*
    getch();
 
@@ -74,11 +88,11 @@ void game()
    freePieceData();
 
    freeBlockData();
-  
+
    endwin();
 
    dropThread.join();
-   
+
    inputThread.join();
 
    return;
