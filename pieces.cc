@@ -132,6 +132,8 @@ void rotate(int n)
 //drops a piece, returns 1 if piece is dropped, 0 if it hits the ground
 int dropPiece()
 {
+	printf("%d",piece.blocks[0][1]);
+	fflush(stdout);
 	unsigned int* newloc = (unsigned int*)malloc(sizeof(unsigned int)*2*piece_size);
 	clearPiece(piece.blocks);
 	for(int i = piece_size; i--;)
@@ -140,11 +142,13 @@ int dropPiece()
 		unsigned int x = piece.blocks[i][0];
 		newloc[2*i] = x;
 		newloc[2*i+1] = nly;
-		if(block_data[nly][x] || nly >= 24)
+
+		if(nly>=24 || block_data[nly][x])
 		{
 			reconstructPiece(newloc);
 			return 0;
 		}
+
 	}
 	piece.origin[1] =  piece.origin[1] + 1;
 	updateBlocks(newloc);
@@ -167,11 +171,15 @@ void updateBlocks(unsigned int* newloc)
 	free(newloc);
 }
 
+//if the block can't move, reconstruct it where it was
 void reconstructPiece(unsigned int* newloc)
 {
+
 	for(int i = piece_size; i--;)
 	{
 		block_data[piece.blocks[i][1]][piece.blocks[i][0]] = piece.color;
 	}
+	
 	free(newloc);
+
 }

@@ -3,6 +3,8 @@
 
 #include <ncurses.h>
 
+const char AUTO_DROP = 1;
+
 const char MOVE_LEFT = 97; //a
 const char MOVE_RIGHT = 100; //d
 const char DROP_BLOCK = 32; //space
@@ -75,9 +77,6 @@ extern PIECE piece;
 
 extern SCORE sc;
 
-//moves added by the threads to be executed by the main
-extern int moveQueue[5];
-
 //===============
 //   main.cc
 //===============
@@ -91,6 +90,23 @@ void game();
 //===============
 //   threads.cc
 //===============
+
+class Queue
+{
+	private:
+		int moves[5];
+		int size;
+		int loc;
+	public:
+		Queue();
+		void Enqueue(int move);
+		int Dequeue();
+		int HasMove();
+	
+};
+
+//moves added to queue by threads to be executed in game()
+extern Queue moveQueue;
 
 void dropFunc();
 

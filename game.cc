@@ -4,6 +4,8 @@
 
 using namespace std;
 
+Queue moveQueue;
+
 void game()
 {
    initGameWindows();
@@ -14,10 +16,28 @@ void game()
 
    //Test for updating score data
    updateScore(1000, 10);
-
+   
    thread dropThread(dropFunc);
 
    thread inputThread(inputFunc);
+
+   int alive = 1;
+
+   makePiece(1);
+
+   while(alive) 
+   {
+   	if(moveQueue.HasMove())
+   	{
+   	int move = moveQueue.Dequeue();
+   	switch(move)
+   	{
+   	case(DROP_BLOCK): 
+   	dropPiece();	
+   	}
+   	updateBlockWindow();	
+   	}
+   }
 /*
    getch();
 
