@@ -59,6 +59,123 @@ void initControls()
     wrefresh(controlsWin);
 }
 
+int menu()
+{
+    initscr(); //Init Ncurses
+    noecho(); //function does not print input characters
+    curs_set(0); //make blinking cursor invisible
+    cbreak(); //ctrl + c will stop function
+    initColors();
+    initMenu();
+
+    char ch;
+    int i, numItems, numControls;
+    numControls = 5;
+    numItems = 3;
+    char options[numItems][15] = {"PLAY GAME","CONTROLS","QUIT"};
+    //Spaces keep control options centered, don't remove plz.
+    char controls[numControls][25] = {"     Left: A  ", "    Right: D  ", " Rotate Right: W", "  Rotate Left: S", "Drop Block: SPACE"};
+    char option[15];
+    char control[25];
+
+    for ( i = 0; i < numItems; i++)
+    {
+        if (i==0)
+            wattron(menuWin, A_STANDOUT);
+        else
+            wattroff(menuWin, A_STANDOUT);
+        sprintf(option, "%s", options[i]);
+        mvwprintw(menuWin, i*3+9, 27, "%s", option);
+    }
+
+	i=0;
+    wrefresh(menuWin);
+    keypad( menuWin, TRUE );
+
+    while(ch = wgetch(menuWin))
+    {
+        //Updates options so only one option is highlighted at a time
+        sprintf(option, "%s",  options[i]);
+		mvwprintw(menuWin, i*3+9, 27, "%s", option);
+
+        switch(ch)
+        {
+            case MENU_UP:
+                i--;
+                if( i < 0 ) { i = numItems - 1; }
+                break;
+
+            case MENU_DOWN:
+                i++;
+                if ( i >= numItems ) { i = 0; }
+                break;
+
+            case MENU_SELECT:
+
+                //Play game was selected, erase menu window and return 1
+                if ( i == 0 )
+                {
+                    werase(menuWin);
+                    wrefresh(menuWin);
+                    delwin(menuWin);
+                    return 1;
+                }
+
+                //Controls selected, load controls guide
+                else if ( i == 1 )
+                {
+                    int x;
+                    for ( x = 0; x < numControls; x++) //print controls to menu window 
+		    {
+                        sprintf(control, "%s", controls[x]);
+                        mvwprintw(menuWin, x*3+6, 24, "%s", control);
+                    }
+                    mvwprintw(menuWin, 30, 18, "--Press any key to go back --");
+                    wrefresh(menuWin);
+                    getch();    // Once finished reading, hit any key to go back to main menu
+                    werase(menuWin); //Clears the menu window
+                    initMenu(); //Initializes fresh menu window
+                    for ( x = 0; x < numItems; x++) // Add menu options to window, highlight currently selected option with x == i
+                    {
+                        if (x==i)
+                            wattron(menuWin, A_STANDOUT);
+                        else
+                            wattroff(menuWin, A_STANDOUT);
+                        sprintf(option, "%s", options[x]);
+                        mvwprintw(menuWin, x*3+9, 27, "%s", option);
+                    }
+                    wrefresh(menuWin); //Refresh window
+                    keypad( menuWin, TRUE ); //Keeps menu from exiting while loop upon return to main from controls menu
+                    break;
+                }
+
+                //Quit selected, return negative value, should close program in main()
+                else if ( i == 2 )
+                {
+                    return -1;
+                }
+
+                //Input was not an expected input, break and try again
+                else
+                {
+                    break;
+                }
+
+            //ESC was pressed, return negative value, should close program in main()
+            case EXIT:
+                return -1;
+        }
+        //Updates the current highlighted option in menu
+        wattron(menuWin, A_STANDOUT);
+		sprintf(option, "%s",  options[i]);
+		mvwprintw(menuWin, i*3+9, 27, "%s", option);
+		wattroff(menuWin, A_STANDOUT);
+    }
+    //Shouldn't reach this point.
+    return -2;
+}
+
+
 void initMenu()
 {
     menuWin = newwin(titleWin_height, menuWin_width, menuWin_y, menuWin_x);

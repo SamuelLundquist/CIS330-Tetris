@@ -11,7 +11,7 @@ using namespace std;
 #define CW_ROT 4
 #define DROP_F 5
 
-
+	
 //moveQueue[5] - queue of moves to be executed by main thread
 
 

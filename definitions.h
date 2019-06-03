@@ -82,7 +82,11 @@ extern int moveQueue[5];
 //   main.cc
 //===============
 
-int menu();
+//===============
+//   game.cc
+//===============
+
+void game();
 
 //===============
 //   threads.cc
@@ -97,6 +101,8 @@ void inputFunc();
 //================
 
 void initColors();
+
+int menu();
 
 void initMenu();
 
