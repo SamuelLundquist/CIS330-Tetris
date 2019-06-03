@@ -76,6 +76,36 @@ void clearPiece(unsigned int** blocks)
   }
 }
 
+void movePiece(int n)
+{
+	if(!n) 
+	{
+		return;
+	}
+	
+	unsigned int* newloc = (unsigned int*)malloc(sizeof(unsigned int)*2*piece_size);
+
+	clearPiece(piece.blocks);
+
+	int direction = n/abs(n);
+
+	for(int i = piece_size; i--;) 
+	{
+
+		int nlx = piece.blocks[i][0] + direction;
+		int nly = piece.blocks[i][1];
+		newloc[2*i] = nlx;
+		newloc[2*i+1] = nly;
+		
+		if(nlx < 0 || nlx >= blockWin_width || block_data[nly][nlx])
+		{
+			reconstructPiece(newloc);
+			return;
+		}
+	}
+	updateBlocks(newloc,piece.origin[0] + direction, piece.origin[1]);
+}
+
 //rotate piece if space available
 //positive input = clockwise, negative = counterclockwise
 //
@@ -87,7 +117,7 @@ void clearPiece(unsigned int** blocks)
 //therefore, plug in above values of x to this equation
 //then, check if space is open
 //if so, update block data and piece data
-void rotate(int n)
+void rotatePiece(int n)
 {
 	if(!n) //n must have value
 	{
@@ -118,22 +148,21 @@ void rotate(int n)
 
 		//if there's a block there, or if the block is
 		//outside of the window, stop the function
-		if(block_data[nly][nlx] || nlx < 0 || nly < 0
-						|| nlx >= blockWin_width || nly >= blockWin_height)
+		if(nlx < 0 || nly < 0 || nlx >= blockWin_width || nly >= blockWin_height+4 
+				|| block_data[nly][nlx])
 		{
 			reconstructPiece(newloc);
 			return;
 		}
 
 	}
-	updateBlocks(newloc);
+	updateBlocks(newloc,piece.origin[0],piece.origin[1]);
 }
 
 //drops a piece, returns 1 if piece is dropped, 0 if it hits the ground
 int dropPiece()
 {
-	printf("%d",piece.blocks[0][1]);
-	fflush(stdout);
+
 	unsigned int* newloc = (unsigned int*)malloc(sizeof(unsigned int)*2*piece_size);
 	clearPiece(piece.blocks);
 	for(int i = piece_size; i--;)
@@ -150,12 +179,11 @@ int dropPiece()
 		}
 
 	}
-	piece.origin[1] =  piece.origin[1] + 1;
-	updateBlocks(newloc);
+	updateBlocks(newloc,piece.origin[0],piece.origin[1]+1);
 	return 1;
 }
 
-void updateBlocks(unsigned int* newloc)
+void updateBlocks(unsigned int* newloc, unsigned int originx, unsigned int originy)
 {
 	//update the block data and piece data
 	for(int i = piece_size; i--;)
@@ -167,7 +195,8 @@ void updateBlocks(unsigned int* newloc)
 		piece.blocks[i][1] = newloc[2*i+1];
 
 	}
-
+	piece.origin[0] = originx;
+	piece.origin[1] = originy;
 	free(newloc);
 }
 

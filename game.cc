@@ -6,38 +6,36 @@ using namespace std;
 
 Queue moveQueue;
 
+int execute(int move);
+
 void game()
 {
-   initGameWindows();
+	initGameWindows();
 
-   initBlockData();
+	initBlockData();
 
-   initPieceData();
+	initPieceData();
 
-   //Test for updating score data
-   updateScore(1000, 10);
+	//Test for updating score data
+	updateScore(1000, 10);
    
-   thread dropThread(dropFunc);
+	thread dropThread(dropFunc);
 
-   thread inputThread(inputFunc);
+	thread inputThread(inputFunc);
 
-   int alive = 1;
+	int alive = 1;
 
-   makePiece(1);
+	makePiece(1);
 
-   while(alive) 
-   {
-   	if(moveQueue.HasMove())
-   	{
-   	int move = moveQueue.Dequeue();
-   	switch(move)
-   	{
-   	case(DROP_BLOCK): 
-   	dropPiece();	
-   	}
-   	updateBlockWindow();	
-   	}
-   }
+	while(alive) 
+	{
+		if(moveQueue.HasMove())
+		{
+			int move = moveQueue.Dequeue();
+			execute(move);
+		updateBlockWindow();	
+		}
+	}
 /*
    getch();
 
@@ -71,15 +69,43 @@ void game()
    updateBlockWindow();
    getch();
    */
-   freePieceData();
+	freePieceData();
 
-   freeBlockData();
+	freeBlockData();
   
-   endwin();
+	endwin();
 
-   dropThread.join();
+	dropThread.join();
    
-   inputThread.join();
+	inputThread.join();
 
-   return;
+	return;
+}
+
+
+int execute(int move) 
+{
+	int bottomed = 0;
+	switch(move){
+		case(DROP_BLOCK): 
+			bottomed = dropPiece();	
+			break;
+		case(AUTO_DROP):
+			bottomed = dropPiece();
+			break;
+		case(ROTATE_BLOCK_CLOCKWISE):
+			rotatePiece(1);
+			break;
+		case(ROTATE_BLOCK_COUNTERCLOCKWISE):
+			rotatePiece(-1);
+			break;
+		case(MOVE_RIGHT):
+			movePiece(1);
+			break;
+		case(MOVE_LEFT):
+			movePiece(-1);
+			break;
+	}
+	return bottomed;
+	getch();
 }

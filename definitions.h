@@ -8,8 +8,8 @@ const char AUTO_DROP = 1;
 const char MOVE_LEFT = 97; //a
 const char MOVE_RIGHT = 100; //d
 const char DROP_BLOCK = 32; //space
-const char ROTATE_BLOCK_RIGHT = 119; //w
-const char ROTATE_BLOCK_LEFT = 115; //s
+const char ROTATE_BLOCK_CLOCKWISE = 115; //s
+const char ROTATE_BLOCK_COUNTERCLOCKWISE = 119; //w
 const char MENU_UP = 119; //w
 const char MENU_DOWN = 115; //s
 const char MENU_SELECT = 10; //enter key
@@ -170,11 +170,13 @@ void makePiece(int n);
 
 void clearPiece(unsigned int** blocks);
 
-void rotate(int n);
+void movePiece(int n);
+
+void rotatePiece(int n);
 
 int dropPiece();
 
-void updateBlocks(unsigned int* newloc);
+void updateBlocks(unsigned int* newloc, unsigned int originx, unsigned int originy);
 
 void reconstructPiece(unsigned int* newloc);
 
