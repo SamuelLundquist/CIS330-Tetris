@@ -35,8 +35,6 @@ void game()
 
 	nextPiece = rand()%7;
 
-	makePiece(1);
-
 	while(alive) 
 	{
 		if(moveQueue.HasMove())
