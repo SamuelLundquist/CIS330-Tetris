@@ -13,11 +13,11 @@ int storeAvailable, nextPiece;
 
 void game()
 {
-	min_piece_size = 4;
+	min_piece_size = 1;
 	max_piece_size = 4;	
-	piece_size = 4;
-	numPieces = 7;
 
+	initPieces(min_piece_size, max_piece_size);	printf("DSLFKSDKJDF");
+	fflush(stdout);
 	initGameWindows();
 	initBlockData();
 	initPieceData();
@@ -28,9 +28,6 @@ void game()
 	thread dropThread(dropFunc);
 	thread inputThread(inputFunc);
 
-
-	initPieces(min_piece_size, max_piece_size);
-
 	linePoints = 10;
 	alive = 1;
 
@@ -40,7 +37,7 @@ void game()
 	srand(time(NULL));
 
 	makePiece(genPiece());
-	
+
 	nextPiece = genPiece();
 
 	updateBlockWindow();
