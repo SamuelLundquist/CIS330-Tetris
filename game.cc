@@ -1,5 +1,6 @@
 #include <time.h>
 #include <thread>
+#include <stdio.h>
 #include "definitions.h"
 
 using namespace std;
@@ -94,12 +95,16 @@ void game()
 
 	freeBlockData();
   
-	endwin();
+
 
 	dropThread.join();
-   
+  
 	inputThread.join();
+	printf("SDLFDSJFKDLFJ");
+	fflush(stdout);
 
+	endwin();
+	
 	return;
 }
 
