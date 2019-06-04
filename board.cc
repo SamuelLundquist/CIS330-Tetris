@@ -110,12 +110,6 @@ void checkLines()
 	int i = 0;
 	int toRow;
 
-	for(int j = 0; j<2; j++) 
-	{
-		printf("%d LINERM", remRow);
-		fflush(stdout);
-	}
-
 	//while there are lines to drop
 	while(remRow)
 	{
