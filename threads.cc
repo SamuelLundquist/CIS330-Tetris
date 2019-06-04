@@ -24,8 +24,9 @@ void inputFunc()
 {
 	char ch;
 	keypad(gameWin, TRUE);
-	while(ch = wgetch(gameWin))
+	while(alive)
 	{
+		ch = wgetch(gameWin);
 		moveQueue.Enqueue(ch);	
 
 	}
