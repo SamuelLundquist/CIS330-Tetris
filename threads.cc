@@ -1,5 +1,5 @@
-#include <iostream>
-#include <time.h>
+#include <chrono>
+#include <thread>
 #include "definitions.h"
 
 using namespace std;
@@ -10,7 +10,11 @@ using namespace std;
 //dictated by the current falling speed
 void dropFunc()
 {
-	
+	while(alive) 
+	{
+		moveQueue.Enqueue(AUTO_DROP);
+		this_thread::sleep_for(chrono::milliseconds(1000));
+	}	
 }
 
 //adds corresponding input to the moveQueue based on user inputted

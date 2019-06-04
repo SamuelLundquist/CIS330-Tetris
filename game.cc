@@ -8,6 +8,8 @@ Queue moveQueue;
 
 int execute(int move);
 
+int alive;
+
 void game()
 {
 	initGameWindows();
@@ -23,7 +25,7 @@ void game()
 
 	thread inputThread(inputFunc);
 
-	int alive = 1;
+	alive = 1;
 
 	makePiece(1);
 

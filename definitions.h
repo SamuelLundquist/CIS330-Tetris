@@ -77,6 +77,8 @@ extern PIECE piece;
 
 extern SCORE sc;
 
+extern int alive;
+
 //===============
 //   main.cc
 //===============
