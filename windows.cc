@@ -90,8 +90,8 @@ int menu()
 
 	i=0;
     wrefresh(menuWin);
-    keypad( menuWin, TRUE );
 
+    keypad( menuWin, TRUE ); //use wgetch() for menu, fetches character with respect to menu window
     while(ch = wgetch(menuWin))
     {
         //Updates options so only one option is highlighted at a time

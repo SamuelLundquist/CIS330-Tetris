@@ -23,10 +23,9 @@ void dropFunc()
 void inputFunc() 
 {
 	char ch;
-	keypad(gameWin, TRUE);
 	while(alive)
 	{
-		ch = wgetch(gameWin);
+		ch = getch();
 		moveQueue.Enqueue(ch);	
 
 	}
