@@ -3,6 +3,13 @@
 
 #include <ncurses.h>
 
+
+
+//===============
+//   execution
+//     codes
+//===============
+
 const char AUTO_DROP = 1;
 
 const char MOVE_LEFT = 97; //a
@@ -10,53 +17,21 @@ const char MOVE_RIGHT = 100; //d
 const char DROP_BLOCK = 32; //space
 const char ROTATE_BLOCK_CLOCKWISE = 115; //s
 const char ROTATE_BLOCK_COUNTERCLOCKWISE = 119; //w
+const char STORE_PIECE = 102; //f
 const char MENU_UP = 119; //w
 const char MENU_DOWN = 115; //s
 const char MENU_SELECT = 10; //enter key
 const char EXIT = 27; //esc
 
-const int piece_size = 4;
 
-const int blockWin_height = 20;
-const int blockWin_width = 10;
-const int blockWin_x = 3;
-const int blockWin_y = 2;
 
-const int gameWin_height = blockWin_height*2+2;
-const int gameWin_width = blockWin_width*4+2;
-const int gameWin_x = 2;
-const int gameWin_y = 1;
-
-const int hintWin_height = 10;
-const int hintWin_width = 20;
-const int hintWin_x = gameWin_width+4;
-const int hintWin_y = 1;
-
-const int scoreWin_height = 10;
-const int scoreWin_width = 20;
-const int scoreWin_x = hintWin_x;
-const int scoreWin_y = 11;
-
-const int controlsWin_height = 15;
-const int controlsWin_width = 20;
-const int controlsWin_x = hintWin_x;
-const int controlsWin_y = 21;
-
-const int titleWin_height = 35;
-const int titleWin_width = 16;
-const int titleWin_x = hintWin_x+22;
-const int titleWin_y = 1;
-
-const int menuWin_height = titleWin_height;
-const int menuWin_width = hintWin_x + 18;
-const int menuWin_x = 2;
-const int menuWin_y = 1;
-
-const int linePoints = 10;
+//===============
+//   objects
+//===============
 
 typedef struct piece {
-	unsigned int** blocks;
-	unsigned int* origin;
+	int** blocks;
+	int* origin;
 	unsigned int color;
 
 } PIECE;
@@ -77,11 +52,39 @@ extern PIECE piece;
 
 extern SCORE sc;
 
-extern int alive;
+//===============
+//   options
+//===============
+
+extern unsigned int min_piece_size;
+
+extern unsigned int max_piece_size;
+
+extern unsigned int numPieces;
+
+extern int** pieces;
 
 //===============
-//   main.cc
+//   status
 //===============
+
+extern unsigned int linePoints;
+
+extern unsigned int piece_size;
+
+extern unsigned int alive;
+
+extern int storeAvailable;
+
+extern int storedPiece;
+
+extern int nextPiece;
+
+
+
+//=======================
+//         FILES
+//=======================
 
 //===============
 //   game.cc
@@ -168,7 +171,13 @@ void initPieceData();
 
 void freePieceData();
 
+void initPieces(int min, int max);
+
+void freePieces();
+
 int makePiece(int n);
+
+int genPiece();
 
 void clearPiece(unsigned int** blocks);
 
@@ -178,8 +187,50 @@ void rotatePiece(int n);
 
 int dropPiece();
 
-void updateBlocks(int* newloc, unsigned int originx, unsigned int originy);
+void updateBlocks(int* newloc, int originx, int originy);
 
 void reconstructPiece(int* newloc);
+
+void storePiece();
+
+
+//===============
+//   menus
+//===============
+
+const int blockWin_height = 20;
+const int blockWin_width = 10;
+const int blockWin_x = 3;
+const int blockWin_y = 2;
+
+const int gameWin_height = blockWin_height*2+2;
+const int gameWin_width = blockWin_width*4+2;
+const int gameWin_x = 2;
+const int gameWin_y = 1;
+
+const int hintWin_height = 10;
+const int hintWin_width = 20;
+const int hintWin_x = gameWin_width+4;
+const int hintWin_y = 1;
+
+const int scoreWin_height = 10;
+const int scoreWin_width = 20;
+const int scoreWin_x = hintWin_x;
+const int scoreWin_y = 11;
+
+const int controlsWin_height = 15;
+const int controlsWin_width = 20;
+const int controlsWin_x = hintWin_x;
+const int controlsWin_y = 21;
+
+const int titleWin_height = 35;
+const int titleWin_width = 16;
+const int titleWin_x = hintWin_x+22;
+const int titleWin_y = 1;
+
+const int menuWin_height = titleWin_height;
+const int menuWin_width = hintWin_x + 18;
+const int menuWin_x = 2;
+const int menuWin_y = 1;
 
 #endif

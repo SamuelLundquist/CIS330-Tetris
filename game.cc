@@ -1,6 +1,5 @@
 #include <time.h>
 #include <thread>
-#include <stdio.h>
 #include "definitions.h"
 
 using namespace std;
@@ -9,32 +8,40 @@ Queue moveQueue;
 
 int execute(int move);
 
-int alive;
-
-int nextPiece;
+unsigned int piece_size, numPieces, linePoints, alive, min_piece_size, max_piece_size;
+int storeAvailable, nextPiece;
 
 void game()
 {
+	min_piece_size = 4;
+	max_piece_size = 4;	
+	piece_size = 4;
+	numPieces = 7;
+
 	initGameWindows();
-
 	initBlockData();
-
 	initPieceData();
 
 	//Test for updating score data
 	updateScore(0, 0);
    
 	thread dropThread(dropFunc);
-
 	thread inputThread(inputFunc);
 
+
+	initPieces(min_piece_size, max_piece_size);
+
+	linePoints = 10;
 	alive = 1;
 
+	storeAvailable = 1;
+
+	//seed the random generator with the current internal timer
 	srand(time(NULL));
 
-	makePiece(rand()%7);
-
-	nextPiece = rand()%7;
+	makePiece(genPiece());
+	
+	nextPiece = genPiece();
 
 	updateBlockWindow();
 
@@ -52,24 +59,20 @@ void game()
 				{
 					alive = 0;
 				}
-				nextPiece = rand()%7;
+				nextPiece = genPiece();
+				storeAvailable = 1;
 			}
 			updateBlockWindow();	
-			
 		}
 	}
 
+	freePieces();
+
 	freePieceData();
-
 	freeBlockData();
-  
-
 
 	dropThread.join();
-  
 	inputThread.join();
-	printf("SDLFDSJFKDLFJ");
-	fflush(stdout);
 
 	endwin();
 	
@@ -87,18 +90,26 @@ int execute(int move)
 		case(AUTO_DROP):
 			bottomed = dropPiece();
 			break;
-		case(ROTATE_BLOCK_CLOCKWISE):
-			rotatePiece(1);
-			break;
-		case(ROTATE_BLOCK_COUNTERCLOCKWISE):
-			rotatePiece(-1);
-			break;
 		case(MOVE_RIGHT):
 			movePiece(1);
 			break;
 		case(MOVE_LEFT):
 			movePiece(-1);
 			break;
+		case(ROTATE_BLOCK_CLOCKWISE):
+			rotatePiece(1);
+			break;
+		case(ROTATE_BLOCK_COUNTERCLOCKWISE):
+			rotatePiece(-1);
+			break;
+		case(STORE_PIECE):
+			if(storeAvailable)
+			{
+				storePiece();
+				storeAvailable = 0;
+			}
+			break;
+
 	}
 	return bottomed;
 	getch();

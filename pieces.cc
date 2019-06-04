@@ -1,15 +1,19 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "definitions.h"
+
 using namespace std;
+
 
 void initPieceData()
 {
-	piece.blocks = (unsigned int**)malloc(sizeof(unsigned int*) * piece_size);
+	piece.blocks = (int**)malloc(sizeof(int*) * piece_size);
 	for(int i = 0; i < piece_size; i++)
 	{
-		piece.blocks[i] = (unsigned int*)malloc(sizeof(unsigned int) * 2);
+		piece.blocks[i] = (int*)malloc(sizeof(int) * 2);
 	}
-	piece.origin = (unsigned int*)malloc(sizeof(unsigned int) * 2);
+	piece.origin = (int*)malloc(sizeof(int) * 2);
+
 }
 
 void freePieceData()
@@ -22,6 +26,11 @@ void freePieceData()
 	}
 	free(piece.blocks);
 }
+
+int **pieces;
+void genPieces(int min, int max);
+
+
 /*
 Defines different types of blocks we might have
 For starters, we have 7 shapes with 4 blocks apiece
@@ -35,8 +44,49 @@ x,y of each block upon initialization
 Each piece {color, originx, originy, x1, y1, x2, y2, x3, y3, x4, y4}
 */
 
-const int pieces[7][3 + 2 * piece_size] =
+//if using random piece generation, the algorithm is set to
+//cap at 7 pieces per size
+//the number of pieces of sizes up to the classic tetromino are:
+//size 1: 1, size 2: 1, size 3: 2, size 4: 7
+void initPieces(int min, int max)
 {
+
+	//first calculate the number of pieces
+	int i = min;
+	numPieces = 0;
+	while(i < 4) 
+	{	
+		if(i == 1 || i == 2)
+		{
+			numPieces++;	
+		}
+		else if(i==3)
+		{
+			numPieces += 2;
+		}
+	}
+	//for the rest of the sizes, have 7 pieces
+	numPieces += (max - i + 1)*7;
+	pieces = (int**)malloc(sizeof(int*)*numPieces);
+	for(int i = 0; i < numPieces; i++) 
+	{
+		pieces[i] = (int*)malloc(sizeof(int)*(3+2*max));
+		for(int j = 0; j < 3+2*max; j++) 
+		{
+			pieces[i][j] = -1;
+		}
+	}
+
+	genPieces(min, max);	
+}
+
+
+//generate all possible tetrominos of size min to size max
+void genPieces(int min, int max)
+{
+	int removecompilewarninga = min;
+	int b = max;
+	int temp[7][11] = {
 	{1, 4, 4, 3, 4, 4, 4, 5, 4, 6, 4}, //line piece
 	{2, 4, 4, 4, 5, 3, 4, 4, 4, 5, 4}, //T piece
 	{3, 4, 4, 3, 5, 3, 4, 4, 4, 5, 4}, //L piece
@@ -44,15 +94,35 @@ const int pieces[7][3 + 2 * piece_size] =
 	{5, 4, 5, 3, 5, 4, 5, 4, 4, 5, 4}, //S piece
 	{6, 4, 5, 4, 5, 5, 5, 3, 4, 4, 4}, //Z piece
 	{7, 5, 5, 4, 5, 5, 5, 4, 4, 5, 4}  //O piece
-};
+	};
 
+	for(int i = 0; i < numPieces; i++) 
+	{
+		for(int j = 0; j < 3 + 2*max; j++) 
+		{
+			pieces[i][j] = temp[i][j];
+		}
+	}
+
+	 
+}
+
+void freePieces()
+{
+	for(int i = 0; i < numPieces; i++) 
+	{
+		free(pieces[i]);
+	}
+	free(pieces);
+
+}
 
 //given piece number (int n), assign piece struct values and update
 //block data matrix with piece
 //return 1 if there is a piece there already (you lose)
 int makePiece(int n)
 {
-	int dead = 0;
+	int game_over = 0;
 	piece.origin[0] = pieces[n][1];
 	piece.origin[1] = pieces[n][2];
 	piece.color = pieces[n][0];
@@ -62,20 +132,26 @@ int makePiece(int n)
 		int x = pieces[n][2*i+3];
 		if(block_data[y][x]) 
 		{
-			dead = 1;
+			game_over = 1;
 		}
 		block_data[y][x] = piece.color;
 		piece.blocks[i][0] = x;
 		piece.blocks[i][1] = y;
 	}
-	return dead;
+	return game_over;
+}
+
+//randomly generate a piece from the possible list of pieces
+int genPiece() 
+{
+	return(rand()%numPieces);
 }
 
 //
 // Given array of x y coordinates, sets those coordinates
 // to zero in block_data, which removes the piece
 //
-void clearPiece(unsigned int** blocks)
+void clearPiece(int** blocks)
 {
   for(int i = 0; i < piece_size; i++)
   {
@@ -132,8 +208,8 @@ void rotatePiece(int lr)
 	{
 		return;
 	}
-	unsigned int originx = piece.origin[0];
-	unsigned int originy = piece.origin[1];
+	int originx = piece.origin[0];
+	int originy = piece.origin[1];
 
 	//possible candidates for rotation
 	int numCand = 6;
@@ -214,8 +290,8 @@ int dropPiece()
 	clearPiece(piece.blocks);
 	for(int i = piece_size; i--;)
 	{
-		unsigned int nly = piece.blocks[i][1]+1;
-		unsigned int x = piece.blocks[i][0];
+		int nly = piece.blocks[i][1]+1;
+		int x = piece.blocks[i][0];
 		newloc[2*i] = x;
 		newloc[2*i+1] = nly;
 
@@ -230,7 +306,7 @@ int dropPiece()
 	return 0;
 }
 
-void updateBlocks(int* newloc, unsigned int originx, unsigned int originy)
+void updateBlocks(int* newloc, int originx, int originy)
 {
 	//update the block data and piece data
 	for(int i = piece_size; i--;)
@@ -258,4 +334,26 @@ void reconstructPiece(int* newloc)
 	
 	free(newloc);
 
+}
+
+int storedPiece = -1;
+
+void storePiece() 
+{
+
+	//if there isn't already a stored piece, 
+	if(storedPiece == -1) 
+	{
+		storedPiece = piece.color;
+		clearPiece(piece.blocks);
+		makePiece(nextPiece);
+		nextPiece = genPiece();
+		return;
+	}
+	int newPiece = storedPiece;
+	storedPiece = piece.color;
+	clearPiece(piece.blocks);
+	//since piece array starts at 1, newPiece - 1
+	makePiece(newPiece-1);
+	return;
 }
