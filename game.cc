@@ -10,6 +10,8 @@ int execute(int move);
 
 int alive;
 
+int nextPiece;
+
 void game()
 {
 	initGameWindows();
@@ -27,6 +29,12 @@ void game()
 
 	alive = 1;
 
+	srand(time(NULL));
+
+	makePiece(rand()%7);
+
+	nextPiece = rand()%7;
+
 	makePiece(1);
 
 	while(alive) 
@@ -39,7 +47,8 @@ void game()
 				updateBlockWindow();
 				checkLines();
 				updateBlockWindow();
-				makePiece(1);
+				makePiece(nextPiece);
+				nextPiece = rand()%7;
 			}
 			updateBlockWindow();	
 			
