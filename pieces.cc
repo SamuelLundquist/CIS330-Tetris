@@ -140,6 +140,11 @@ void genPieces(int min, int max)
 		int dataa[len] = {1, 4, 4, 3, 4, 4, 4, 5, 4, 6, 4, -1};
 		addPiece(i, max, dataa); //line piece
 		memcpy(genarr[0],pieces[i],sizeof(int)*(tlen));
+		for(int r = 0; r <12; r++)
+		{
+			printf("%d",genarr[0][r]);
+			fflush(stdout);
+		}
 		i++;
 		int datab[len] = {2, 4, 4, 4, 5, 3, 4, 4, 4, 5, 4, -1};
 		addPiece(i, max, datab); //T piece
@@ -167,16 +172,25 @@ void genPieces(int min, int max)
 		i++;
 		csize++;
 	}
+	//if our minimum size is less than 4, add to genArr but don't add
+	//piece to pieces
+	else if(min > 4){}//TODO
 	while(csize <= max)
 	{
+		fflush(stdout);
 		for(int j = 0; j < 7; j++)
 		{
-			int* tpiece = shapePiece(csize, max, genarr[j]);
+			int* tpiece = shapePiece(csize-1, max, genarr[j]);
 			addPiece(i, max, tpiece);
 			free(tpiece);
-			i++;
 			memcpy(pieces[i],genarr[j],sizeof(int)*(tlen));
+			i++;
+			//TODO: IF csize > min
+				printf("%d <- FIN",j);
+			fflush(stdout);
 		}
+		printf("DLDSJKFJKSLDFLK");
+		fflush(stdout);
 		csize++;
 	}
 	
@@ -189,6 +203,7 @@ void genPieces(int min, int max)
 //returns an array to be inputted into addPiece
 int *shapePiece(int n, int max, int* genarr)
 {
+
 	int graph[n+1][n+1];
 	for(int i = 0; i < n; i++)
 	{
@@ -198,52 +213,55 @@ int *shapePiece(int n, int max, int* genarr)
 		}
 	}	
 	int i = 1;
-	int entry;
+	int entry;	
+
 	while((entry = genarr[2*i+1]) != -1)
 	{
-	printf("GOT HERE");
-	fflush(stdout);
+
 		//graph[y-4][x] = color
-		printf("%d ",genarr[2*i+2]);
-		printf("\n%d",entry);
-		fflush(stdout);
-		graph[genarr[2*i+2]][entry] = genarr[0];
+		graph[genarr[2*i+2]-4][entry] = genarr[0];
 		i++;
+		
 	}
-	printf("GOT HERE");
-	fflush(stdout);
+
 	int found = 0;
 	int newx;
 	int newy;
+	int block;
 	while(!found) 
 	{	
 		//choose block in original piece
-		int block = rand()%n;
+		block = rand()%n;
 		int blockx = genarr[3+2*block];
-		int blocky = genarr[3+2*block]-4;
+		int blocky = genarr[3+2*block+1]-4;
+
 		//possible ways to move from block
 		//(don't count up - don't want to go above the window)
-		int options[3] = {0,1,-1};
-		//randomize order of options
+		//0: down, 1: right, -1: left
+		int shifts[3] = {0,1,-1};
+		//randomize order of shifts tested
 		for(int j = 0; j < 2; j++)
 		{
-			//psuedo-random number between j and 3
-			int k = (rand()%3 + j)%3;
+			//psuedo-random number between j and 3:
+			//1. find random from 0-2 (rand%3)
+			//2. random number from 0-(2-j) = %(3-j)
+			//3. random number from 1-2 = + j
+			int k = (rand()%3)%(3-j)+j;
 			//exchange entries k and j
-			int t = options[k];
-			options[k] = options[j];
-			options[j] = t;
+			int t = shifts[k];
+			shifts[k] = shifts[j];
+			shifts[j] = t;
 		}
 		int dir;
 		for(int j = 0; j < 3; j++)
-		{
-			if(dir = options[j])
+		{		
+			if(dir = shifts[j])
 			{
 				if(!graph[blocky][blockx+dir])
 				{
 					found = 1;
 					newx = blockx + dir;
-					newy = blocky;
+					newy = blocky+4;
 					break;
 				
 				}	
@@ -254,7 +272,7 @@ int *shapePiece(int n, int max, int* genarr)
 				{
 					found = 1;
 					newx = blockx;
-					newy = blocky+1;
+					newy = blocky+1+4;
 					break;
 				}
 			}
@@ -266,6 +284,9 @@ int *shapePiece(int n, int max, int* genarr)
 	{
 		newPiece[j] = genarr[j];
 	}
+	printf("OLD%d {%d, %d} ",block,genarr[3+2*block],genarr[3+2*block+1]);
+	printf("NEW {%d, %d} ",newx,newy);
+	fflush(stdout);
 	newPiece[j+1] = newx;
 	newPiece[j+2] = newy;
 	newPiece[j+3] = -1;
@@ -277,9 +298,10 @@ void addPiece(int piecenum, int max, int* piecedata)
 	int i = 0;
 	int entry;
 	while((entry = piecedata[i]) != -1) 
-	{
+	{		
 		pieces[piecenum][i] = entry;
 		i++;
+
 	}
 	while(i < 3 + 2*max)
 	{

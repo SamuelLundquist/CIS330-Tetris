@@ -14,8 +14,11 @@ int storeAvailable, nextPiece;
 void game()
 {
 	//set these in the options menu, however default to 4,4
-	min_piece_size = 1;
+	min_piece_size = 4;
 	max_piece_size = 4;	
+
+	//seed the random generator with the current internal timer
+	srand(time(NULL));
 
 	initPieces(min_piece_size, max_piece_size);	
 	initGameWindows();
@@ -33,8 +36,6 @@ void game()
 
 	storeAvailable = 1;
 
-	//seed the random generator with the current internal timer
-	srand(time(NULL));
 
 	makePiece(genPiece());
 
