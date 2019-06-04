@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <cstring>
 #include "definitions.h"
 
 using namespace std;
@@ -27,8 +28,9 @@ void freePieceData()
 	free(piece.blocks);
 }
 
-int **pieces;
+int** pieces;
 void genPieces(int min, int max);
+int* shapePiece(int n, int max, int* genarr);
 void addPiece(int piecenum, int max, int* piecedata);
 
 /*
@@ -66,8 +68,6 @@ void initPieces(int min, int max)
 		}
 		i++;
 	}
-	printf("GOT HERE");
-	fflush(stdout);
 	//for the rest of the sizes, have 7 pieces
 	numPieces += (max - i + 1)*7;
 	pieces = (int**)malloc(sizeof(int*)*numPieces);
@@ -92,6 +92,7 @@ void genPieces(int min, int max)
 {
 	int csize = 1;
 	int i = 0;
+	int len = 3+2*max+1;
 
 	//search until reach min, or until need to start generating pieces (size = 5)
 	while(csize < min && csize < 5) 
@@ -102,14 +103,16 @@ void genPieces(int min, int max)
 	{
 		//start at (4,4) : x=4 = center rounded left, y=4 = top of visible blocks
 		//origin = (4,4). this is the first two entries after color
-		int data[3+2*max+1] = {7,4,4,4,4,-1};
+		int data[len] = {7,4,4,4,4,-1};
 		addPiece(i, max, data);
 		i++;
 		csize++;
 	}
 	if(csize == 2 && csize <= max)
 	{
-		int data[3+2*max+1] = {6,4,4,4,4,5,4,-1};
+		//c++ doesn't accept curly braced arrays as parameters to
+		//functions, so must make a temporary container for the data
+		int data[len] = {6,4,4,4,4,5,4,-1};
 		addPiece(i, max, data);
 		i++;
 		csize++;
@@ -118,44 +121,155 @@ void genPieces(int min, int max)
 	{
 		//2 possible pieces this time: corner piece and length 3 line piece
 		
-		int dataa[3+2*max+1] = {5,4,4,3,4,4,4,5,4,-1};
+		int dataa[len] = {5,4,4,3,4,4,4,5,4,-1};
 		addPiece(i, max, dataa);
 		i++;
-		int datab[3+2*max+1] = {4,4,4,3,4,4,4,4,5,-1};
+		int datab[len] = {4,4,4,3,4,4,4,4,5,-1};
 		addPiece(i, max, datab);
 		i++;
 		csize++;
 	}
+	//excess -1 character on pieces of max size is removed
+	int tlen = len-1;
+	//a generator array used to shape pieces of larger sizes
+	int genarr[7][tlen];
+
 	if(csize == 4 && csize <= max)
 	{
 		//regular tetris pieces
-		int dataa[3+2*max+1] = {1, 4, 4, 3, 4, 4, 4, 5, 4, 6, 4, -1};
+		int dataa[len] = {1, 4, 4, 3, 4, 4, 4, 5, 4, 6, 4, -1};
 		addPiece(i, max, dataa); //line piece
+		memcpy(genarr[0],pieces[i],sizeof(int)*(tlen));
 		i++;
-		int datab[3+2*max+1] = {2, 4, 4, 4, 5, 3, 4, 4, 4, 5, 4, -1};
+		int datab[len] = {2, 4, 4, 4, 5, 3, 4, 4, 4, 5, 4, -1};
 		addPiece(i, max, datab); //T piece
+		memcpy(genarr[1],pieces[i],sizeof(int)*(tlen));
 		i++;
-		int datac[3+2*max+1] = {3, 4, 4, 3, 5, 3, 4, 4, 4, 5, 4, -1};
+		int datac[len] = {3, 4, 4, 3, 5, 3, 4, 4, 4, 5, 4, -1};
 		addPiece(i, max, datac); //L piece
+		memcpy(genarr[2],pieces[i],sizeof(int)*(tlen));
 		i++;
-		int datad[3+2*max+1] = {4, 4, 4, 5, 5, 3, 4, 4, 4, 5, 4, -1};
+		int datad[len] = {4, 4, 4, 5, 5, 3, 4, 4, 4, 5, 4, -1};
 		addPiece(i, max, datad); //Flipped L piece
+		memcpy(genarr[3],pieces[i],sizeof(int)*(tlen));
 		i++;
-		int datae[3+2*max+1] = {5, 4, 5, 3, 5, 4, 5, 4, 4, 5, 4, -1};
+		int datae[len] = {5, 4, 5, 3, 5, 4, 5, 4, 4, 5, 4, -1};
 		addPiece(i, max, datae); //S piece
+		memcpy(genarr[4],pieces[i],sizeof(int)*(tlen));
 		i++;
-		int dataf[3+2*max+1] = {6, 4, 5, 4, 5, 5, 5, 3, 4, 4, 4, -1};
+		int dataf[len] = {6, 4, 5, 4, 5, 5, 5, 3, 4, 4, 4, -1};
 		addPiece(i, max, dataf); //Z piece
+		memcpy(genarr[5],pieces[i],sizeof(int)*(tlen));
 		i++;
-		int datag[3+2*max+1] = {7, 5, 5, 4, 5, 5, 5, 4, 4, 5, 4, -1};
+		int datag[len] = {7, 5, 5, 4, 5, 5, 5, 4, 4, 5, 4, -1};
 		addPiece(i, max, datag); //O piece
+		memcpy(genarr[6],pieces[i],sizeof(int)*(tlen));
 		i++;
 		csize++;
 	}
-
-
+	while(csize <= max)
+	{
+		for(int j = 0; j < 7; j++)
+		{
+			int* tpiece = shapePiece(csize, max, genarr[j]);
+			addPiece(i, max, tpiece);
+			free(tpiece);
+			i++;
+			memcpy(pieces[i],genarr[j],sizeof(int)*(tlen));
+		}
+		csize++;
+	}
+	
 
 	 
+}
+
+//from a piece of size n, create a new piece of size n+1 by adding a block
+//to some random empty space next to a block in the original piece
+//returns an array to be inputted into addPiece
+int *shapePiece(int n, int max, int* genarr)
+{
+	int graph[n+1][n+1];
+	for(int i = 0; i < n; i++)
+	{
+		for(int j = 0; j < n; j++)
+		{
+			graph[i][j] = 0;
+		}
+	}	
+	int i = 1;
+	int entry;
+	while((entry = genarr[2*i+1]) != -1)
+	{
+	printf("GOT HERE");
+	fflush(stdout);
+		//graph[y-4][x] = color
+		printf("%d ",genarr[2*i+2]);
+		printf("\n%d",entry);
+		fflush(stdout);
+		graph[genarr[2*i+2]][entry] = genarr[0];
+		i++;
+	}
+	printf("GOT HERE");
+	fflush(stdout);
+	int found = 0;
+	int newx;
+	int newy;
+	while(!found) 
+	{	
+		//choose block in original piece
+		int block = rand()%n;
+		int blockx = genarr[3+2*block];
+		int blocky = genarr[3+2*block]-4;
+		//possible ways to move from block
+		//(don't count up - don't want to go above the window)
+		int options[3] = {0,1,-1};
+		//randomize order of options
+		for(int j = 0; j < 2; j++)
+		{
+			//psuedo-random number between j and 3
+			int k = (rand()%3 + j)%3;
+			//exchange entries k and j
+			int t = options[k];
+			options[k] = options[j];
+			options[j] = t;
+		}
+		int dir;
+		for(int j = 0; j < 3; j++)
+		{
+			if(dir = options[j])
+			{
+				if(!graph[blocky][blockx+dir])
+				{
+					found = 1;
+					newx = blockx + dir;
+					newy = blocky;
+					break;
+				
+				}	
+			}	
+			else
+			{
+				if(!graph[blocky+1][blockx])
+				{
+					found = 1;
+					newx = blockx;
+					newy = blocky+1;
+					break;
+				}
+			}
+		}
+	}
+	int* newPiece= (int*)malloc(sizeof(int)*(3+2*max + 1));
+	int j;
+	for(j = 0; j < 3+2*n; j++)
+	{
+		newPiece[j] = genarr[j];
+	}
+	newPiece[j+1] = newx;
+	newPiece[j+2] = newy;
+	newPiece[j+3] = -1;
+	return newPiece;
 }
 
 void addPiece(int piecenum, int max, int* piecedata)

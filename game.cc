@@ -13,11 +13,11 @@ int storeAvailable, nextPiece;
 
 void game()
 {
+	//set these in the options menu, however default to 4,4
 	min_piece_size = 1;
 	max_piece_size = 4;	
 
-	initPieces(min_piece_size, max_piece_size);	printf("DSLFKSDKJDF");
-	fflush(stdout);
+	initPieces(min_piece_size, max_piece_size);	
 	initGameWindows();
 	initBlockData();
 	initPieceData();
