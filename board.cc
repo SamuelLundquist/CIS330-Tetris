@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "definitions.h"
 
 void initBlockData()
@@ -96,30 +97,56 @@ void drop(int row, int dropNum)
 //the rest of the blocks in the block window down
 void checkLines()
 {
-  int* removedLines = fullLines();
-  int dropNum = 0;
-  int i = 0;
-  int value;
+	int* removedLines = fullLines();
+	int remRow = removedLines[0];
 
-  while(removedLines[i] != -1)
-  {
-    int row = removedLines[i] - 1;
-    dropNum++;
+	//if there was no row removed, return
+	if(remRow == -1) 
+	{
+		return;
+	}
 
-    if(removedLines[i+1] != -1) {
-      value = removedLines[i+1];
-    } else {
-      value = 0;
-    }
-    while (row != value)
-    {
-      drop(row, dropNum);
-      row--;
-    }
-    dropNum++;
-    i++;
-  }
-  free(removedLines);
+	int dropNum = 0;
+	int i = 0;
+	int toRow;
+
+	for(int j = 0; j<2; j++) 
+	{
+		printf("%d LINERM", remRow);
+		fflush(stdout);
+	}
+
+	//while there are lines to drop
+	while(remRow)
+	{
+		int toRow = removedLines[i+1];
+
+		//case where duplicates in array, skip to next value
+		if(remRow == -2) 
+		{
+			i++;
+			remRow = toRow;
+			continue;
+		}
+		
+		dropNum++;
+		int row = remRow - 1;
+		
+		//if there is no next line, drop the rest of the board	
+		if(toRow == -1) {      
+			toRow = 0;
+		}
+		
+		//until you reach the next row, drop all rows by dropNum
+		while (row != toRow)
+		{
+			drop(row, dropNum);
+			row--;
+		}
+		remRow = toRow;
+		i++;
+	}
+	free(removedLines);
 }
 
 //Sorts array from greatest to least given array and array length
@@ -133,6 +160,11 @@ void insertionSort(int* arr, int n)
 
         while (j >= 0 && arr[j] < key)
         {
+			//"remove" duplicates
+			if(key == arr[j]) 
+			{
+				key = -2;
+			}
             arr[j + 1] = arr[j];
             j = j - 1;
         }

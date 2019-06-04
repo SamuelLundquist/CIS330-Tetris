@@ -21,7 +21,7 @@ void game()
 	initPieceData();
 
 	//Test for updating score data
-	updateScore(1000, 10);
+	updateScore(0, 0);
    
 	thread dropThread(dropFunc);
 
