@@ -47,7 +47,10 @@ void game()
 				updateBlockWindow();
 				checkLines();
 				updateBlockWindow();
-				makePiece(nextPiece);
+				if (makePiece(nextPiece)) 
+				{
+					alive = 0;
+				}
 				nextPiece = rand()%7;
 			}
 			updateBlockWindow();	

@@ -168,7 +168,7 @@ void initPieceData();
 
 void freePieceData();
 
-void makePiece(int n);
+int makePiece(int n);
 
 void clearPiece(unsigned int** blocks);
 

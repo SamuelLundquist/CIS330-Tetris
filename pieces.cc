@@ -49,7 +49,8 @@ const int pieces[7][3 + 2 * piece_size] =
 
 //given piece number (int n), assign piece struct values and update
 //block data matrix with piece
-void makePiece(int n)
+//return 1 if there is a piece there already (you lose)
+int makePiece(int n)
 {
 	piece.origin[0] = pieces[n][1];
 	piece.origin[1] = pieces[n][2];
@@ -58,10 +59,15 @@ void makePiece(int n)
 	{
 		int y = pieces[n][2*i+4];
 		int x = pieces[n][2*i+3];
+		if(block_data[y][x]) 
+		{
+			return 1;
+		}
 		block_data[y][x] = piece.color;
 		piece.blocks[i][0] = x;
 		piece.blocks[i][1] = y;
 	}
+	return 0;
 }
 
 //
