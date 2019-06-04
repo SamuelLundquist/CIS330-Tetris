@@ -11,9 +11,10 @@ using namespace std;
 void dropFunc()
 {
 	while(alive) 
-	{
-		moveQueue.Enqueue(AUTO_DROP);
+	{	
 		this_thread::sleep_for(chrono::milliseconds(1000));
+		moveQueue.Enqueue(AUTO_DROP);
+
 	}	
 }
 
