@@ -178,8 +178,8 @@ void rotatePiece(int n);
 
 int dropPiece();
 
-void updateBlocks(unsigned int* newloc, unsigned int originx, unsigned int originy);
+void updateBlocks(int* newloc, unsigned int originx, unsigned int originy);
 
-void reconstructPiece(unsigned int* newloc);
+void reconstructPiece(int* newloc);
 
 #endif
