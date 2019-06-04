@@ -35,6 +35,8 @@ void game()
 
 	nextPiece = rand()%7;
 
+	updateBlockWindow();
+
 	while(alive) 
 	{
 		if(moveQueue.HasMove())
