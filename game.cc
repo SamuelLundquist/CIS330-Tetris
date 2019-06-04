@@ -34,8 +34,15 @@ void game()
 		if(moveQueue.HasMove())
 		{
 			int move = moveQueue.Dequeue();
-			execute(move);
-		updateBlockWindow();	
+			if(execute(move))
+			{
+				updateBlockWindow();
+				checkLines();
+				updateBlockWindow();
+				makePiece(1);
+			}
+			updateBlockWindow();	
+			
 		}
 	}
 /*

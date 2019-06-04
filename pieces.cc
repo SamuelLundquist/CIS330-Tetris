@@ -159,7 +159,7 @@ void rotatePiece(int n)
 	updateBlocks(newloc,piece.origin[0],piece.origin[1]);
 }
 
-//drops a piece, returns 1 if piece is dropped, 0 if it hits the ground
+//drops a piece, returns 1 if piece has hit the ground (bottomed)
 int dropPiece()
 {
 
@@ -175,12 +175,12 @@ int dropPiece()
 		if(nly>=24 || block_data[nly][x])
 		{
 			reconstructPiece(newloc);
-			return 0;
+			return 1;
 		}
 
 	}
 	updateBlocks(newloc,piece.origin[0],piece.origin[1]+1);
-	return 1;
+	return 0;
 }
 
 void updateBlocks(unsigned int* newloc, unsigned int originx, unsigned int originy)
