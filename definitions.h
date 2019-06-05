@@ -39,7 +39,8 @@ typedef struct piece {
 
 typedef struct score {
 	unsigned int pts;
-	unsigned int lns;
+	int lns;
+	int level;
 } SCORE;
 
 extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin, *lastWin;
@@ -80,6 +81,10 @@ extern int storedPiece;
 
 extern int nextPiece;
 
+//Set block speed based on level and number of levels
+const int levels = 10;
+
+const int levelSpeed[levels] = {1000, 850, 750, 650, 500, 400, 300, 200, 150, 100};
 
 
 //=======================
@@ -107,7 +112,7 @@ class Queue
 		void Enqueue(int move);
 		int Dequeue();
 		int HasMove();
-	
+
 };
 
 //moves added to queue by threads to be executed in game()
@@ -142,6 +147,10 @@ void killAllWindows();
 void updateScoreWin();
 
 void updateScore(int points, int lines);
+
+void updateLevel();
+
+void initLevelAndScore(int level);
 
 
 //================

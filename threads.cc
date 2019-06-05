@@ -4,65 +4,65 @@
 
 using namespace std;
 
-	
 
-//adds DROP to the moveQueue every period of time 
+
+//adds DROP to the moveQueue every period of time
 //dictated by the current falling speed
 void dropFunc()
 {
-	while(alive) 
-	{	
-		this_thread::sleep_for(chrono::milliseconds(1000));
+	while(alive)
+	{
+		this_thread::sleep_for(chrono::milliseconds(dropSpeed));
 		moveQueue.Enqueue(AUTO_DROP);
 
-	}	
+	}
 }
 
 //adds corresponding input to the moveQueue based on user inputted
 //characters to be executed by the main
-void inputFunc() 
+void inputFunc()
 {
 	char ch;
 	while(alive)
 	{
 		ch = getch();
-		moveQueue.Enqueue(ch);	
+		moveQueue.Enqueue(ch);
 
 	}
 }
 
-Queue::Queue() 
+Queue::Queue()
 {
 	size = 5;
 	loc = 0;
 }
 
-void Queue::Enqueue(int move) 
+void Queue::Enqueue(int move)
 {
 	int next = loc+1;
-	if(loc == size - 1) 
+	if(loc == size - 1)
 	{
 		next = 0;
 	}
-	if(!moves[next]) 
+	if(!moves[next])
 	{
 		loc = next;
 		moves[loc] = move;
-	} 
+	}
 	//add autodrop to the queue no matter what
 	else if(move == AUTO_DROP)
 	{
 		moves[loc] = move;
 	}
 	return;
-	
+
 }
 
 int Queue::Dequeue()
 {
 	int val = moves[loc];
 	moves[loc] = 0;
-	if(loc == 0) 
+	if(loc == 0)
 	{
 		loc = 4;
 	}
