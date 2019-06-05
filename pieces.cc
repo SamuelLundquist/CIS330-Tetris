@@ -175,23 +175,73 @@ void genPieces(int min, int max)
 	}
 	//if our minimum size is less than 4, add to genArr but don't add
 	//piece to pieces
-	else if(min > 4){}//TODO
+	else if(min > 4){}		//regular tetris pieces
+		int dataa[len] = {1, 4, 4, 3, 4, 4, 4, 5, 4, 6, 4, -1};
+		addPiece(i, max, dataa); //line piece
+		memcpy(genarr[0],pieces[i],sizeof(int)*(tlen));
+		i++;
+		int datab[len] = {2, 4, 4, 4, 5, 3, 4, 4, 4, 5, 4, -1};
+		addPiece(i, max, datab); //T piece
+		memcpy(genarr[1],pieces[i],sizeof(int)*(tlen));
+		i++;
+		int datac[len] = {3, 4, 4, 3, 5, 3, 4, 4, 4, 5, 4, -1};
+		addPiece(i, max, datac); //L piece
+		memcpy(genarr[2],pieces[i],sizeof(int)*(tlen));
+		i++;
+		int datad[len] = {4, 4, 4, 5, 5, 3, 4, 4, 4, 5, 4, -1};
+		addPiece(i, max, datad); //Flipped L piece
+		memcpy(genarr[3],pieces[i],sizeof(int)*(tlen));
+		i++;
+		int datae[len] = {5, 4, 5, 3, 5, 4, 5, 4, 4, 5, 4, -1};
+		addPiece(i, max, datae); //S piece
+		memcpy(genarr[4],pieces[i],sizeof(int)*(tlen));
+		i++;
+		int dataf[len] = {6, 4, 5, 4, 5, 5, 5, 3, 4, 4, 4, -1};
+		addPiece(i, max, dataf); //Z piece
+		memcpy(genarr[5],pieces[i],sizeof(int)*(tlen));
+		i++;
+		int datag[len] = {7, 5, 5, 4, 5, 5, 5, 4, 4, 5, 4, -1};
+		addPiece(i, max, datag); //O piece
+		memcpy(genarr[6],pieces[i],sizeof(int)*(tlen));
+		i++;
+		csize++;
+//TODO
+
+
 	while(csize <= max)
 	{
 		fflush(stdout);
 		for(int j = 0; j < 7; j++)
 		{
 			int* tpiece = shapePiece(csize-1, max, genarr[j]);
-			addPiece(i, max, tpiece);
+			if(csize > min)
+			{
+				addPiece(i, max, tpiece);
+				memcpy(genarr[j],pieces[i],sizeof(int)*(tlen));
+				i++;
+
+			}
+			else
+			{
+				int k = 0;
+				int entry;
+				while((entry = tpiece[k]) != -1) 
+				{		
+					genarr[j][k] = entry;
+					k++;
+
+				}
+				while(i < 3 + 2*max)
+				{
+					
+					genarr[j][k] = -1;
+					k++;
+				}
+			}			
 			free(tpiece);
-			memcpy(genarr[j],pieces[i],sizeof(int)*(tlen));
-			i++;
-			//TODO: IF csize > min
-				printf("%d <- FIN",j);
-			fflush(stdout);
+
 		}
-		printf("DLDSJKFJKSLDFLK");
-		fflush(stdout);
+
 		csize++;
 	}
 
@@ -293,16 +343,15 @@ int *shapePiece(int n, int max, int* genarr)
 	}
 	int* newPiece= (int*)malloc(sizeof(int)*(3+2*max + 1));
 	int j;
+
 	for(j = 0; j < 3+2*n; j++)
 	{
 		newPiece[j] = genarr[j];
 	}
-	printf("OLD%d {%d, %d} ",block,genarr[3+2*block],genarr[3+2*block+1]);
-	printf("NEW {%d, %d} ",newx,newy);
-	fflush(stdout);
-	newPiece[j+1] = newx;
-	newPiece[j+2] = newy;
-	newPiece[j+3] = -1;
+
+	newPiece[j] = newx;
+	newPiece[j+1] = newy;
+	newPiece[j+2] = -1;
 	
 	for(int t = 0; t < n+1; t++)
 	{
@@ -331,6 +380,8 @@ void addPiece(int piecenum, int max, int* piecedata)
 	}
 
 }
+
+addPieceToArr(int piecenum, int max, int* piecedata)
 
 void freePieces()
 {
