@@ -9,9 +9,9 @@ using namespace std;
 //Given a new score value, updates to score window
 void updateScoreWin()
 {
-    mvwprintw(scoreWin, 2, 9, "%d", sc.pts);
-    mvwprintw(scoreWin, 4, 9, "%d", sc.lns);
-    mvwprintw(scoreWin, 6, 9, "%d", sc.level);
+    mvwprintw(scoreWin, 1, 9, "%d", sc.pts);
+    mvwprintw(scoreWin, 3, 9, "%d", sc.lns);
+    mvwprintw(scoreWin, 5, 9, "%d", sc.level);
     wrefresh(scoreWin);
     return;
 }

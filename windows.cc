@@ -479,6 +479,7 @@ void initGameWindows()
     scoreWin = newwin(scoreWin_height, scoreWin_width, scoreWin_y, scoreWin_x);
     controlsWin = newwin(controlsWin_height, controlsWin_width, controlsWin_y, controlsWin_x);
     hintWin = newwin(hintWin_height, hintWin_width, hintWin_y, hintWin_x);
+    storeWin = newwin(storeWin_height, storeWin_width, storeWin_y, storeWin_x);
     refresh();
 
     //Init Game Win
@@ -493,23 +494,28 @@ void initGameWindows()
     mvwprintw(hintWin, 0, 4, " NEXT BLOCK ");
     wrefresh(hintWin);
 
+    //Init Store Win
+    box(storeWin,0,0);
+    mvwprintw(storeWin, 0, 4, " STORE BLOCK ");
+    wrefresh(storeWin);
+
     //Init Score Win
     box(scoreWin, 0, 0);
     mvwprintw(scoreWin, 0, 6, " SCORE ");
-    mvwprintw(scoreWin, 2, 2, "Score: 0");
-    mvwprintw(scoreWin, 4, 2, "Lines: 0");
-    mvwprintw(scoreWin, 6, 2, "Level: 0");
+    mvwprintw(scoreWin, 1, 2, "Score: 0");
+    mvwprintw(scoreWin, 3, 2, "Lines: 0");
+    mvwprintw(scoreWin, 5, 2, "Level: 0");
     wrefresh(scoreWin);
 
     //Init Controls Win
     box(controlsWin,0,0);
     mvwprintw(controlsWin, 0, 5, " CONTROLS ");
-    mvwprintw(controlsWin, 2, 2, "Left: A");
-    mvwprintw(controlsWin, 4, 2, "Right: D");
-    mvwprintw(controlsWin, 6, 2, "Right Rotate: W");
-    mvwprintw(controlsWin, 8, 2, "Left Rotate: S");
-    mvwprintw(controlsWin, 10, 2, "Drop: SPACE");
-    mvwprintw(controlsWin, 12, 2, "Pause: P");
+    mvwprintw(controlsWin, 1, 2, "Left: A");
+    mvwprintw(controlsWin, 3, 2, "Right: D");
+    mvwprintw(controlsWin, 5, 2, "Right Rotate: W");
+    mvwprintw(controlsWin, 7, 2, "Left Rotate: S");
+    mvwprintw(controlsWin, 9, 2, "Drop: SPACE");
+    mvwprintw(controlsWin, 11, 2, "Pause: P");
     wrefresh(controlsWin);
 }
 
