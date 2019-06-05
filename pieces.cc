@@ -175,7 +175,7 @@ void genPieces(int min, int max)
 	}
 	//if our minimum size is less than 4, add to genArr but don't add
 	//piece to pieces
-	else if(min > 4){}		//regular tetris pieces
+	else if(min > 4){		//regular tetris pieces
 		int dataa[len] = {1, 4, 4, 3, 4, 4, 4, 5, 4, 6, 4, -1};
 		addPiece(i, max, dataa); //line piece
 		memcpy(genarr[0],pieces[i],sizeof(int)*(tlen));
@@ -204,7 +204,7 @@ void genPieces(int min, int max)
 		addPiece(i, max, datag); //O piece
 		memcpy(genarr[6],pieces[i],sizeof(int)*(tlen));
 		i++;
-		csize++;
+		csize++;}
 //TODO
 
 
@@ -381,7 +381,7 @@ void addPiece(int piecenum, int max, int* piecedata)
 
 }
 
-addPieceToArr(int piecenum, int max, int* piecedata)
+void addPieceToArr(int piecenum, int max, int* piecedata){}
 
 void freePieces()
 {
