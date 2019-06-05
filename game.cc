@@ -9,7 +9,7 @@ Queue moveQueue;
 
 int execute(int move);
 
-unsigned int piece_size, numPieces, linePoints, alive, min_piece_size, max_piece_size;
+unsigned int piece_size, numPieces, linePoints, alive, running, min_piece_size, max_piece_size;
 int storeAvailable, nextPiece, dropSpeed;
 
 void game()
@@ -31,6 +31,7 @@ void game()
 	initLevelAndScore(4);
 
 	alive = 1;
+	running = 1;
 	storeAvailable = 1;
 
 	thread dropThread(dropFunc);
@@ -118,6 +119,10 @@ int execute(int move)
 				storePiece();
 				storeAvailable = 0;
 			}
+			break;
+		case(PAUSE_GAME):
+			running = 0;
+			pauseGame();
 			break;
 
 	}

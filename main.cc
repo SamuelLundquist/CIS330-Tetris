@@ -16,7 +16,7 @@ PIECE piece;
 SCORE sc = {0,0};
 
 //Define all windows
-WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin, *lastWin;
+WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin, *pauseWin, *lastWin;
 
 int main()
 {
@@ -33,4 +33,3 @@ int main()
 
    return 0;
 }
-                       

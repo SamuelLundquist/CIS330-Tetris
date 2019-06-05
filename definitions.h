@@ -22,6 +22,7 @@ const char MENU_UP = 119; //w
 const char MENU_DOWN = 115; //s
 const char MENU_SELECT = 10; //enter key
 const char EXIT = 27; //esc
+const char PAUSE_GAME = 112; //p
 
 
 
@@ -43,7 +44,7 @@ typedef struct score {
 	int level;
 } SCORE;
 
-extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin, *lastWin;
+extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin, *pauseWin, *lastWin;
 
 //2d array of integers representing color of block at that location
 extern unsigned int **block_data;
@@ -74,6 +75,8 @@ extern unsigned int linePoints;
 extern unsigned int piece_size;
 
 extern unsigned int alive;
+
+extern unsigned int running;
 
 extern int dropSpeed;
 
@@ -141,6 +144,8 @@ void initControls();
 void initGameWindows();
 
 void updateBlockWindow();
+
+void pauseGame();
 
 //================
 //   score.cc
@@ -249,6 +254,10 @@ const int menuWin_width = hintWin_x + 18;
 const int menuWin_x = 2;
 const int menuWin_y = 1;
 
+const int pauseWin_height = gameWin_height/4;
+const int pauseWin_width = gameWin_width/2;
+const int pauseWin_x = (gameWin_width - pauseWin_width)/2 + gameWin_x;
+const int pauseWin_y = (gameWin_height - pauseWin_height)/2 + gameWin_y;
 
 
 #endif

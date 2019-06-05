@@ -10,7 +10,7 @@ using namespace std;
 //dictated by the current falling speed
 void dropFunc()
 {
-	while(alive)
+	while(running)
 	{
 		this_thread::sleep_for(chrono::milliseconds(dropSpeed));
 		moveQueue.Enqueue(AUTO_DROP);
@@ -23,7 +23,7 @@ void dropFunc()
 void inputFunc()
 {
 	char ch;
-	while(alive)
+	while(running)
 	{
 		ch = getch();
 		moveQueue.Enqueue(ch);

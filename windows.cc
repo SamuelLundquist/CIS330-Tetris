@@ -265,3 +265,17 @@ void initGameWindows()
     mvwprintw(controlsWin, 8, 2, "Rotate: W");
     wrefresh(controlsWin);
 }
+
+void pauseGame()
+{
+    pauseWin = newwin(pauseWin_height, pauseWin_width, pauseWin_y, pauseWin_x);
+    box(pauseWin,0,0);
+    mvwprintw(pauseWin, 0, pauseWin_width/2 - 4, " PAUSED ");
+    wrefresh(pauseWin);
+    getch();
+    werase(pauseWin);
+    wrefresh(pauseWin);
+    delwin(pauseWin);
+    updateBlockWindow();
+
+}
