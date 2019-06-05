@@ -125,7 +125,7 @@ int menu()
                 else if ( i == 1 )
                 {
                     int x;
-                    for ( x = 0; x < numControls; x++) //print controls to menu window 
+                    for ( x = 0; x < numControls; x++) //print controls to menu window
 		    {
                         sprintf(control, "%s", controls[x]);
                         mvwprintw(menuWin, x*3+6, 24, "%s", control);
@@ -253,6 +253,7 @@ void initGameWindows()
     mvwprintw(scoreWin, 0, 6, " SCORE ");
     mvwprintw(scoreWin, 2, 2, "Score: 0");
     mvwprintw(scoreWin, 4, 2, "Lines: 0");
+    mvwprintw(scoreWin, 6, 2, "Level: 0");
     wrefresh(scoreWin);
 
     //Init Controls Win
@@ -263,4 +264,16 @@ void initGameWindows()
     mvwprintw(controlsWin, 6, 2, "Drop: SPACE");
     mvwprintw(controlsWin, 8, 2, "Rotate: W");
     wrefresh(controlsWin);
+}
+
+
+void killAllWindows(){
+    delwin(gameWin);
+    delwin(blockWin);
+    delwin(scoreWin);
+    delwin(controlsWin);
+    delwin(hintWin);
+    //refresh();
+    endwin();
+
 }

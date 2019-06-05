@@ -9,14 +9,14 @@ Queue moveQueue;
 int execute(int move);
 
 unsigned int piece_size, numPieces, linePoints, alive, min_piece_size, max_piece_size;
-int storeAvailable, nextPiece;
+int storeAvailable, nextPiece, dropSpeed;
 
 void game()
 {
 	//set these in the options menu, however default to 4,4
 	min_piece_size = 4;
-	max_piece_size = 5;	
 
+	max_piece_size = 4;
 	//seed the random generator with the current internal timer
 	srand(time(NULL));
 
@@ -25,15 +25,15 @@ void game()
 	initBlockData();
 	initPieceData();
 
-	//Test for updating score data
-	updateScore(0, 0);
+
+	//Sets level and score, parameter is level
+	initLevelAndScore(3);
+
+	alive = 1;
+	storeAvailable = 1;
+
 	thread dropThread(dropFunc);
 	thread inputThread(inputFunc);
-
-	linePoints = 10;
-	alive = 1;
-
-	storeAvailable = 1;
 
 
 	makePiece(genPiece());
@@ -42,7 +42,7 @@ void game()
 
 	updateBlockWindow();
 
-	while(alive) 
+	while(alive)
 	{
 		if(moveQueue.HasMove())
 		{
@@ -52,14 +52,27 @@ void game()
 				updateBlockWindow();
 				checkLines();
 				updateBlockWindow();
-				if (makePiece(nextPiece)) 
+				if (makePiece(nextPiece))
 				{
 					alive = 0;
+               //delwin(gameWin);
+               //delwin(blockWin);
+               //wrefresh(gameWin);
+              // wrefresh(blockWin);
+               endwin();
+              // refresh();
+               lastWin = newwin(50, 100, 0, 0);
+               // refresh();
+                wbkgd(lastWin, COLOR_PAIR(2));
+                box(lastWin, 0, 0);
+                //wbkgd(lastWin, COLOR_PAIR(2));
+                mvwprintw(lastWin, 1, 2, " # Game Over # ");
+                wrefresh(lastWin);
 				}
 				nextPiece = genPiece();
 				storeAvailable = 1;
 			}
-			updateBlockWindow();	
+			updateBlockWindow();
 		}
 	}
 
@@ -72,17 +85,17 @@ void game()
 	inputThread.join();
 
 	endwin();
-	
+
 	return;
 }
 
 
-int execute(int move) 
+int execute(int move)
 {
 	int bottomed = 0;
 	switch(move){
-		case(DROP_BLOCK): 
-			bottomed = dropPiece();	
+		case(DROP_BLOCK):
+			bottomed = dropPiece();
 			break;
 		case(AUTO_DROP):
 			bottomed = dropPiece();

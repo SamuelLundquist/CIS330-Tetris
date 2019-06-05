@@ -39,10 +39,11 @@ typedef struct piece {
 
 typedef struct score {
 	unsigned int pts;
-	unsigned int lns;
+	int lns;
+	int level;
 } SCORE;
 
-extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
+extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin, *lastWin;
 
 //2d array of integers representing color of block at that location
 extern unsigned int **block_data;
@@ -74,12 +75,18 @@ extern unsigned int piece_size;
 
 extern unsigned int alive;
 
+extern int dropSpeed;
+
 extern int storeAvailable;
 
 extern int storedPiece;
 
 extern int nextPiece;
 
+//Set block speed based on level and number of levels
+const int levels = 10;
+
+const int levelSpeed[levels] = {1000, 850, 750, 650, 500, 400, 300, 200, 150, 100};
 
 
 //=======================
@@ -107,7 +114,7 @@ class Queue
 		void Enqueue(int move);
 		int Dequeue();
 		int HasMove();
-	
+
 };
 
 //moves added to queue by threads to be executed in game()
@@ -133,6 +140,8 @@ void initGameWindows();
 
 void updateBlockWindow();
 
+void killAllWindows();
+
 //================
 //   score.cc
 //================
@@ -140,6 +149,10 @@ void updateBlockWindow();
 void updateScoreWin();
 
 void updateScore(int points, int lines);
+
+void updateLevel();
+
+void initLevelAndScore(int level);
 
 
 //================
@@ -232,5 +245,7 @@ const int menuWin_height = titleWin_height;
 const int menuWin_width = hintWin_x + 18;
 const int menuWin_x = 2;
 const int menuWin_y = 1;
+
+
 
 #endif
