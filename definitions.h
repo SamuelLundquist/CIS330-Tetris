@@ -150,8 +150,6 @@ int menu();
 
 void initMenu();
 
-void initControls();
-
 void initGameWindows();
 
 void updateBlockWindow();

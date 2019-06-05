@@ -47,19 +47,6 @@ void updateBlockWindow()
     wrefresh(blockWin);
 }
 
-void initControls()
-{
-    controlsWin = newwin(controlsWin_height, controlsWin_width, controlsWin_y - 2, controlsWin_x - 4);
-
-    box(controlsWin,0,0);
-    mvwprintw(controlsWin, 0, 5, " CONTROLS ");
-    mvwprintw(controlsWin, 2, 2, "Left: A");
-    mvwprintw(controlsWin, 4, 2, "Right: D");
-    mvwprintw(controlsWin, 6, 2, "Drop: SPACE");
-    mvwprintw(controlsWin, 8, 2, "Rotate: W");
-    wrefresh(controlsWin);
-}
-
 int menu()
 {
     initscr(); //Init Ncurses
@@ -519,8 +506,10 @@ void initGameWindows()
     mvwprintw(controlsWin, 0, 5, " CONTROLS ");
     mvwprintw(controlsWin, 2, 2, "Left: A");
     mvwprintw(controlsWin, 4, 2, "Right: D");
-    mvwprintw(controlsWin, 6, 2, "Drop: SPACE");
-    mvwprintw(controlsWin, 8, 2, "Rotate: W");
+    mvwprintw(controlsWin, 6, 2, "Right Rotate: W");
+    mvwprintw(controlsWin, 8, 2, "Left Rotate: S");
+    mvwprintw(controlsWin, 10, 2, "Drop: SPACE");
+    mvwprintw(controlsWin, 12, 2, "Pause: P");
     wrefresh(controlsWin);
 }
 
