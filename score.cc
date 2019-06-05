@@ -2,7 +2,9 @@
 #include "definitions.h"
 #include <ncurses.h>
 #include <iostream>
-#include <fcntl.h>
+#include <fstream>
+#include <string>
+using namespace std;
 
 //Given a new score value, updates to score window
 void updateScoreWin()
@@ -72,17 +74,26 @@ void dis_score()
 
 void store_score()
 {
+  int rank, score, i=0;
+  string name;
+
+
   dis_score();
-  FILE *fp;
-  fp = fopen("highscores.txt", "r");
-  if(fp != NULL){
+ /* ifstream myFile("highscores.txt");
 
-    mvwprintw(gameWin, 26, (gameWin_width/2)-6, "YOOOO \n");
-    wrefresh(gameWin);
-  }
-  else{
 
-    mvwprintw(gameWin, 26, (gameWin_width/2)-6, "Noooo:  \n");
-    wrefresh(gameWin);
+  if(myFile.is_open())
+  {
+    while(getline(myFile, name))
+    { 
+      mvwprintw(gameWin, 26 + i, (gameWin_width/2)-6, "test: %s \n", name);
+
+      i++;
+    }
+    myFile.close();
   }
+
+    wrefresh(gameWin);*/
+  
+
 }

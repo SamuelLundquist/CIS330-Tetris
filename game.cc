@@ -16,7 +16,7 @@ void game()
 {
 	//set these in the options menu, however default to 4,4
 	min_piece_size = 4;
-	max_piece_size = 5;
+	max_piece_size = 4;
 
 	//seed the random generator with the current internal timer
 	srand(time(NULL));
