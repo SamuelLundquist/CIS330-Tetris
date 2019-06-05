@@ -73,11 +73,11 @@ int menu()
     int i, numItems, numControls, numSettings;
     numControls = 5;
     numItems = 4;
-    numSettings = 3;
+    numSettings = 4;
     char options[numItems][15] = {"PLAY GAME","CONTROLS","SETTINGS","QUIT"};
     //Spaces keep control options centered, don't remove plz.
     char controls[numControls][25] = {"     Left: A  ", "    Right: D  ", " Rotate Right: W", "  Rotate Left: S", "Drop Block: SPACE"};
-    char settings[numSettings][20] = {"Max Block Size:", "Min Block Size:", "Checkerboard Theme:"};
+    char settings[numSettings][20] = {"Max Block Size:", "Min Block Size:", "Checkerboard Theme:", "Apply Changes"};
     char option[15];
     char setting[25];
     char control[25];
@@ -119,7 +119,6 @@ int menu()
                 //Play game was selected, erase menu window and return 1
                 if ( i == 0 )
                 {
-                    int finished = 0;
                     int level = 1;
                     char lvl[5];
                     werase(menuWin);
@@ -135,9 +134,9 @@ int menu()
                     mvwprintw(menuWin, menuWin_height/2+2, menuWin_width/2+6, "|");
                     wrefresh(menuWin);
 
-                    while(!finished)
+                    while(ch = wgetch(menuWin))
                     {
-                        ch = getch();
+                        int exit = 0;
                         switch(ch)
                         {
                             case(MENU_UP):
@@ -161,7 +160,7 @@ int menu()
                                 break;
 
                             case(MENU_SELECT):
-                                finished = 1;
+                                exit = 1;
                                 setLevel = level;
                                 werase(menuWin);
                                 wrefresh(menuWin);
@@ -169,8 +168,12 @@ int menu()
                                 return 1;
 
                             case(EXIT):
-                                finished = 1;
+                                exit = 1;
                                 break;
+                        }
+                        if(exit)
+                        {
+                            break;
                         }
                         
                     }
@@ -187,7 +190,6 @@ int menu()
                         mvwprintw(menuWin, x*3+9, 27, "%s", option);
                     }
                     wrefresh(menuWin); //Refresh window
-                    keypad( menuWin, TRUE ); //Keeps menu from exiting while loop upon return to main from controls menu
                     break;
                     
                 }
@@ -246,7 +248,7 @@ int menu()
                     x, finished = 0;
                     wrefresh(menuWin);
 
-                    while(ch = getch())
+                    while(ch = wgetch(menuWin))
                     {
                         sprintf(setting, "%s", settings[x]);
                         mvwprintw(menuWin, x*3+6, 16, "%s", setting);
@@ -271,7 +273,7 @@ int menu()
                                     wattron(menuWin, A_STANDOUT);
                                     mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
                                     wrefresh(menuWin);
-                                    while(ch = getch())
+                                    while(ch = wgetch(menuWin))
                                     {
                                         int exit = 0;
 
@@ -358,7 +360,7 @@ int menu()
                                     mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
 
                                 }
-                                else
+                                else if (x == 2)
                                 {
                                     if(checkerboard)
                                     {
@@ -371,6 +373,11 @@ int menu()
                                         mvwprintw(menuWin, 12, 40, "Enabled ");
                                     }
 
+                                }
+
+                                else if (x == 3)
+                                {
+                                    finished = 1;
                                 }
                                 break;
 
@@ -402,7 +409,6 @@ int menu()
                         mvwprintw(menuWin, x*3+9, 27, "%s", option);
                     }
                     wrefresh(menuWin); //Refresh window
-                    keypad( menuWin, TRUE ); //Keeps menu from exiting while loop upon return to main from controls menu
                     break;
                 }
 
