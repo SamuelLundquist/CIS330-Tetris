@@ -2,6 +2,7 @@
 #include "definitions.h"
 #include <ncurses.h>
 #include <iostream>
+#include <fcntl.h>
 
 //Given a new score value, updates to score window
 void updateScoreWin()
@@ -56,4 +57,32 @@ void initLevelAndScore(int level)
   linePoints = 10 * level;
   updateScore(0,0);
   return;
+}
+
+void dis_score()
+{
+  // display score when the game is over
+  werase(scoreWin);
+  mvwprintw(gameWin, 18, (gameWin_width/2)-6, "Your score is: \n"); 
+  mvwprintw(gameWin, 20, (gameWin_width/2)-6, "Points: %d \n", sc.pts); 
+  mvwprintw(gameWin, 22, (gameWin_width/2)-6, "Lines: %d \n", sc.lns); 
+  mvwprintw(gameWin, 24, (gameWin_width/2)-6, "Level: %d \n", sc.level); 
+
+}
+
+void store_score()
+{
+  dis_score();
+  FILE *fp;
+  fp = fopen("highscores.txt", "r");
+  if(fp != NULL){
+
+    mvwprintw(gameWin, 26, (gameWin_width/2)-6, "YOOOO \n");
+    wrefresh(gameWin);
+  }
+  else{
+
+    mvwprintw(gameWin, 26, (gameWin_width/2)-6, "Noooo:  \n");
+    wrefresh(gameWin);
+  }
 }

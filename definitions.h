@@ -156,6 +156,9 @@ void updateLevel();
 
 void initLevelAndScore(int level);
 
+void dis_score();
+
+void store_score();
 
 //================
 //   board.cc

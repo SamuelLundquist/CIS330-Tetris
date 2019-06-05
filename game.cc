@@ -1,6 +1,7 @@
 #include <time.h>
 #include <thread>
 #include "definitions.h"
+#include <ncurses.h>
 
 using namespace std;
 
@@ -55,19 +56,6 @@ void game()
 				if (makePiece(nextPiece))
 				{
 					alive = 0;
-               //delwin(gameWin);
-               //delwin(blockWin);
-               //wrefresh(gameWin);
-              // wrefresh(blockWin);
-               endwin();
-              // refresh();
-               lastWin = newwin(50, 100, 0, 0);
-               // refresh();
-                wbkgd(lastWin, COLOR_PAIR(2));
-                box(lastWin, 0, 0);
-                //wbkgd(lastWin, COLOR_PAIR(2));
-                mvwprintw(lastWin, 1, 2, " # Game Over # ");
-                wrefresh(lastWin);
 				}
 				nextPiece = genPiece();
 				storeAvailable = 1;
@@ -83,6 +71,18 @@ void game()
 
 	dropThread.join();
 	inputThread.join();
+
+
+	werase(blockWin);                          // remove block window 
+	wrefresh(blockWin);
+	delwin(blockWin);
+
+
+    mvwprintw(gameWin, 14, (gameWin_width/2)-6, "# Game Over # ");              // game over window
+    //dis_score();                                                                // display score
+    store_score();           // mvwprintw(gameWin, 18, (gameWin_width/2)-6, "Your score is: xx");
+    wrefresh(gameWin);
+    getch();
 
 	endwin();
 
