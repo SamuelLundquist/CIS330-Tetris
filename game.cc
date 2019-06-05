@@ -9,17 +9,13 @@ Queue moveQueue;
 
 int execute(int move);
 
-unsigned int piece_size, numPieces, linePoints, alive, running, min_piece_size, max_piece_size;
+unsigned int piece_size, numPieces, linePoints, alive, running;
 int storeAvailable, nextPiece, dropSpeed;
 
 int game()
 {
 	//if restart selected, game will restart after ending in main
 	int restart = 0;
-
-	//set these in the options menu, however default to 4,4
-	min_piece_size = 6;
-	max_piece_size = 9;
 
 	//seed the random generator with the current internal timer
 	srand(time(NULL));

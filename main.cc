@@ -14,6 +14,8 @@ using namespace std;
 unsigned int **block_data;
 int setLevel;
 int checkerboard = 0;
+unsigned int max_piece_size = 4;
+unsigned int min_piece_size = 1;
 PIECE piece;
 
 SCORE sc = {0,0};

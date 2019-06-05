@@ -266,10 +266,96 @@ int menu()
                                 
                                 if (x == 0)
                                 {
+                                    sprintf(setting, "%s", settings[x]);
+                                    mvwprintw(menuWin, x*3+6, 16, "%s", setting);
+                                    wattron(menuWin, A_STANDOUT);
+                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
+                                    wrefresh(menuWin);
+                                    while(ch = getch())
+                                    {
+                                        int exit = 0;
 
+                                        switch(ch)
+                                        {
+                                            case(MENU_UP):
+                                                if(max_piece_size < 7)
+                                                {
+                                                    max_piece_size++;
+                                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
+                                                }
+                                                break;
+
+                                            case(MENU_DOWN):
+                                                if(max_piece_size > min_piece_size)
+                                                {
+                                                    max_piece_size--;
+                                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
+                                                }
+                                                break;
+
+                                            case(MENU_SELECT):
+                                                exit = 1;
+                                                break;
+
+                                            case(EXIT):
+                                                exit = 1;
+                                                break; 
+                                        }
+                                        wrefresh(menuWin);
+
+                                        if(exit)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    wattroff(menuWin, A_STANDOUT);
+                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
                                 }
                                 else if (x == 1)
                                 {
+                                    sprintf(setting, "%s", settings[x]);
+                                    mvwprintw(menuWin, x*3+6, 16, "%s", setting);
+                                    wattron(menuWin, A_STANDOUT);
+                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
+                                    wrefresh(menuWin);
+                                    while(ch = getch())
+                                    {
+                                        int exit = 0;
+                                        switch(ch)
+                                        {
+                                            case(MENU_UP):
+                                                if(min_piece_size < max_piece_size)
+                                                {
+                                                    min_piece_size++;
+                                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
+                                                }
+                                                break;
+
+                                            case(MENU_DOWN):
+                                                if(min_piece_size > 1)
+                                                {
+                                                    min_piece_size--;
+                                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
+                                                }
+                                                break;
+
+                                            case(MENU_SELECT):
+                                                exit = 1;
+                                                break;
+
+                                            case(EXIT):
+                                                exit = 1;
+                                                break;
+                                        }
+                                        wrefresh(menuWin);
+
+                                        if(exit)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    wattroff(menuWin, A_STANDOUT);
+                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
 
                                 }
                                 else
