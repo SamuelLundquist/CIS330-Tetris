@@ -69,12 +69,14 @@ int menu()
     initMenu();
 
     char ch;
-    int i, numItems, numControls;
+    int i, numItems, numControls, numSettings;
     numControls = 5;
-    numItems = 3;
-    char options[numItems][15] = {"PLAY GAME","CONTROLS","QUIT"};
+    numItems = 4;
+    numSettings = 3;
+    char options[numItems][15] = {"PLAY GAME","CONTROLS","SETTINGS","QUIT"};
     //Spaces keep control options centered, don't remove plz.
     char controls[numControls][25] = {"     Left: A  ", "    Right: D  ", " Rotate Right: W", "  Rotate Left: S", "Drop Block: SPACE"};
+    char settings[numSettings][20] = {"Max Block Size:", "Min Block Size", "Checkerboard Theme:"};
     char option[15];
     char control[25];
 
@@ -115,10 +117,77 @@ int menu()
                 //Play game was selected, erase menu window and return 1
                 if ( i == 0 )
                 {
+                    int finished = 0;
+                    int level = 1;
+                    char lvl[5];
                     werase(menuWin);
+                    initMenu(); //Initializes fresh menu window
+                    mvwprintw(menuWin, menuWin_height/2, menuWin_width/2-10, "Level Select:");
+                    wattron(menuWin, A_STANDOUT);
+                    mvwprintw(menuWin, menuWin_height/2-4, menuWin_width/2+6, "w");
+                    mvwprintw(menuWin, menuWin_height/2+4, menuWin_width/2+6, "s");
+                    wattroff(menuWin, A_STANDOUT);
+                    mvwprintw(menuWin, menuWin_height/2-2, menuWin_width/2+6, "|");
+                    sprintf(lvl, "%d ",  level);
+                    mvwprintw(menuWin, menuWin_height/2, menuWin_width/2+6, lvl);
+                    mvwprintw(menuWin, menuWin_height/2+2, menuWin_width/2+6, "|");
                     wrefresh(menuWin);
-                    delwin(menuWin);
-                    return 1;
+
+                    while(!finished)
+                    {
+                        ch = getch();
+                        switch(ch)
+                        {
+                            case(MENU_UP):
+                                if(level == levels)
+                                    level = 1;
+                                else
+                                    level++;
+                                sprintf(lvl, "%d ",  level);
+                                mvwprintw(menuWin, menuWin_height/2, menuWin_width/2+6, lvl);
+                                wrefresh(menuWin);
+                                break;
+
+                            case(MENU_DOWN):
+                                if(level == 1)
+                                    level = levels;
+                                else
+                                    level--;
+                                sprintf(lvl, "%d ",  level);
+                                mvwprintw(menuWin, menuWin_height/2, menuWin_width/2+6, lvl);
+                                wrefresh(menuWin);
+                                break;
+
+                            case(MENU_SELECT):
+                                finished = 1;
+                                setLevel = level;
+                                werase(menuWin);
+                                wrefresh(menuWin);
+                                delwin(menuWin);
+                                return 1;
+
+                            case(EXIT):
+                                finished = 1;
+                                break;
+                        }
+                        
+                    }
+                    
+                    werase(menuWin); //Clears the menu window
+                    initMenu(); //Initializes fresh menu window
+                    for ( int x = 0; x < numItems; x++) // Add menu options to window, highlight currently selected option with x == i
+                    {
+                        if (x==i)
+                            wattron(menuWin, A_STANDOUT);
+                        else
+                            wattroff(menuWin, A_STANDOUT);
+                        sprintf(option, "%s", options[x]);
+                        mvwprintw(menuWin, x*3+9, 27, "%s", option);
+                    }
+                    wrefresh(menuWin); //Refresh window
+                    keypad( menuWin, TRUE ); //Keeps menu from exiting while loop upon return to main from controls menu
+                    break;
+                    
                 }
 
                 //Controls selected, load controls guide
@@ -126,7 +195,34 @@ int menu()
                 {
                     int x;
                     for ( x = 0; x < numControls; x++) //print controls to menu window
-		    {
+		            {
+                        sprintf(control, "%s", controls[x]);
+                        mvwprintw(menuWin, x*3+6, 24, "%s", control);
+                    }
+                    mvwprintw(menuWin, 30, 18, "--Press any key to go back --");
+                    wrefresh(menuWin);
+                    getch();    // Once finished reading, hit any key to go back to main menu
+                    werase(menuWin); //Clears the menu window
+                    initMenu(); //Initializes fresh menu window
+                    for ( x = 0; x < numItems; x++) // Add menu options to window, highlight currently selected option with x == i
+                    {
+                        if (x==i)
+                            wattron(menuWin, A_STANDOUT);
+                        else
+                            wattroff(menuWin, A_STANDOUT);
+                        sprintf(option, "%s", options[x]);
+                        mvwprintw(menuWin, x*3+9, 27, "%s", option);
+                    }
+                    wrefresh(menuWin); //Refresh window
+                    keypad( menuWin, TRUE ); //Keeps menu from exiting while loop upon return to main from controls menu
+                    break;
+                }
+
+                else if ( i == 2 )
+                {
+                    int x;
+                    for ( x = 0; x < numControls; x++) //print controls to menu window
+                    {
                         sprintf(control, "%s", controls[x]);
                         mvwprintw(menuWin, x*3+6, 24, "%s", control);
                     }
@@ -150,15 +246,9 @@ int menu()
                 }
 
                 //Quit selected, return negative value, should close program in main()
-                else if ( i == 2 )
+                else if ( i == 3 )
                 {
                     return -1;
-                }
-
-                //Input was not an expected input, break and try again
-                else
-                {
-                    break;
                 }
 
             //ESC was pressed, return negative value, should close program in main()

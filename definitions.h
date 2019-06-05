@@ -64,7 +64,16 @@ extern unsigned int max_piece_size;
 
 extern unsigned int numPieces;
 
+extern unsigned int max_piece_size;
+
+extern unsigned int min_piece_size;
+
+extern int checkerboard;
+
 extern int** pieces;
+
+extern int setLevel;
+
 
 //===============
 //   status

@@ -12,6 +12,7 @@ Qi Han
 using namespace std;
 
 unsigned int **block_data;
+int setLevel;
 PIECE piece;
 SCORE sc = {0,0};
 

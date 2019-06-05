@@ -31,7 +31,7 @@ int game()
 
 
 	//Sets level and score, parameter is level
-	initLevelAndScore(1);
+	initLevelAndScore(setLevel);
 
 	alive = 1;
 	running = 1;
