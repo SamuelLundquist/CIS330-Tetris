@@ -263,3 +263,15 @@ void initGameWindows()
     mvwprintw(controlsWin, 8, 2, "Rotate: W");
     wrefresh(controlsWin);
 }
+
+
+void killAllWindows(){
+    delwin(gameWin);
+    delwin(blockWin);
+    delwin(scoreWin);
+    delwin(controlsWin);
+    delwin(hintWin);
+    //refresh();
+    endwin();
+
+}

@@ -56,6 +56,19 @@ void game()
 				if (makePiece(nextPiece)) 
 				{
 					alive = 0;
+               //delwin(gameWin);
+               //delwin(blockWin);
+               //wrefresh(gameWin);
+              // wrefresh(blockWin);
+               endwin();
+              // refresh();
+               lastWin = newwin(50, 100, 0, 0);
+               // refresh();
+                wbkgd(lastWin, COLOR_PAIR(2));
+                box(lastWin, 0, 0);
+                //wbkgd(lastWin, COLOR_PAIR(2));
+                mvwprintw(lastWin, 1, 2, " # Game Over # ");
+                wrefresh(lastWin);
 				}
 				nextPiece = genPiece();
 				storeAvailable = 1;
@@ -71,7 +84,7 @@ void game()
 
 	dropThread.join();
 	inputThread.join();
-
+  
 	endwin();
 	
 	return;

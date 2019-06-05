@@ -42,7 +42,7 @@ typedef struct score {
 	unsigned int lns;
 } SCORE;
 
-extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin;
+extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleWin, *lastWin;
 
 //2d array of integers representing color of block at that location
 extern unsigned int **block_data;
@@ -132,6 +132,8 @@ void initControls();
 void initGameWindows();
 
 void updateBlockWindow();
+
+void killAllWindows();
 
 //================
 //   score.cc
@@ -232,5 +234,7 @@ const int menuWin_height = titleWin_height;
 const int menuWin_width = hintWin_x + 18;
 const int menuWin_x = 2;
 const int menuWin_y = 1;
+
+
 
 #endif
