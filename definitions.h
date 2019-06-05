@@ -228,6 +228,9 @@ void storePiece();
 //   menus
 //===============
 
+void dispPiece(WINDOW* win, int piecenum);
+
+
 const int blockWin_height = 20;
 const int blockWin_width = 10;
 const int blockWin_x = 3;

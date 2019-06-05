@@ -40,6 +40,7 @@ int game()
 	makePiece(genPiece());
 
 	nextPiece = genPiece();
+	dispPiece(hintWin, nextPiece);
 
 	updateBlockWindow();
 
@@ -67,6 +68,7 @@ int game()
 					break;
 				}
 				nextPiece = genPiece();
+				dispPiece(hintWin, nextPiece);
 				storeAvailable = 1;
 			}
 			updateBlockWindow();
@@ -125,6 +127,8 @@ int execute(int move)
 			if(storeAvailable)
 			{
 				storePiece();
+				dispPiece(storeWin,storedPiece);
+				dispPiece(hintWin,nextPiece);
 				storeAvailable = 0;
 			}
 			break;

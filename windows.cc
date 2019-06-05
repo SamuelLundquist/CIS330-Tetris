@@ -606,3 +606,54 @@ int pauseGame()
     }
     return 1;
 }
+
+int* findTL(int pnum)
+{
+	int* ret = (int*)malloc(sizeof(int)*2);
+	int i = 3;
+	int minx = 0;
+	int miny = 4;	
+	while(i<2*piece_size+1)
+	{
+		if(pieces[pnum][2*i+1] < minx){
+			minx = pieces[pnum][2*i+1];
+		}
+		if(pieces[pnum][2*i+2] < miny)
+		{
+			miny = pieces[pnum][2*i+2];
+		}
+		i+=2;
+	}
+	ret[0] = minx;
+	ret[1] = miny-4;
+	return(ret);
+}
+
+void dispPiece(WINDOW* win, int pnum) 
+{
+	int* tl = findTL(pnum);
+	int** tarr = (int**)malloc(sizeof(int*)*piece_size);
+	for(int i = 0; i < piece_size; i++)
+	{
+		tarr[i] = (int*)malloc(sizeof(int)*2);
+	}
+
+	wattrset(win, COLOR_PAIR(pieces[pnum][0]));
+	for(int i = 0; i < piece_size; i++)
+	{	
+		mvwprintw(win,tarr[i][1]-tl[1],tarr[i][0]-tl[0], " ");
+		printf("{%d,%d}",tarr[i][0]-tl[0], tarr[i][1]- tl[1]);
+		fflush(stdout);
+		getch();
+	}
+	free(tl);
+	wrefresh(win);
+	for(int i = 0; i < piece_size; i++)
+	{
+		free(tarr[i]);
+	}
+	free(tarr);
+}
+
+
+ 
