@@ -75,6 +75,8 @@ extern unsigned int piece_size;
 
 extern unsigned int alive;
 
+extern int dropSpeed;
+
 extern int storeAvailable;
 
 extern int storedPiece;
