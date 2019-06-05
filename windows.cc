@@ -78,6 +78,7 @@ int menu()
     char controls[numControls][25] = {"     Left: A  ", "    Right: D  ", " Rotate Right: W", "  Rotate Left: S", "Drop Block: SPACE"};
     char settings[numSettings][20] = {"Max Block Size:", "Min Block Size", "Checkerboard Theme:"};
     char option[15];
+    char setting[25];
     char control[25];
 
     for ( i = 0; i < numItems; i++)
@@ -218,17 +219,64 @@ int menu()
                     break;
                 }
 
+                //Settings selected, open settings menu
                 else if ( i == 2 )
                 {
-                    int x;
-                    for ( x = 0; x < numControls; x++) //print controls to menu window
+                    int x, finished;
+                    werase(menuWin); //Clears the menu window
+                    initMenu(); //Initializes fresh menu window
+                    for ( x = 0; x < numSettings; x++) //print controls to menu window
                     {
-                        sprintf(control, "%s", controls[x]);
-                        mvwprintw(menuWin, x*3+6, 24, "%s", control);
+                        if(x == 0)
+                        {
+                            wattron(menuWin, A_STANDOUT);
+                        }
+                        else
+                        {
+                            wattroff(menuWin, A_STANDOUT);
+                        }
+                        sprintf(setting, "%s", settings[x]);
+                        mvwprintw(menuWin, x*3+6, 24, "%s", setting);
                     }
-                    mvwprintw(menuWin, 30, 18, "--Press any key to go back --");
+                    x, finished = 0;
                     wrefresh(menuWin);
-                    getch();    // Once finished reading, hit any key to go back to main menu
+
+                    while(ch = getch())
+                    {
+                        sprintf(setting, "%s", settings[x]);
+                        mvwprintw(menuWin, x*3+6, 24, "%s", setting);
+                        switch(ch)
+                        {
+                            case(MENU_UP):
+                                x--;
+                                if(x < 0 ) { x = numSettings -1; }
+                                break;
+
+                            case(MENU_DOWN):
+                                x++;
+                                if( x >= numSettings ) { x = 0; }
+                                break;
+
+                            case(MENU_SELECT):
+                                
+                                break;
+
+                            case(EXIT):
+                                finished = 1;
+                                break;
+                        }
+                        
+                        if (finished)
+                        {
+                            break;
+                        }
+                        wattron(menuWin, A_STANDOUT);
+                        sprintf(setting, "%s",  settings[x]);
+                        mvwprintw(menuWin, x*3+6, 24, "%s", setting);
+                        wattroff(menuWin, A_STANDOUT);
+                        wrefresh(menuWin);
+                    }
+
                     werase(menuWin); //Clears the menu window
                     initMenu(); //Initializes fresh menu window
                     for ( x = 0; x < numItems; x++) // Add menu options to window, highlight currently selected option with x == i
@@ -260,6 +308,7 @@ int menu()
 		sprintf(option, "%s",  options[i]);
 		mvwprintw(menuWin, i*3+9, 27, "%s", option);
 		wattroff(menuWin, A_STANDOUT);
+        wrefresh(menuWin);
     }
     //Shouldn't reach this point.
     return -2;
