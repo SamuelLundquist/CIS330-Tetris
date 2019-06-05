@@ -92,6 +92,8 @@ void genPieces(int min, int max)
 {
 	int csize = 1;
 	int i = 0;
+
+	//color + originx&y + 2*max size + 1(space for -1 entry)
 	int len = 3+2*max+1;
 
 	//search until reach min, or until need to start generating pieces (size = 5)
@@ -144,11 +146,6 @@ void genPieces(int min, int max)
 		int dataa[len] = {1, 4, 4, 3, 4, 4, 4, 5, 4, 6, 4, -1};
 		addPiece(i, max, dataa); //line piece
 		memcpy(genarr[0],pieces[i],sizeof(int)*(tlen));
-		for(int r = 0; r <12; r++)
-		{
-			printf("%d",genarr[0][r]);
-			fflush(stdout);
-		}
 		i++;
 		int datab[len] = {2, 4, 4, 4, 5, 3, 4, 4, 4, 5, 4, -1};
 		addPiece(i, max, datab); //T piece
@@ -187,7 +184,7 @@ void genPieces(int min, int max)
 			int* tpiece = shapePiece(csize-1, max, genarr[j]);
 			addPiece(i, max, tpiece);
 			free(tpiece);
-			memcpy(pieces[i],genarr[j],sizeof(int)*(tlen));
+			memcpy(genarr[j],pieces[i],sizeof(int)*(tlen));
 			i++;
 			//TODO: IF csize > min
 				printf("%d <- FIN",j);
