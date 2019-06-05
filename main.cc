@@ -13,7 +13,9 @@ using namespace std;
 
 unsigned int **block_data;
 int setLevel;
+int checkerboard = 0;
 PIECE piece;
+
 SCORE sc = {0,0};
 
 //Define all windows

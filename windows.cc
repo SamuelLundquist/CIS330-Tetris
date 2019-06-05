@@ -27,20 +27,21 @@ void updateBlockWindow()
             mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
             mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
 
-	//optional checkerboard pattern
-	/*if(block_data[y][x]) {
-		for(int i = 0; i < 4; i++) {
-			mvwaddch(blockWin, 2*y-8, x*4 + i, ACS_CKBOARD);
-		}
-		for(int i = 0; i < 4; i++) {
-		mvwaddch(blockWin, 2*y-7, x*4 + i, ACS_CKBOARD);
-		}
-          }
+	        if(checkerboard)
+            {
+                if(block_data[y][x]) {
+                    for(int i = 0; i < 4; i++) {
+                        mvwaddch(blockWin, 2*y-8, x*4 + i, ACS_CKBOARD);
+                        mvwaddch(blockWin, 2*y-7, x*4 + i, ACS_CKBOARD);
+                    }
+                }
 
-	  else {
-        	mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
-            	mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
-	  }*/
+                else 
+                {
+                    mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
+                    mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
+                }
+            }
         }
     }
     wrefresh(blockWin);
@@ -76,7 +77,7 @@ int menu()
     char options[numItems][15] = {"PLAY GAME","CONTROLS","SETTINGS","QUIT"};
     //Spaces keep control options centered, don't remove plz.
     char controls[numControls][25] = {"     Left: A  ", "    Right: D  ", " Rotate Right: W", "  Rotate Left: S", "Drop Block: SPACE"};
-    char settings[numSettings][20] = {"Max Block Size:", "Min Block Size", "Checkerboard Theme:"};
+    char settings[numSettings][20] = {"Max Block Size:", "Min Block Size:", "Checkerboard Theme:"};
     char option[15];
     char setting[25];
     char control[25];
@@ -236,15 +237,19 @@ int menu()
                             wattroff(menuWin, A_STANDOUT);
                         }
                         sprintf(setting, "%s", settings[x]);
-                        mvwprintw(menuWin, x*3+6, 24, "%s", setting);
+                        mvwprintw(menuWin, x*3+6, 16, "%s", setting);
                     }
+                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
+                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
+                    mvwprintw(menuWin, 12, 40, "Disabled");
+
                     x, finished = 0;
                     wrefresh(menuWin);
 
                     while(ch = getch())
                     {
                         sprintf(setting, "%s", settings[x]);
-                        mvwprintw(menuWin, x*3+6, 24, "%s", setting);
+                        mvwprintw(menuWin, x*3+6, 16, "%s", setting);
                         switch(ch)
                         {
                             case(MENU_UP):
@@ -259,6 +264,28 @@ int menu()
 
                             case(MENU_SELECT):
                                 
+                                if (x == 0)
+                                {
+
+                                }
+                                else if (x == 1)
+                                {
+
+                                }
+                                else
+                                {
+                                    if(checkerboard)
+                                    {
+                                        checkerboard = 0;
+                                        mvwprintw(menuWin, 12, 40, "Disabled");
+                                    }
+                                    else
+                                    {
+                                        checkerboard = 1;
+                                        mvwprintw(menuWin, 12, 40, "Enabled ");
+                                    }
+
+                                }
                                 break;
 
                             case(EXIT):
@@ -272,7 +299,7 @@ int menu()
                         }
                         wattron(menuWin, A_STANDOUT);
                         sprintf(setting, "%s",  settings[x]);
-                        mvwprintw(menuWin, x*3+6, 24, "%s", setting);
+                        mvwprintw(menuWin, x*3+6, 16, "%s", setting);
                         wattroff(menuWin, A_STANDOUT);
                         wrefresh(menuWin);
                     }
