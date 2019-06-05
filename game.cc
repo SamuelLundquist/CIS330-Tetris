@@ -15,19 +15,18 @@ void game()
 {
 	//set these in the options menu, however default to 4,4
 	min_piece_size = 4;
-	max_piece_size = 4;	
+	max_piece_size = 5;	
 
 	//seed the random generator with the current internal timer
 	srand(time(NULL));
 
-	initPieces(min_piece_size, max_piece_size);	
+	initPieces(min_piece_size, max_piece_size);
 	initGameWindows();
 	initBlockData();
 	initPieceData();
 
 	//Test for updating score data
 	updateScore(0, 0);
-   
 	thread dropThread(dropFunc);
 	thread inputThread(inputFunc);
 

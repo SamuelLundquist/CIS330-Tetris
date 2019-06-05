@@ -228,8 +228,9 @@ void initMenu()
 
 void initGameWindows()
 {
+
     gameWin = newwin(gameWin_height, gameWin_width, gameWin_y, gameWin_x);
-    blockWin = newwin(blockWin_height * 2, blockWin_width * 4, blockWin_y, blockWin_x);
+    blockWin = newwin(blockWin_height * 2, blockWin_width * 4, blockWin_y, blockWin_x);	
     scoreWin = newwin(scoreWin_height, scoreWin_width, scoreWin_y, scoreWin_x);
     controlsWin = newwin(controlsWin_height, controlsWin_width, controlsWin_y, controlsWin_x);
     hintWin = newwin(hintWin_height, hintWin_width, hintWin_y, hintWin_x);

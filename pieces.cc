@@ -132,7 +132,11 @@ void genPieces(int min, int max)
 	//excess -1 character on pieces of max size is removed
 	int tlen = len-1;
 	//a generator array used to shape pieces of larger sizes
-	int genarr[7][tlen];
+	int** genarr = (int**)malloc(sizeof(int*)*7);
+	for(int t = 0; t < 7; t++)
+	{
+		genarr[t] = (int*)malloc(sizeof(int)*tlen);
+	}
 
 	if(csize == 4 && csize <= max)
 	{
@@ -193,9 +197,14 @@ void genPieces(int min, int max)
 		fflush(stdout);
 		csize++;
 	}
-	
 
-	 
+	for(int t = 0; t < 7; t++)
+	{
+		free(genarr[t]);
+	}
+	free(genarr);
+	
+		 
 }
 
 //from a piece of size n, create a new piece of size n+1 by adding a block
@@ -204,10 +213,11 @@ void genPieces(int min, int max)
 int *shapePiece(int n, int max, int* genarr)
 {
 
-	int graph[n+1][n+1];
-	for(int i = 0; i < n; i++)
+	int** graph = (int**)malloc(sizeof(int*)*(n+1));
+	for(int i = 0; i < n+1; i++)
 	{
-		for(int j = 0; j < n; j++)
+		graph[i] = (int*)malloc(sizeof(int)*(n+1));
+		for(int j = 0; j < n+1; j++)
 		{
 			graph[i][j] = 0;
 		}
@@ -238,7 +248,10 @@ int *shapePiece(int n, int max, int* genarr)
 		//possible ways to move from block
 		//(don't count up - don't want to go above the window)
 		//0: down, 1: right, -1: left
-		int shifts[3] = {0,1,-1};
+		int* shifts = (int*)malloc(sizeof(int)*3);
+		shifts[0] = 0;
+	        shifts[1] = 1;
+		shifts[2] = -1;
 		//randomize order of shifts tested
 		for(int j = 0; j < 2; j++)
 		{
@@ -277,6 +290,7 @@ int *shapePiece(int n, int max, int* genarr)
 				}
 			}
 		}
+		free(shifts);
 	}
 	int* newPiece= (int*)malloc(sizeof(int)*(3+2*max + 1));
 	int j;
@@ -290,6 +304,13 @@ int *shapePiece(int n, int max, int* genarr)
 	newPiece[j+1] = newx;
 	newPiece[j+2] = newy;
 	newPiece[j+3] = -1;
+	
+	for(int t = 0; t < n+1; t++)
+	{
+		free(graph[t]);
+	}
+	free(graph);
+
 	return newPiece;
 }
 
@@ -305,9 +326,11 @@ void addPiece(int piecenum, int max, int* piecedata)
 	}
 	while(i < 3 + 2*max)
 	{
+		
 		pieces[piecenum][i] = -1;
 		i++;
 	}
+
 }
 
 void freePieces()
