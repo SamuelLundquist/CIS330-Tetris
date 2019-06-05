@@ -12,8 +12,11 @@ int execute(int move);
 unsigned int piece_size, numPieces, linePoints, alive, running, min_piece_size, max_piece_size;
 int storeAvailable, nextPiece, dropSpeed;
 
-void game()
+int game()
 {
+	//if restart selected, game will restart after ending in main
+	int restart = 0;
+
 	//set these in the options menu, however default to 4,4
 	min_piece_size = 6;
 	max_piece_size = 9;
@@ -28,7 +31,7 @@ void game()
 
 
 	//Sets level and score, parameter is level
-	initLevelAndScore(4);
+	initLevelAndScore(1);
 
 	alive = 1;
 	running = 1;
@@ -50,7 +53,14 @@ void game()
 		{
 			int move = moveQueue.Dequeue();
 
-			if(execute(move))
+			int handle = execute(move);
+
+			//pauseGame returns -1 if quit is selected
+			if(handle < 0)
+			{
+				restart = 1;
+			}
+			else if(handle)
 			{
 				updateBlockWindow();
 				checkLines();
@@ -58,6 +68,7 @@ void game()
 				if (makePiece(nextPiece))
 				{
 					alive = 0;
+					break;
 				}
 				nextPiece = genPiece();
 				storeAvailable = 1;
@@ -88,7 +99,7 @@ void game()
 
 	endwin();
 
-	return;
+	return restart;
 }
 
 
@@ -123,11 +134,35 @@ int execute(int move)
 			break;
 		case(PAUSE_GAME):
 			running = 0;
-			pauseGame();
-			running = 1;
+			int handle = pauseGame();
+			if(handle < 0)
+			{
+				alive = 0;
+				running = 1;
+			}
+			else if(handle == 0)
+			{
+				bottomed = -1;
+				alive = 0;
+				running = 1;
+			}
+			else
+			{
+				running = 1;
+			}
 			break;
 
 	}
 	return bottomed;
-	getch();
+}
+
+int restartGame()
+{
+	initscr(); //Init Ncurses
+	noecho(); //function does not print input characters
+	curs_set(0); //make blinking cursor invisible
+	cbreak(); //ctrl + c will stop function
+	initColors();
+	int restart = game();
+	return restart;
 }

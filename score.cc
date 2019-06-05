@@ -57,7 +57,9 @@ void initLevelAndScore(int level)
   }
   dropSpeed = levelSpeed[sc.level-1];
   linePoints = 10 * level;
-  updateScore(0,0);
+  sc.pts = 0;
+  sc.lns = 0;
+  updateScoreWin();
   return;
 }
 
@@ -65,10 +67,10 @@ void dis_score()
 {
   // display score when the game is over
   werase(scoreWin);
-  mvwprintw(gameWin, 18, (gameWin_width/2)-6, "Your score is: \n"); 
-  mvwprintw(gameWin, 20, (gameWin_width/2)-6, "Points: %d \n", sc.pts); 
-  mvwprintw(gameWin, 22, (gameWin_width/2)-6, "Lines: %d \n", sc.lns); 
-  mvwprintw(gameWin, 24, (gameWin_width/2)-6, "Level: %d \n", sc.level); 
+  mvwprintw(gameWin, 18, (gameWin_width/2)-6, "Your score is: \n");
+  mvwprintw(gameWin, 20, (gameWin_width/2)-6, "Points: %d \n", sc.pts);
+  mvwprintw(gameWin, 22, (gameWin_width/2)-6, "Lines: %d \n", sc.lns);
+  mvwprintw(gameWin, 24, (gameWin_width/2)-6, "Level: %d \n", sc.level);
 
 }
 
@@ -85,7 +87,7 @@ void store_score()
   if(myFile.is_open())
   {
     while(getline(myFile, name))
-    { 
+    {
       mvwprintw(gameWin, 26 + i, (gameWin_width/2)-6, "test: %s \n", name);
 
       i++;
@@ -94,6 +96,6 @@ void store_score()
   }
 
     wrefresh(gameWin);*/
-  
+
 
 }

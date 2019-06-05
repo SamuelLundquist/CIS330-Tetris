@@ -266,16 +266,90 @@ void initGameWindows()
     wrefresh(controlsWin);
 }
 
-void pauseGame()
+int pauseGame()
 {
     pauseWin = newwin(pauseWin_height, pauseWin_width, pauseWin_y, pauseWin_x);
     box(pauseWin,0,0);
     mvwprintw(pauseWin, 0, pauseWin_width/2 - 4, " PAUSED ");
-    wrefresh(pauseWin);
-    getch();
-    werase(pauseWin);
-    wrefresh(pauseWin);
-    delwin(pauseWin);
-    updateBlockWindow();
 
+    char ch;
+    int i, numItems;
+    numItems = 3;
+    char options[numItems][15] = {"Resume", "Restart", "Quit"};
+    char option[15];
+
+    for (i = 0; i < numItems; i++)
+    {
+      if(i == 0)
+        wattron(pauseWin, A_STANDOUT);
+      else
+        wattroff(pauseWin, A_STANDOUT);
+      sprintf(option, "%s", options[i]);
+      mvwprintw(pauseWin, i*2+2, pauseWin_width/2-3, "%s", option);
+    }
+    i = 0;
+    wrefresh(pauseWin);
+
+    keypad(pauseWin, TRUE);
+    while(ch = wgetch(pauseWin))
+    {
+      //Updates options so only one option is highlighted at a time
+      sprintf(option, "%s", options[i]);
+      mvwprintw(pauseWin, i*2+2, pauseWin_width/2-3, "%s", option);
+
+      switch(ch)
+      {
+        case MENU_UP:
+            i--;
+            if( i < 0 ) { i = numItems - 1; }
+            break;
+
+        case MENU_DOWN:
+            i++;
+            if ( i >= numItems ) { i = 0; }
+            break;
+
+        case MENU_SELECT:
+
+            //Resume was selected, unpause game, erase menu window and return 1
+            if ( i == 0 )
+            {
+                werase(pauseWin);
+                wrefresh(pauseWin);
+                delwin(pauseWin);
+                return 1;
+            }
+
+            //Restar sleected, remove window and return 0
+            else if ( i == 1)
+            {
+                werase(pauseWin);
+                wrefresh(pauseWin);
+                delwin(pauseWin);
+                return 0;
+            }
+
+            //Quit selected, return negative value
+            else if ( i == 2 )
+            {
+                werase(pauseWin);
+                wrefresh(pauseWin);
+                delwin(pauseWin);
+                return -1;
+            }
+
+        //ESC was pressed, unpause game, erase menu window and return 1
+        case EXIT:
+          werase(pauseWin);
+          wrefresh(pauseWin);
+          delwin(pauseWin);
+          return 1;
+      }
+      wattron(pauseWin, A_STANDOUT);
+      sprintf(option, "%s",  options[i]);
+      mvwprintw(pauseWin, i*2+2, pauseWin_width/2-3, "%s", option);
+      wattroff(pauseWin, A_STANDOUT);
+
+    }
+    return 1;
 }

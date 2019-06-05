@@ -20,16 +20,22 @@ WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *scoreWin, *controlsWin, *titleW
 
 int main()
 {
-   int x = menu(); //Returns negative if user decided to quit. Otherwise game will start.
+  int restart = 0;
+  int x = menu(); //Returns negative if user decided to quit. Otherwise game will start.
 
-   if( x < 0 )
-   {
-       cout << x << endl;
-       endwin();
-       return(0);
-   }
+  if( x < 0 )
+  {
+      cout << x << endl;
+      endwin();
+      return(0);
+  }
 
-   game();
+  restart = game();
 
-   return 0;
+  while(restart)
+  {
+     restart = restartGame();
+  }
+
+  return 0;
 }

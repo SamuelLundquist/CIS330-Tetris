@@ -102,7 +102,9 @@ const int levelSpeed[levels] = {1000, 850, 750, 650, 500, 400, 300, 200, 150, 10
 //   game.cc
 //===============
 
-void game();
+int game();
+
+int restartGame();
 
 //===============
 //   threads.cc
@@ -145,7 +147,7 @@ void initGameWindows();
 
 void updateBlockWindow();
 
-void pauseGame();
+int pauseGame();
 
 //================
 //   score.cc
