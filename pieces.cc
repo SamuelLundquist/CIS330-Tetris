@@ -32,6 +32,7 @@ int** pieces;
 void genPieces(int min, int max);
 int* shapePiece(int n, int max, int* genarr);
 void addPiece(int piecenum, int max, int* piecedata);
+void addPieceToArr(int piecenum, int max, int* piecedata, int*** arrptr);
 
 /*
 Defines different types of blocks we might have
@@ -97,7 +98,7 @@ void genPieces(int min, int max)
 	int len = 3+2*max+1;
 
 	//search until reach min, or until need to start generating pieces (size = 5)
-	while(csize < min && csize < 5) 
+	while(csize < min && csize < 4) 
 	{
 		csize++;
 	}
@@ -140,7 +141,7 @@ void genPieces(int min, int max)
 		genarr[t] = (int*)malloc(sizeof(int)*tlen);
 	}
 
-	if(csize == 4 && csize <= max)
+	if(csize == 4 && csize <= max && 4 >= min)
 	{
 		//regular tetris pieces
 		int dataa[len] = {1, 4, 4, 3, 4, 4, 4, 5, 4, 6, 4, -1};
@@ -175,46 +176,39 @@ void genPieces(int min, int max)
 	}
 	//if our minimum size is less than 4, add to genArr but don't add
 	//piece to pieces
-	else if(min > 4){		//regular tetris pieces
+	else if(min > 4){
+		int j = 0;
 		int dataa[len] = {1, 4, 4, 3, 4, 4, 4, 5, 4, 6, 4, -1};
-		addPiece(i, max, dataa); //line piece
-		memcpy(genarr[0],pieces[i],sizeof(int)*(tlen));
-		i++;
+		addPieceToArr(j, max, dataa, &genarr); //line piece
+		j++;
 		int datab[len] = {2, 4, 4, 4, 5, 3, 4, 4, 4, 5, 4, -1};
-		addPiece(i, max, datab); //T piece
-		memcpy(genarr[1],pieces[i],sizeof(int)*(tlen));
-		i++;
+		addPieceToArr(j, max, datab, &genarr); //T piece
+		j++;
 		int datac[len] = {3, 4, 4, 3, 5, 3, 4, 4, 4, 5, 4, -1};
-		addPiece(i, max, datac); //L piece
-		memcpy(genarr[2],pieces[i],sizeof(int)*(tlen));
-		i++;
+		addPieceToArr(j, max, datac, &genarr); //L piece
+		j++;
 		int datad[len] = {4, 4, 4, 5, 5, 3, 4, 4, 4, 5, 4, -1};
-		addPiece(i, max, datad); //Flipped L piece
-		memcpy(genarr[3],pieces[i],sizeof(int)*(tlen));
-		i++;
+		addPieceToArr(j, max, datad, &genarr); //Flipped L piece
+		j++;
 		int datae[len] = {5, 4, 5, 3, 5, 4, 5, 4, 4, 5, 4, -1};
-		addPiece(i, max, datae); //S piece
-		memcpy(genarr[4],pieces[i],sizeof(int)*(tlen));
-		i++;
+		addPieceToArr(j, max, datae, &genarr); //S piece
+		j++;
 		int dataf[len] = {6, 4, 5, 4, 5, 5, 5, 3, 4, 4, 4, -1};
-		addPiece(i, max, dataf); //Z piece
-		memcpy(genarr[5],pieces[i],sizeof(int)*(tlen));
-		i++;
+		addPieceToArr(j, max, dataf, &genarr); //Z piece
+		j++;
 		int datag[len] = {7, 5, 5, 4, 5, 5, 5, 4, 4, 5, 4, -1};
-		addPiece(i, max, datag); //O piece
-		memcpy(genarr[6],pieces[i],sizeof(int)*(tlen));
-		i++;
+		addPieceToArr(j, max, datag, &genarr); //O piece
+		j++;
 		csize++;}
-//TODO
+
 
 
 	while(csize <= max)
 	{
-		fflush(stdout);
 		for(int j = 0; j < 7; j++)
 		{
 			int* tpiece = shapePiece(csize-1, max, genarr[j]);
-			if(csize > min)
+			if(csize >= min)
 			{
 				addPiece(i, max, tpiece);
 				memcpy(genarr[j],pieces[i],sizeof(int)*(tlen));
@@ -223,20 +217,7 @@ void genPieces(int min, int max)
 			}
 			else
 			{
-				int k = 0;
-				int entry;
-				while((entry = tpiece[k]) != -1) 
-				{		
-					genarr[j][k] = entry;
-					k++;
-
-				}
-				while(i < 3 + 2*max)
-				{
-					
-					genarr[j][k] = -1;
-					k++;
-				}
+				addPieceToArr(j, max, tpiece, &genarr);
 			}			
 			free(tpiece);
 
@@ -381,7 +362,22 @@ void addPiece(int piecenum, int max, int* piecedata)
 
 }
 
-void addPieceToArr(int piecenum, int max, int* piecedata){}
+void addPieceToArr(int piecenum, int max, int* piecedata, int*** arrptr)
+{
+	int i = 0;
+	int entry;
+	while((entry = piecedata[i]) != -1) 
+	{		
+		arrptr[0][piecenum][i] = entry;
+		i++;
+
+	}
+	while(i < 3 + 2*max)
+	{	
+		arrptr[0][piecenum][i] = -1;
+		i++;
+	}
+}
 
 void freePieces()
 {
