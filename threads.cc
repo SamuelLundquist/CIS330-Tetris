@@ -10,8 +10,14 @@ using namespace std;
 //dictated by the current falling speed
 void dropFunc()
 {
-	while(running)
+	while(alive)
 	{
+		//!running is when the game is paused, keeps the thead on standby
+		while(!running)
+		{
+			this_thread::sleep_for(chrono::milliseconds(dropSpeed));
+		}
+
 		this_thread::sleep_for(chrono::milliseconds(dropSpeed));
 		moveQueue.Enqueue(AUTO_DROP);
 
@@ -23,8 +29,14 @@ void dropFunc()
 void inputFunc()
 {
 	char ch;
-	while(running)
+	while(alive)
 	{
+		//!running is when the game is paused, keeps the thead on standby
+		while(!running)
+		{
+			this_thread::sleep_for(chrono::milliseconds(dropSpeed));
+		}
+
 		ch = getch();
 		moveQueue.Enqueue(ch);
 

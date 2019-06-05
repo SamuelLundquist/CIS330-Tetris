@@ -49,6 +49,7 @@ void game()
 		if(moveQueue.HasMove())
 		{
 			int move = moveQueue.Dequeue();
+
 			if(execute(move))
 			{
 				updateBlockWindow();
@@ -123,6 +124,7 @@ int execute(int move)
 		case(PAUSE_GAME):
 			running = 0;
 			pauseGame();
+			running = 1;
 			break;
 
 	}
