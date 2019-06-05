@@ -79,6 +79,8 @@ extern int dropSpeed;
 
 extern int storeAvailable;
 
+extern int currentPiece;
+
 extern int storedPiece;
 
 extern int nextPiece;

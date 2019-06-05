@@ -213,8 +213,8 @@ int *shapePiece(int n, int max, int* genarr)
 	int** graph = (int**)malloc(sizeof(int*)*(n+1));
 	for(int i = 0; i < n+1; i++)
 	{
-		graph[i] = (int*)malloc(sizeof(int)*(n+1));
-		for(int j = 0; j < n+1; j++)
+		graph[i] = (int*)malloc(sizeof(int)*(10));
+		for(int j = 0; j < 10; j++)
 		{
 			graph[i][j] = 0;
 		}
@@ -267,10 +267,11 @@ int *shapePiece(int n, int max, int* genarr)
 		{		
 			if(dir = shifts[j])
 			{
-				if(!graph[blocky][blockx+dir])
+				newx = blockx + dir;
+				if(!(newx < 0 || newx >9)
+					&& !graph[blocky][newx])
 				{
 					found = 1;
-					newx = blockx + dir;
 					newy = blocky+4;
 					break;
 				
@@ -278,11 +279,12 @@ int *shapePiece(int n, int max, int* genarr)
 			}	
 			else
 			{
-				if(!graph[blocky+1][blockx])
+				newy = blocky+1;
+				if(!graph[newy][blockx])
 				{
 					found = 1;
 					newx = blockx;
-					newy = blocky+1+4;
+					newy = newy+4;
 					break;
 				}
 			}
@@ -340,6 +342,8 @@ void freePieces()
 
 }
 
+int currentPiece;
+
 //given piece number (int n), assign piece struct values and update
 //block data matrix with piece
 //return 1 if there is a piece there already (you lose)
@@ -368,6 +372,7 @@ int makePiece(int n)
 		piece.blocks[i][0] = x;
 		piece.blocks[i][1] = y;
 	}
+	currentPiece = n;
 	return game_over;
 }
 
@@ -574,16 +579,16 @@ void storePiece()
 	//if there isn't already a stored piece, 
 	if(storedPiece == -1) 
 	{
-		storedPiece = piece.color;
+		storedPiece = currentPiece;
 		clearPiece(piece.blocks);
 		makePiece(nextPiece);
 		nextPiece = genPiece();
 		return;
 	}
 	int newPiece = storedPiece;
-	storedPiece = piece.color;
+	storedPiece = currentPiece;
 	clearPiece(piece.blocks);
 	//since piece array starts at 1, newPiece - 1
-	makePiece(newPiece-1);
+	makePiece(newPiece);
 	return;
 }
