@@ -28,7 +28,7 @@ void game()
 
 
 	//Sets level and score, parameter is level
-	initLevelAndScore(3);
+	initLevelAndScore(4);
 
 	alive = 1;
 	storeAvailable = 1;
@@ -73,7 +73,7 @@ void game()
 	inputThread.join();
 
 
-	werase(blockWin);                          // remove block window 
+	werase(blockWin);                          // remove block window
 	wrefresh(blockWin);
 	delwin(blockWin);
 

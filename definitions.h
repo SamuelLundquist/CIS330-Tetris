@@ -15,8 +15,8 @@ const char AUTO_DROP = 1;
 const char MOVE_LEFT = 97; //a
 const char MOVE_RIGHT = 100; //d
 const char DROP_BLOCK = 32; //space
-const char ROTATE_BLOCK_CLOCKWISE = 115; //s
-const char ROTATE_BLOCK_COUNTERCLOCKWISE = 119; //w
+const char ROTATE_BLOCK_CLOCKWISE = 119; //w
+const char ROTATE_BLOCK_COUNTERCLOCKWISE = 115; //s
 const char STORE_PIECE = 102; //f
 const char MENU_UP = 119; //w
 const char MENU_DOWN = 115; //s
@@ -141,8 +141,6 @@ void initControls();
 void initGameWindows();
 
 void updateBlockWindow();
-
-void killAllWindows();
 
 //================
 //   score.cc
