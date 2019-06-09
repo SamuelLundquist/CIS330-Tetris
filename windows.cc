@@ -267,7 +267,7 @@ int menu()
                                         switch(ch)
                                         {
                                             case(MENU_UP):
-                                                if(max_piece_size < 7)
+                                                if(max_piece_size < 30)
                                                 {
                                                     max_piece_size++;
                                                     mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
@@ -607,52 +607,86 @@ int pauseGame()
     return 1;
 }
 
-int* findTL(int pnum)
+//returns the minimum x value and next piece size so display function can know how to align piece
+int* findpdata(int pnum)
 {
-	int* ret = (int*)malloc(sizeof(int)*2);
-	int i = 3;
-	int minx = 0;
-	int miny = 4;	
-	while(i<2*piece_size+1)
+	int minx = 9;
+	int i = 0;
+	int val;	
+
+	while((val = pieces[pnum][2*i+3]) != -1 && i < max_piece_size)
 	{
-		if(pieces[pnum][2*i+1] < minx){
-			minx = pieces[pnum][2*i+1];
-		}
-		if(pieces[pnum][2*i+2] < miny)
+		if(val < minx)
 		{
-			miny = pieces[pnum][2*i+2];
+			minx = val;
 		}
-		i+=2;
+		i+=1;
 	}
+	int* ret = (int*)malloc(sizeof(int)*2);
 	ret[0] = minx;
-	ret[1] = miny-4;
+	ret[1] = i;
 	return(ret);
 }
 
 void dispPiece(WINDOW* win, int pnum) 
 {
-	int* tl = findTL(pnum);
-	int** tarr = (int**)malloc(sizeof(int*)*piece_size);
-	for(int i = 0; i < piece_size; i++)
+
+	int* pdata = findpdata(pnum);
+	int** tgraph = (int**)malloc(sizeof(int*)*8);
+	//make a temporary graph of the piece and clear the window
+	wattrset(win, COLOR_PAIR(0));
+	for(int i = 0; i < 8; i++)
 	{
-		tarr[i] = (int*)malloc(sizeof(int)*2);
+		tgraph[i] = (int*)malloc(sizeof(int)*8);
+		for(int j = 0; j < 8; j++)
+		{
+			tgraph[i][j] = 0;
+		}
+		mvwprintw(win, i+1, 1, "                 ");
+	}
+	
+	//insert the piece into the subgraph
+	for(int i = 0; i < pdata[1]; i++)
+	{
+		tgraph[pieces[pnum][2*i+4]-4][pieces[pnum][2*i+3]-pdata[0]] = 1;
 	}
 
+	
+
 	wattrset(win, COLOR_PAIR(pieces[pnum][0]));
-	for(int i = 0; i < piece_size; i++)
-	{	
-		mvwprintw(win,tarr[i][1]-tl[1],tarr[i][0]-tl[0], " ");
-		printf("{%d,%d}",tarr[i][0]-tl[0], tarr[i][1]- tl[1]);
-		fflush(stdout);
-		getch();
-	}
-	free(tl);
-	wrefresh(win);
-	for(int i = 0; i < piece_size; i++)
+	//if the piece is too big to display as a small piece
+	if(pdata[1] > 4)
 	{
-		free(tarr[i]);
+		for(int i = 0; i < 8; i++)
+		{
+			for(int j = 0; j < 8; j++)
+			{
+				if(tgraph[i][j])
+				{
+					mvwprintw(win, i + 1, 2*j + 2, "  ");
+				}
+			}
+		}
 	}
-	free(tarr);
+	else
+	{
+		for(int i = 0; i < 4; i++)
+		{	
+			for(int j = 0; j < 4; j++) {
+				if(tgraph[i][j]){
+					mvwprintw(win, 2*i + 1 ,4*j + 2, "    ");
+					mvwprintw(win, 2*i + 2 ,4*j + 2, "    ");
+				}	
+			}
+		}
+	}
+	free(pdata);
+	wrefresh(win);
+	for(int i = 0; i < 8; i++)
+	{
+		free(tgraph[i]);
+	}
+	free(tgraph);
 }
 
 
