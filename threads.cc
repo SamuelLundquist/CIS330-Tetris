@@ -43,6 +43,7 @@ void inputFunc()
 	}
 }
 
+//queue object implementation for moveQueue
 Queue::Queue()
 {
 	size = 5;

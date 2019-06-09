@@ -209,6 +209,10 @@ int makePiece(int n);
 
 int genPiece();
 
+//================
+//   moves.cc
+//================
+
 void clearPiece(unsigned int** blocks);
 
 void movePiece(int n);

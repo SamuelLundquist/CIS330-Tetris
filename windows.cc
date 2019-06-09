@@ -215,7 +215,7 @@ int menu()
                     int x, finished;
                     werase(menuWin); //Clears the menu window
                     initMenu(); //Initializes fresh menu window
-                    for ( x = 0; x < numSettings; x++) //print controls to menu window
+                    for ( x = 0; x < numSettings; x++) //print settings to menu window
                     {
                         if(x == 0)
                         {
@@ -230,7 +230,7 @@ int menu()
                     }
                     mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
                     mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
-                    mvwprintw(menuWin, 12, 40, "Disabled");
+                    mvwprintw(menuWin, 12, 40, "Disabled ");
 
                     x, finished = 0;
                     wrefresh(menuWin);
@@ -277,7 +277,14 @@ int menu()
                                             case(MENU_DOWN):
                                                 if(max_piece_size > min_piece_size)
                                                 {
+
                                                     max_piece_size--;
+						    if(max_piece_size == 9)
+						    {
+						    	wattroff(menuWin, A_STANDOUT);
+							mvwprintw(menuWin, 6, 40, "  ");
+						        wattron(menuWin, A_STANDOUT);
+						    }
                                                     mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
                                                 }
                                                 break;
@@ -298,7 +305,7 @@ int menu()
                                         }
                                     }
                                     wattroff(menuWin, A_STANDOUT);
-                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
+                                    mvwprintw(menuWin, 6, 40, "%d ", max_piece_size);
                                 }
                                 else if (x == 1)
                                 {
@@ -324,6 +331,12 @@ int menu()
                                                 if(min_piece_size > 1)
                                                 {
                                                     min_piece_size--;
+						    if(min_piece_size == 9)
+						    {
+						    	wattroff(menuWin, A_STANDOUT);
+							mvwprintw(menuWin, 9, 40, "  ");
+							wattron(menuWin, A_STANDOUT);
+						    }
                                                     mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
                                                 }
                                                 break;
@@ -344,7 +357,7 @@ int menu()
                                         }
                                     }
                                     wattroff(menuWin, A_STANDOUT);
-                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
+                                    mvwprintw(menuWin, 9, 40, "%d ", min_piece_size);
 
                                 }
                                 else if (x == 2)
@@ -352,7 +365,7 @@ int menu()
                                     if(checkerboard)
                                     {
                                         checkerboard = 0;
-                                        mvwprintw(menuWin, 12, 40, "Disabled");
+                                        mvwprintw(menuWin, 12, 40, "Disabled ");
                                     }
                                     else
                                     {
