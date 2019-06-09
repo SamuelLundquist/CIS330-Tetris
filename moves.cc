@@ -23,7 +23,7 @@ void movePiece(int lr)
 		return;
 	}
 	
-	int* newloc = (int*)malloc(sizeof(int)*2*piece_size);
+	int* newloc = new int[2*piece_size];
 
 	clearPiece(piece.blocks);
 
@@ -81,7 +81,7 @@ void rotatePiece(int lr)
 		return;
 	}
 	
-	int* newloc = (int*)malloc(sizeof(int)*2*piece_size);
+	int* newloc = new int[2*piece_size];
 
 	clearPiece(piece.blocks);
 
@@ -102,7 +102,7 @@ void rotatePiece(int lr)
 	{
 		if(checkCandidate(candidates[i][0],candidates[i][1],newloc))
 		{
-			free(newloc);
+			delete newloc;
 			return;
 		}
 	}
@@ -124,7 +124,7 @@ return 1 if the candidate is valid
 */
 int checkCandidate(int x, int shift, int* loc)
 {
-	int* newloc = (int*)malloc(sizeof(int)*2*piece_size);
+	int* newloc = new int[2*piece_size];
 	for(int i = piece_size; i--;)
 	{
 		int nlx = newloc[2*i] = loc[2*i] + shift*x;
@@ -134,7 +134,7 @@ int checkCandidate(int x, int shift, int* loc)
 		if(nlx < 0 || nly < 0 || nlx >= blockWin_width || nly >= blockWin_height+4 
 				|| block_data[nly][nlx])
 		{
-			free(newloc);
+			delete newloc;
 			return 0;
 		}
 	}
@@ -149,7 +149,7 @@ int checkCandidate(int x, int shift, int* loc)
 int dropPiece()
 {
 
-	int* newloc = (int*)malloc(sizeof(int)*2*piece_size);
+	int* newloc = new int[2*piece_size];
 	clearPiece(piece.blocks);
 	for(int i = piece_size; i--;)
 	{
@@ -183,7 +183,7 @@ void updateBlocks(int* newloc, int originx, int originy)
 	}
 	piece.origin[0] = originx;
 	piece.origin[1] = originy;
-	free(newloc);
+	delete newloc;
 }
 
 //if the block can't move, reconstruct it where it was
@@ -195,7 +195,7 @@ void reconstructPiece(int* newloc)
 		block_data[piece.blocks[i][1]][piece.blocks[i][0]] = piece.color;
 	}
 	
-	free(newloc);
+	delete newloc;
 
 }
 

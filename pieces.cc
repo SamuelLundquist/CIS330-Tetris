@@ -8,24 +8,24 @@ using namespace std;
 
 void initPieceData()
 {
-	piece.blocks = (int**)malloc(sizeof(int*) * max_piece_size);
+	piece.blocks = new int*[max_piece_size];
 	for(int i = 0; i < max_piece_size; i++)
 	{
-		piece.blocks[i] = (int*)malloc(sizeof(int) * 2);
+		piece.blocks[i] = new int[2];
 	}
-	piece.origin = (int*)malloc(sizeof(int) * 2);
+	piece.origin = new int[2];
 
 }
 
 void freePieceData()
 {
-	free(piece.origin);
+	delete piece.origin;
 
 	for(int i = 0; i < piece_size; i++)
 	{
-	free(piece.blocks[i]);
+		delete piece.blocks[i];
 	}
-	free(piece.blocks);
+	delete piece.blocks;
 }
 
 int** pieces;
@@ -71,10 +71,10 @@ void initPieces(int min, int max)
 	}
 	//for the rest of the sizes, have 7 pieces
 	numPieces += (max - i + 1)*7;
-	pieces = (int**)malloc(sizeof(int*)*numPieces);
+	pieces = new int*[numPieces];
 	for(int i = 0; i < numPieces; i++) 
 	{
-		pieces[i] = (int*)malloc(sizeof(int)*(3+2*max));
+		pieces[i] = new int[3+2*max];
 		for(int j = 0; j < 3+2*max; j++) 
 		{
 			pieces[i][j] = -1;
@@ -136,10 +136,10 @@ void genPieces(int min, int max)
 	//excess -1 character on pieces of max size is removed
 	int tlen = len-1;
 	//a generator array used to shape pieces of larger sizes
-	int** genarr = (int**)malloc(sizeof(int*)*7);
+	int** genarr = new int*[7];
 	for(int t = 0; t < 7; t++)
 	{
-		genarr[t] = (int*)malloc(sizeof(int)*tlen);
+		genarr[t] = new int[tlen];
 	}
 
 	if(csize == 4 && csize <= max && 4 >= min)
@@ -220,7 +220,7 @@ void genPieces(int min, int max)
 			{
 				addPieceToArr(j, max, tpiece, &genarr);
 			}			
-			free(tpiece);
+			delete tpiece;
 
 		}
 
@@ -229,9 +229,9 @@ void genPieces(int min, int max)
 
 	for(int t = 0; t < 7; t++)
 	{
-		free(genarr[t]);
+		delete genarr[t];
 	}
-	free(genarr);
+	delete genarr;
 	
 		 
 }
@@ -242,10 +242,10 @@ void genPieces(int min, int max)
 int *shapePiece(int n, int max, int* genarr)
 {
 
-	int** graph = (int**)malloc(sizeof(int*)*(n+1));
+	int** graph = new int*[n+1];
 	for(int i = 0; i < n+1; i++)
 	{
-		graph[i] = (int*)malloc(sizeof(int)*(10));
+		graph[i] = new int[10];
 		for(int j = 0; j < 10; j++)
 		{
 			graph[i][j] = 0;
@@ -277,7 +277,7 @@ int *shapePiece(int n, int max, int* genarr)
 		//possible ways to move from block
 		//(don't count up - don't want to go above the window)
 		//0: down, 1: right, -1: left
-		int* shifts = (int*)malloc(sizeof(int)*3);
+		int* shifts = new int[3];
 		shifts[0] = 0;
 	        shifts[1] = 1;
 		shifts[2] = -1;
@@ -321,9 +321,9 @@ int *shapePiece(int n, int max, int* genarr)
 				}
 			}
 		}
-		free(shifts);
+		delete shifts;
 	}
-	int* newPiece= (int*)malloc(sizeof(int)*(3+2*max + 1));
+	int* newPiece= new int[3+2*max + 1];
 	int j;
 
 	for(j = 0; j < 3+2*n; j++)
@@ -337,9 +337,9 @@ int *shapePiece(int n, int max, int* genarr)
 	
 	for(int t = 0; t < n+1; t++)
 	{
-		free(graph[t]);
+		delete graph[t];
 	}
-	free(graph);
+	delete graph;
 
 	return newPiece;
 }
@@ -384,9 +384,9 @@ void freePieces()
 {
 	for(int i = 0; i < numPieces; i++) 
 	{
-		free(pieces[i]);
+		delete pieces[i];
 	}
-	free(pieces);
+	delete pieces;
 
 }
 

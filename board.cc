@@ -4,10 +4,10 @@
 
 void initBlockData()
 {
-  block_data = (unsigned int**)malloc(sizeof(unsigned int*) * blockWin_width * blockWin_height);
-	for(int i = 0; i < blockWin_height + 4; i++) //want to be able to store blocks that go above the screen
-    {
-        block_data[i] = (unsigned int*)malloc(sizeof(unsigned int) * blockWin_width);
+  block_data = new unsigned int*[blockWin_width * blockWin_height];
+  for(int i = 0; i < blockWin_height + 4; i++) //want to be able to store blocks that go above the screen
+  {
+        block_data[i] = new unsigned int[blockWin_width];
         for(int j = 0; j < blockWin_width; j++)
         {
             block_data[i][j] = 0;
@@ -17,11 +17,11 @@ void initBlockData()
 
 void freeBlockData()
 {
-	for(int i = 0; i < blockWin_height; i++)
+    for(int i = 0; i < blockWin_height; i++)
     {
-        free(block_data[i]);
+        delete block_data[i];
     }
-    free(block_data);
+    delete block_data;
 }
 
 //remove horizontal line y
@@ -37,7 +37,7 @@ void rmLine(int y)
 int* mallocFullLines()
 {
   int len = piece_size + 1;
-  int* fullLines = (int*)malloc(sizeof(int) * len);
+  int* fullLines = new int[len];
   for(int i = 0; i < len; i++)
   {
     fullLines[i] = -1;
@@ -140,7 +140,7 @@ void checkLines()
 		remRow = toRow;
 		i++;
 	}
-	free(removedLines);
+	delete removedLines;
 }
 
 //Sorts array from greatest to least given array and array length

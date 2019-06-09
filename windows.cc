@@ -200,7 +200,7 @@ int* findpdata(int pnum)
 		}
 		i+=1;
 	}
-	int* ret = (int*)malloc(sizeof(int)*2);
+	int* ret = new int[2];
 	ret[0] = minx;
 	ret[1] = i;
 	return(ret);
@@ -210,12 +210,12 @@ void dispPiece(WINDOW* win, int pnum)
 {
 
 	int* pdata = findpdata(pnum);
-	int** tgraph = (int**)malloc(sizeof(int*)*8);
+	int** tgraph = new int*[8];
 	//make a temporary graph of the piece and clear the window
 	wattrset(win, COLOR_PAIR(0));
 	for(int i = 0; i < 8; i++)
 	{
-		tgraph[i] = (int*)malloc(sizeof(int)*8);
+		tgraph[i] = new int[8];
 		for(int j = 0; j < 8; j++)
 		{
 			tgraph[i][j] = 0;
@@ -258,13 +258,13 @@ void dispPiece(WINDOW* win, int pnum)
 			}
 		}
 	}
-	free(pdata);
+	delete pdata;
 	wrefresh(win);
 	for(int i = 0; i < 8; i++)
 	{
-		free(tgraph[i]);
+		delete tgraph[i];
 	}
-	free(tgraph);
+	delete tgraph;
 }
 
 
