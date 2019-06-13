@@ -44,8 +44,14 @@ int main()
 
     if(restart == 0)
     {
+      werase(blockWin);
+      werase(gameWin);
+      werase(controlsWin);
+      wrefresh(blockWin);
+      wrefresh(gameWin);
+      wrefresh(controlsWin);
       goto gameloop;
     }
-
+  endwin();
   return 0;
 }

@@ -90,8 +90,6 @@ int game()
 
 
 	restart = gameOver();
-
-    endwin();
 	return restart;
 }
 
