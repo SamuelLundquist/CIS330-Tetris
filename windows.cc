@@ -30,16 +30,10 @@ void updateBlockWindow()
 	        if(checkerboard)
             {
                 if(block_data[y][x]) {
-                    for(int i = 0; i < 4; i++) {
-                        mvwaddch(blockWin, 2*y-8, x*4 + i, ACS_CKBOARD);
-                        mvwaddch(blockWin, 2*y-7, x*4 + i, ACS_CKBOARD);
+                    for(int i = 0; i < 2; i++) {
+                        mvwaddch(blockWin, 2*y-8, x*4 + 2 + i, ACS_CKBOARD);
+                        mvwaddch(blockWin, 2*y-7, x*4 + 2 + i, ACS_CKBOARD);
                     }
-                }
-
-                else 
-                {
-                    mvwprintw(blockWin, 2 * y - 8, x * 4, "    ");
-                    mvwprintw(blockWin, 2 * y - 7, x * 4, "    ");
                 }
             }
         }
@@ -242,6 +236,11 @@ void dispPiece(WINDOW* win, int pnum)
 				if(tgraph[i][j])
 				{
 					mvwprintw(win, i + 1, 2*j + 2, "  ");
+
+                    if (checkerboard)
+                    {
+                        mvwaddch(win, i + 1, 2*j + 2, ACS_CKBOARD);
+                    }
 				}
 			}
 		}
@@ -252,8 +251,18 @@ void dispPiece(WINDOW* win, int pnum)
 		{	
 			for(int j = 0; j < 4; j++) {
 				if(tgraph[i][j]){
-					mvwprintw(win, 2*i + 1 ,4*j + 2, "    ");
-					mvwprintw(win, 2*i + 2 ,4*j + 2, "    ");
+
+                    mvwprintw(win, 2*i + 1 ,4*j + 2, "    ");
+                    mvwprintw(win, 2*i + 2 ,4*j + 2, "    ");
+
+                    if(checkerboard)
+                    {
+                        for(int x = 0; x < 2; x++)
+                        {
+                            mvwaddch(win, 2*i + 1, j*4 + 2 + x, ACS_CKBOARD);
+                            mvwaddch(win, 2*i + 2, j*4 + 2 + x, ACS_CKBOARD);
+                        }
+                    }
 				}	
 			}
 		}
