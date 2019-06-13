@@ -30,7 +30,6 @@ int main()
 
   if( x < 0 )
   {
-      cout << x << endl;
       endwin();
       return(0);
   }

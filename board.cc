@@ -1,7 +1,6 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "definitions.h"
 
+//initialize 2D array which stores color data of blocks in board as integers
 void initBlockData()
 {
   block_data = new unsigned int*[blockWin_width * blockWin_height];
@@ -29,11 +28,13 @@ void rmLine(int y)
 {
 	for(int x = 0; x < blockWin_width; x++)
 	{
+		//set the color value of all blocks in row to 0
 		block_data[y][x] = 0;
 	}
 }
 
 //Mallocs array for the fullLines function, keeps track of full lines of piece once done dropping
+//The array being allocated will contain an array of line numbers (rows) which are full
 int* mallocFullLines()
 {
   int len = piece_size + 1;
@@ -45,9 +46,13 @@ int* mallocFullLines()
   return fullLines;
 }
 
-//Check lines returns an array of all lines that are full in current piece
-//specifically, the lines of the block that was just placed
-//array has -1 values if there is not a full line
+/*
+Return list of all lines that are full
+Since it is only possible to fill lines that the piece has just 
+stopped in, the function only checks lines that the piece is inside.
+specifically, the lines of the block that was just placed
+array has -1 values if there is not a full line
+*/
 int* fullLines()
 {
   int* fullLines = mallocFullLines();
@@ -57,17 +62,21 @@ int* fullLines()
     int y = piece.blocks[i][1];
     for(int x = 0; x < blockWin_width; x++)
   	{
+		//if any block in the row has a color, the row is not full
   		if (block_data[y][x] == 0)
-      {
-        full = 0;
-      }
+  		{
+  			full = 0;
+  		}
   	}
     if (full)
     {
+      //fremove the full line and add it to the list of lines removed
       fullLines[i] = y;
       rmLine(y);
     }
   }
+  //sort the list of removed lines so we can operate over them from 
+  //the bottom row up, also remove duplicates so lines destroyed is accurate
   insertionSort(fullLines, piece_size);
   int linesDestr = 0, i = 0, points;
   while(fullLines[i] != -1)

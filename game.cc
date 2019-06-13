@@ -1,7 +1,7 @@
 #include <time.h>
 #include <thread>
-#include "definitions.h"
 #include <ncurses.h>
+#include "definitions.h"
 
 using namespace std;
 
@@ -37,9 +37,10 @@ int game()
 	thread dropThread(dropFunc);
 	thread inputThread(inputFunc);
 
-	makePiece(genPiece());
+	makePiece(randPiece());
 
-	nextPiece = genPiece();
+	//generate the next piece
+	nextPiece = randPiece();
 	dispPiece(hintWin, nextPiece);
 
 	updateBlockWindow();
@@ -58,17 +59,20 @@ int game()
 			{
 				restart = 1;
 			}
+			//event triggered if piece reaches the bottom
 			else if(handle)
 			{
 				updateBlockWindow();
 				checkLines();
 				updateBlockWindow();
+				//makePiece returns 1 if there is no space for
+				//the new piece, meaning the game is over
 				if (makePiece(nextPiece))
 				{
 					alive = 0;
 					break;
 				}
-				nextPiece = genPiece();
+				nextPiece = randPiece();
 				dispPiece(hintWin, nextPiece);
 				storeAvailable = 1;
 			}
@@ -101,7 +105,7 @@ int game()
 	return restart;
 }
 
-
+//executes actions read from the moveQueue
 int execute(int move)
 {
 	int bottomed = 0;
@@ -125,10 +129,13 @@ int execute(int move)
 			rotatePiece(-1);
 			break;
 		case(STORE_PIECE):
+			//only let the player store a piece once
+			//each time the piece falls to the ground
 			if(storeAvailable)
 			{
 				storePiece();
 				dispPiece(storeWin,storedPiece);
+				//in case the new piece was taken from nextPiece
 				dispPiece(hintWin,nextPiece);
 				storeAvailable = 0;
 			}

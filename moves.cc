@@ -18,26 +18,33 @@ void clearPiece(int** blocks)
 //move piece left or right 1 (dependent on sign of lr = left right)
 void movePiece(int lr)
 {
+	//if there is no left/right distinction, do not move the piece
 	if(!lr) 
 	{
 		return;
 	}
 	
+	//the new pairs of xy coordinates cooresponding to the piece
 	int* newloc = new int[2*piece_size];
 
+	//clear the blocks associated with the piece so that the piece
+	//doesn't think it is running into itself
 	clearPiece(piece.blocks);
 
+	//eliminate all except the sign data of lr 
 	int direction = lr/abs(lr);
 
 	for(int i = piece_size; i--;) 
 	{
-
+		//the new x is the old x shifted in direction
 		int nlx = piece.blocks[i][0] + direction;
+		//the new y is the same as the old i
 		int nly = piece.blocks[i][1];
 		newloc[2*i] = nlx;
 		newloc[2*i+1] = nly;
 		
-		//if piece is out of range, reconstruct it where it was
+		//if piece is out of range or there is already a block there, 
+		//reconstruct it where it was
 		if(nlx < 0 || nlx >= blockWin_width || block_data[nly][nlx])
 		{
 			reconstructPiece(newloc);
@@ -87,6 +94,7 @@ void rotatePiece(int lr)
 
 	for(int i = piece_size; i--;)
 	{
+		//typical 90 degree rotation generalized for either direction
 		int oldx = piece.blocks[i][0] - originx;
 		int oldy = originy - piece.blocks[i][1];
 
@@ -210,8 +218,9 @@ void storePiece()
 	{
 		storedPiece = currentPiece;
 		clearPiece(piece.blocks);
+		//make the piece that is the next to be made instead
 		makePiece(nextPiece);
-		nextPiece = genPiece();
+		nextPiece = randPiece();
 		return;
 	}
 	int newPiece = storedPiece;

@@ -1,6 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <cstring>
+#include <stdlib.h> //random
+#include <cstring> //memcpy
 #include "definitions.h"
 
 using namespace std;
@@ -203,11 +202,12 @@ void genPieces(int min, int max)
 		csize++;}
 
 
-
+	//for remaining sizes, make 7 pieces of each size
 	while(csize <= max)
 	{
 		for(int j = 0; j < 7; j++)
 		{
+			//make a new piece out of the jth entry of the genarr
 			int* tpiece = shapePiece(csize-1, max, genarr[j]);
 			if(csize >= min)
 			{
@@ -218,6 +218,8 @@ void genPieces(int min, int max)
 			}
 			else
 			{
+				//if size is not in range, only add the 
+				//shape to the generation array
 				addPieceToArr(j, max, tpiece, &genarr);
 			}			
 			delete tpiece;
@@ -299,10 +301,13 @@ int *shapePiece(int n, int max, int* genarr)
 		{		
 			if(dir = shifts[j])
 			{
+				//attempt a random shift on the block
 				newx = blockx + dir;
 				if(!(newx < 0 || newx >9)
 					&& !graph[blocky][newx])
 				{
+					//if the position is valid, the
+					//new piece has been created
 					found = 1;
 					newy = blocky+4;
 					break;
@@ -344,6 +349,7 @@ int *shapePiece(int n, int max, int* genarr)
 	return newPiece;
 }
 
+//add a new piece to the list of possible pieces in current game
 void addPiece(int piecenum, int max, int* piecedata)
 {
 	int i = 0;
@@ -363,6 +369,7 @@ void addPiece(int piecenum, int max, int* piecedata)
 
 }
 
+//add a new piece to the list of pieces used to generate new random pieces
 void addPieceToArr(int piecenum, int max, int* piecedata, int*** arrptr)
 {
 	int i = 0;
@@ -425,7 +432,7 @@ int makePiece(int n)
 }
 
 //randomly generate a piece from the possible list of pieces
-int genPiece() 
+int randPiece() 
 {
 	return(rand()%numPieces);
 }

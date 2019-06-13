@@ -49,6 +49,9 @@ extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *storeWin, *scoreWin, *co
 //2d array of integers representing color of block at that location
 extern unsigned int **block_data;
 
+//list of all possible pieces to be used during game
+extern int** pieces;
+
 //where the current movable piece is stored
 extern PIECE piece;
 
@@ -69,8 +72,6 @@ extern unsigned int max_piece_size;
 extern unsigned int min_piece_size;
 
 extern int checkerboard;
-
-extern int** pieces;
 
 extern int setLevel;
 
@@ -207,7 +208,7 @@ void freePieces();
 
 int makePiece(int n);
 
-int genPiece();
+int randPiece();
 
 //================
 //   moves.cc

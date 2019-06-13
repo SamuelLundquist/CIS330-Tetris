@@ -10,6 +10,7 @@ using namespace std;
 //dictated by the current falling speed
 void dropFunc()
 {
+	//stop when the player loses
 	while(alive)
 	{
 		//!running is when the game is paused, keeps the thead on standby
@@ -17,13 +18,12 @@ void dropFunc()
 		{
 			this_thread::sleep_for(chrono::milliseconds(dropSpeed));
 		}
-
+		//every dropSpeed milliseconds, drop the piece
 		this_thread::sleep_for(chrono::milliseconds(dropSpeed));
 		moveQueue.Enqueue(AUTO_DROP);
 
 	}
 }
-
 //adds corresponding input to the moveQueue based on user inputted
 //characters to be executed by the main
 void inputFunc()
