@@ -3,6 +3,9 @@
 #include <iostream>
 #include "definitions.h"
 
+const int numItems = 4;
+const char options[numItems][15] = {"PLAY GAME","CONTROLS","SETTINGS","QUIT"};
+
 int menu()
 {
     initscr(); //Init Ncurses
@@ -13,17 +16,9 @@ int menu()
     initMenu();
 
     char ch;
-    int i, numItems, numControls, numSettings;
-    numControls = 5;
-    numItems = 4;
-    numSettings = 4;
-    char options[numItems][15] = {"PLAY GAME","CONTROLS","SETTINGS","QUIT"};
-    //Spaces keep control options centered, don't remove plz.
-    char controls[numControls][25] = {"     Left: A  ", "    Right: D  ", " Rotate Right: W", "  Rotate Left: S", "Drop Block: SPACE"};
-    char settings[numSettings][20] = {"Max Block Size:", "Min Block Size:", "Checkerboard Theme:", "Apply Changes"};
+    int i;
+    
     char option[15];
-    char setting[25];
-    char control[25];
 
     for ( i = 0; i < numItems; i++)
     {
@@ -61,309 +56,26 @@ int menu()
                 //Play game was selected, erase menu window and return 1
                 if ( i == 0 )
                 {
-                    int level = 1;
-                    char lvl[5];
-                    werase(menuWin);
-                    initMenu(); //Initializes fresh menu window
-                    mvwprintw(menuWin, menuWin_height/2, menuWin_width/2-10, "Level Select:");
-                    wattron(menuWin, A_STANDOUT);
-                    mvwprintw(menuWin, menuWin_height/2-4, menuWin_width/2+6, "w");
-                    mvwprintw(menuWin, menuWin_height/2+4, menuWin_width/2+6, "s");
-                    wattroff(menuWin, A_STANDOUT);
-                    mvwprintw(menuWin, menuWin_height/2-2, menuWin_width/2+6, "|");
-                    sprintf(lvl, "%d ",  level);
-                    mvwprintw(menuWin, menuWin_height/2, menuWin_width/2+6, lvl);
-                    mvwprintw(menuWin, menuWin_height/2+2, menuWin_width/2+6, "|");
-                    wrefresh(menuWin);
-
-
-	            while(ch = wgetch(menuWin))
-                    {
-                        int exit = 0;
-                        switch(ch)
-                        {
-                            case(MENU_UP):
-                                if(level == levels)
-                                    level = 1;
-                                else
-                                    level++;
-                                sprintf(lvl, "%d ",  level);
-                                mvwprintw(menuWin, menuWin_height/2, menuWin_width/2+6, lvl);
-                                wrefresh(menuWin);
-                                break;
-
-                            case(MENU_DOWN):
-                                if(level == 1)
-                                    level = levels;
-                                else
-                                    level--;
-                                sprintf(lvl, "%d ",  level);
-                                mvwprintw(menuWin, menuWin_height/2, menuWin_width/2+6, lvl);
-                                wrefresh(menuWin);
-                                break;
-
-                            case(MENU_SELECT):
-                                exit = 1;
-                                setLevel = level;
-                                werase(menuWin);
-                                wrefresh(menuWin);
-                                delwin(menuWin);
-                                return 1;
-
-                            case(EXIT):
-                                exit = 1;
-                                break;
-                        }
-                        if(exit)
-                        {
-                            break;
-                        }
-                        
-                    }
-                    werase(menuWin); //Clears the menu window
-                    initMenu(); //Initializes fresh menu window
-                    for ( int x = 0; x < numItems; x++) // Add menu options to window, highlight currently selected option with x == i
-                    {
-                        if (x==i)
-                            wattron(menuWin, A_STANDOUT);
-                        else
-                            wattroff(menuWin, A_STANDOUT);
-                        sprintf(option, "%s", options[x]);
-                        mvwprintw(menuWin, x*3+9, 27, "%s", option);
-                    }
-                    wrefresh(menuWin); //Refresh window
+                    if(levelSelect())
+                        return 1;
+                    printOptions(0);
                     break;
-                    
                 }
 
                 //Controls selected, load controls guide
                 else if ( i == 1 )
                 {
-                    int x;
-                    for ( x = 0; x < numControls; x++) //print controls to menu window
-		            {
-                        sprintf(control, "%s", controls[x]);
-                        mvwprintw(menuWin, x*3+6, 24, "%s", control);
-                    }
-                    mvwprintw(menuWin, 30, 18, "--Press any key to go back --");
-                    wrefresh(menuWin);
-                    getch();    // Once finished reading, hit any key to go back to main menu
-                    werase(menuWin); //Clears the menu window
-                    initMenu(); //Initializes fresh menu window
-                    for ( x = 0; x < numItems; x++) // Add menu options to window, highlight currently selected option with x == i
-                    {
-                        if (x==i)
-                            wattron(menuWin, A_STANDOUT);
-                        else
-                            wattroff(menuWin, A_STANDOUT);
-                        sprintf(option, "%s", options[x]);
-                        mvwprintw(menuWin, x*3+9, 27, "%s", option);
-                    }
-                    wrefresh(menuWin); //Refresh window
-                    keypad( menuWin, TRUE ); //Keeps menu from exiting while loop upon return to main from controls menu
+                    printControls();
+                    printOptions(1);
                     break;
                 }
 
                 //Settings selected, open settings menu
                 else if ( i == 2 )
                 {
-                    int x, finished;
-                    werase(menuWin); //Clears the menu window
-                    initMenu(); //Initializes fresh menu window
-                    for ( x = 0; x < numSettings; x++) //print settings to menu window
-                    {
-                        if(x == 0)
-                        {
-                            wattron(menuWin, A_STANDOUT);
-                        }
-                        else
-                        {
-                            wattroff(menuWin, A_STANDOUT);
-                        }
-                        sprintf(setting, "%s", settings[x]);
-                        mvwprintw(menuWin, x*3+6, 16, "%s", setting);
-                    }
-                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
-                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
-                    mvwprintw(menuWin, 12, 40, "Disabled ");
-
-                    x, finished = 0;
-                    wrefresh(menuWin);
-
-                    while(ch = wgetch(menuWin))
-                    {
-                        sprintf(setting, "%s", settings[x]);
-                        mvwprintw(menuWin, x*3+6, 16, "%s", setting);
-                        switch(ch)
-                        {
-                            case(MENU_UP):
-                                x--;
-                                if(x < 0 ) { x = numSettings -1; }
-                                break;
-
-                            case(MENU_DOWN):
-                                x++;
-                                if( x >= numSettings ) { x = 0; }
-                                break;
-
-                            case(MENU_SELECT):
-                                
-                                if (x == 0)
-                                {
-                                    sprintf(setting, "%s", settings[x]);
-                                    mvwprintw(menuWin, x*3+6, 16, "%s", setting);
-                                    wattron(menuWin, A_STANDOUT);
-                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
-                                    wrefresh(menuWin);
-                                    while(ch = wgetch(menuWin))
-                                    {
-                                        int exit = 0;
-
-                                        switch(ch)
-                                        {
-                                            case(MENU_UP):
-                                                if(max_piece_size < 30)
-                                                {
-                                                    max_piece_size++;
-                                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
-                                                }
-                                                break;
-
-                                            case(MENU_DOWN):
-                                                if(max_piece_size > min_piece_size)
-                                                {
-
-                                                    max_piece_size--;
-						    if(max_piece_size == 9)
-						    {
-						    	wattroff(menuWin, A_STANDOUT);
-							mvwprintw(menuWin, 6, 40, "  ");
-						        wattron(menuWin, A_STANDOUT);
-						    }
-                                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
-                                                }
-                                                break;
-
-                                            case(MENU_SELECT):
-                                                exit = 1;
-                                                break;
-
-                                            case(EXIT):
-                                                exit = 1;
-                                                break; 
-                                        }
-                                        wrefresh(menuWin);
-
-                                        if(exit)
-                                        {
-                                            break;
-                                        }
-                                    }
-                                    wattroff(menuWin, A_STANDOUT);
-                                    mvwprintw(menuWin, 6, 40, "%d ", max_piece_size);
-                                }
-                                else if (x == 1)
-                                {
-                                    sprintf(setting, "%s", settings[x]);
-                                    mvwprintw(menuWin, x*3+6, 16, "%s", setting);
-                                    wattron(menuWin, A_STANDOUT);
-                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
-                                    wrefresh(menuWin);
-                                    while(ch = getch())
-                                    {
-                                        int exit = 0;
-                                        switch(ch)
-                                        {
-                                            case(MENU_UP):
-                                                if(min_piece_size < max_piece_size)
-                                                {
-                                                    min_piece_size++;
-                                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
-                                                }
-                                                break;
-
-                                            case(MENU_DOWN):
-                                                if(min_piece_size > 1)
-                                                {
-                                                    min_piece_size--;
-						    if(min_piece_size == 9)
-						    {
-						    	wattroff(menuWin, A_STANDOUT);
-							mvwprintw(menuWin, 9, 40, "  ");
-							wattron(menuWin, A_STANDOUT);
-						    }
-                                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
-                                                }
-                                                break;
-
-                                            case(MENU_SELECT):
-                                                exit = 1;
-                                                break;
-
-                                            case(EXIT):
-                                                exit = 1;
-                                                break;
-                                        }
-                                        wrefresh(menuWin);
-
-                                        if(exit)
-                                        {
-                                            break;
-                                        }
-                                    }
-                                    wattroff(menuWin, A_STANDOUT);
-                                    mvwprintw(menuWin, 9, 40, "%d ", min_piece_size);
-
-                                }
-                                else if (x == 2)
-                                {
-                                    if(checkerboard)
-                                    {
-                                        checkerboard = 0;
-                                        mvwprintw(menuWin, 12, 40, "Disabled ");
-                                    }
-                                    else
-                                    {
-                                        checkerboard = 1;
-                                        mvwprintw(menuWin, 12, 40, "Enabled ");
-                                    }
-
-                                }
-
-                                else if (x == 3)
-                                {
-                                    finished = 1;
-                                }
-                                break;
-
-                            case(EXIT):
-                                finished = 1;
-                                break;
-                        }
-                        
-                        if (finished)
-                        {
-                            break;
-                        }
-                        wattron(menuWin, A_STANDOUT);
-                        sprintf(setting, "%s",  settings[x]);
-                        mvwprintw(menuWin, x*3+6, 16, "%s", setting);
-                        wattroff(menuWin, A_STANDOUT);
-                        wrefresh(menuWin);
-                    }
-
-                    werase(menuWin); //Clears the menu window
-                    initMenu(); //Initializes fresh menu window
-                    for ( x = 0; x < numItems; x++) // Add menu options to window, highlight currently selected option with x == i
-                    {
-                        if (x==i)
-                            wattron(menuWin, A_STANDOUT);
-                        else
-                            wattroff(menuWin, A_STANDOUT);
-                        sprintf(option, "%s", options[x]);
-                        mvwprintw(menuWin, x*3+9, 27, "%s", option);
-                    }
-                    wrefresh(menuWin); //Refresh window
+                    
+                    settingsMenu();
+                    printOptions(2);
                     break;
                 }
 
@@ -437,4 +149,291 @@ void initMenu()
     wrefresh(titleWin);
 }
 
+int levelSelect()
+{
+                    char ch;
+                    int level = 1;
+                    char lvl[5];
+                    werase(menuWin);
+                    initMenu(); //Initializes fresh menu window
+                    mvwprintw(menuWin, menuWin_height/2, menuWin_width/2-10, "Level Select:");
+                    wattron(menuWin, A_STANDOUT);
+                    mvwprintw(menuWin, menuWin_height/2-4, menuWin_width/2+6, "w");
+                    mvwprintw(menuWin, menuWin_height/2+4, menuWin_width/2+6, "s");
+                    wattroff(menuWin, A_STANDOUT);
+                    mvwprintw(menuWin, menuWin_height/2-2, menuWin_width/2+6, "|");
+                    sprintf(lvl, "%d ",  level);
+                    mvwprintw(menuWin, menuWin_height/2, menuWin_width/2+6, lvl);
+                    mvwprintw(menuWin, menuWin_height/2+2, menuWin_width/2+6, "|");
+                    wrefresh(menuWin);
 
+
+                    while(ch = wgetch(menuWin))
+                    {
+                        int exit = 0;
+                        switch(ch)
+                        {
+                            case(MENU_UP):
+                                if(level == levels)
+                                    level = 1;
+                                else
+                                    level++;
+                                sprintf(lvl, "%d ",  level);
+                                mvwprintw(menuWin, menuWin_height/2, menuWin_width/2+6, lvl);
+                                wrefresh(menuWin);
+                                break;
+
+                            case(MENU_DOWN):
+                                if(level == 1)
+                                    level = levels;
+                                else
+                                    level--;
+                                sprintf(lvl, "%d ",  level);
+                                mvwprintw(menuWin, menuWin_height/2, menuWin_width/2+6, lvl);
+                                wrefresh(menuWin);
+                                break;
+
+                            case(MENU_SELECT):
+                                exit = 1;
+                                setLevel = level;
+                                werase(menuWin);
+                                wrefresh(menuWin);
+                                delwin(menuWin);
+                                return 1;
+
+                            case(EXIT):
+                                exit = 1;
+                                break;
+                        }
+                        if(exit)
+                        {
+                            break;
+                        }  
+                    }
+                    return 0;
+}
+
+void printOptions(int i)
+{
+    char option[15];
+    initMenu();
+    for ( int x = 0; x < 4; x++) // Add menu options to window, highlight currently selected option with x == i
+    {
+        if (x==i)
+            wattron(menuWin, A_STANDOUT);
+        else
+            wattroff(menuWin, A_STANDOUT);
+    sprintf(option, "%s", options[x]);
+    mvwprintw(menuWin, x*3+9, 27, "%s", option);
+    }
+    wrefresh(menuWin); //Refresh window
+}
+
+void printControls()
+{
+    char controls[5][25] = {"     Left: A  ", "    Right: D  ", " Rotate Right: W", "  Rotate Left: S", "Drop Block: SPACE"};
+    char control[25];
+    int x;
+    for ( x = 0; x < 5; x++) //print controls to menu window
+    {
+        sprintf(control, "%s", controls[x]);
+        mvwprintw(menuWin, x*3+6, 24, "%s", control);
+    }
+    mvwprintw(menuWin, 30, 18, "--Press any key to go back --");
+    wrefresh(menuWin);
+    wgetch(menuWin);    // Once finished reading, hit any key to go back to main menu
+}
+
+void settingsMenu()
+{
+    char ch;
+    int numSettings = 4;
+    char setting[25];
+    int x, finished;
+    char settings[numSettings][20] = {"Max Block Size:", "Min Block Size:", "Checkerboard Theme:", "Apply Changes"};
+    initMenu(); //Initializes fresh menu window
+    for ( x = 0; x < numSettings; x++) //print settings to menu window
+    {
+        if(x == 0)
+        {
+            wattron(menuWin, A_STANDOUT);
+        }
+        else
+        {
+            wattroff(menuWin, A_STANDOUT);
+        }
+        sprintf(setting, "%s", settings[x]);
+        mvwprintw(menuWin, x*3+6, 16, "%s", setting);
+    }
+    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
+    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
+    mvwprintw(menuWin, 12, 40, "Disabled ");
+
+    x, finished = 0;
+    wrefresh(menuWin);
+
+    while(ch = wgetch(menuWin))
+    {
+        sprintf(setting, "%s", settings[x]);
+        mvwprintw(menuWin, x*3+6, 16, "%s", setting);
+        switch(ch)
+        {
+            case(MENU_UP):
+                x--;
+                if(x < 0 ) { x = numSettings -1; }
+                break;
+
+            case(MENU_DOWN):
+                x++;
+                if( x >= numSettings ) { x = 0; }
+                break;
+
+            case(MENU_SELECT):
+                                
+                if (x == 0)
+                {
+                    sprintf(setting, "%s", settings[x]);
+                    mvwprintw(menuWin, x*3+6, 16, "%s", setting);
+                    wattron(menuWin, A_STANDOUT);
+                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
+                    wrefresh(menuWin);
+                    while(ch = wgetch(menuWin))
+                    {
+                        int exit = 0;
+
+                        switch(ch)
+                        {
+                            case(MENU_UP):
+                                if(max_piece_size < 30)
+                                {
+                                    max_piece_size++;
+                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
+                                }
+                                break;
+
+                            case(MENU_DOWN):
+                                if(max_piece_size > min_piece_size)
+                                {
+
+                                    max_piece_size--;
+                                    if(max_piece_size == 9)
+                                    {
+                                        wattroff(menuWin, A_STANDOUT);
+                                        mvwprintw(menuWin, 6, 40, "  ");
+                                        wattron(menuWin, A_STANDOUT);
+                                    }
+                                    mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
+                                }
+                                break;
+
+                            case(MENU_SELECT):
+                                exit = 1;
+                                break;
+
+                            case(EXIT):
+                                exit = 1;
+                                break; 
+                        }
+                        wrefresh(menuWin);
+
+                        if(exit)
+                        {
+                            break;
+                        }
+                    }
+                    wattroff(menuWin, A_STANDOUT);
+                    mvwprintw(menuWin, 6, 40, "%d ", max_piece_size);
+                }
+
+                else if (x == 1)
+                {
+                    sprintf(setting, "%s", settings[x]);
+                    mvwprintw(menuWin, x*3+6, 16, "%s", setting);
+                    wattron(menuWin, A_STANDOUT);
+                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
+                    wrefresh(menuWin);
+                    while(ch = wgetch(menuWin))
+                    {
+                        int exit = 0;
+                        switch(ch)
+                        {
+                            case(MENU_UP):
+                                if(min_piece_size < max_piece_size)
+                                {
+                                    min_piece_size++;
+                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
+                                }
+                                break;
+
+                            case(MENU_DOWN):
+                                if(min_piece_size > 1)
+                                {
+                                    min_piece_size--;
+                                    if(min_piece_size == 9)
+                                    {
+                                        wattroff(menuWin, A_STANDOUT);
+                                        mvwprintw(menuWin, 9, 40, "  ");
+                                        wattron(menuWin, A_STANDOUT);
+                                    }
+                                    mvwprintw(menuWin, 9, 40, "%d", min_piece_size);
+                                }
+                                break;
+
+                            case(MENU_SELECT):
+                                exit = 1;
+                                break;
+
+                            case(EXIT):
+                                exit = 1;
+                                break;
+                        }
+                        wrefresh(menuWin);
+
+                        if(exit)
+                        {
+                            break;
+                        }
+                    }
+                    wattroff(menuWin, A_STANDOUT);
+                    mvwprintw(menuWin, 9, 40, "%d ", min_piece_size);
+                }
+
+                else if (x == 2)
+                {
+                    if(checkerboard)
+                    {
+                        checkerboard = 0;
+                        mvwprintw(menuWin, 12, 40, "Disabled ");
+                    }
+                    else
+                    {
+                        checkerboard = 1;
+                        mvwprintw(menuWin, 12, 40, "Enabled ");
+                    }
+
+                }
+
+                else if (x == 3)
+                {
+                    finished = 1;
+                    break;
+                }
+                break;
+
+            case(EXIT):
+                finished = 1;
+                break;
+        }
+                        
+        if (finished)
+        {
+            break;
+        }
+        wattron(menuWin, A_STANDOUT);
+        sprintf(setting, "%s",  settings[x]);
+        mvwprintw(menuWin, x*3+6, 16, "%s", setting);
+        wattroff(menuWin, A_STANDOUT);
+        wrefresh(menuWin);
+    }
+    
+}

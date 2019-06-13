@@ -142,14 +142,25 @@ void dropFunc();
 void inputFunc();
 
 //================
-//   windows.cc
+//   menus.cc
 //================
+int levelSelect();
 
-void initColors();
+void printOptions(int i);
+
+void printControls();
+
+void settingsMenu();
 
 int menu();
 
 void initMenu();
+
+//================
+//   windows.cc
+//================
+
+void initColors();
 
 void initGameWindows();
 
