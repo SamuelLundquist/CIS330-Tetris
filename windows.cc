@@ -278,3 +278,87 @@ void dispPiece(WINDOW* win, int pnum)
 
 
  
+int gameOver()
+{
+    lastWin = newwin(lastWin_height, lastWin_width, lastWin_y, lastWin_x);
+    box(lastWin,0,0);
+    mvwprintw(lastWin, 12, lastWin_width/2 - 6, " GAME OVER ! ");
+    wrefresh(lastWin);
+    char ch;
+    int i, numItems;
+    numItems = 3;
+    char options[numItems][26] = {"High Score Board", "Restart", "Quit"};
+    char option[26];
+    
+
+    for (i = 0; i < numItems; i++)
+    {
+      if(i == 0)
+        wattron(lastWin, A_STANDOUT);
+      else
+        wattroff(lastWin, A_STANDOUT);
+      sprintf(option, "%s", options[i]);
+      mvwprintw(lastWin, i*2+14, lastWin_width/2-6, "%s", option);
+    }
+    i = 0;
+    wrefresh(lastWin);
+
+    keypad(lastWin, TRUE);
+    while(ch = wgetch(lastWin))
+    {
+      //Updates options so only one option is highlighted at a time
+      sprintf(option, "%s", options[i]);
+      mvwprintw(lastWin, i*2+14, lastWin_width/2-6, "%s", option);
+
+      switch(ch)
+      {
+        case MENU_UP:
+            i--;
+            if( i < 0 ) { i = numItems - 1; }
+            break;
+
+        case MENU_DOWN:
+            i++;
+            if ( i >= numItems ) { i = 0; }
+            break;
+
+        case MENU_SELECT:
+
+            //high score was selected, unpause game, erase menu window and return 1
+            if ( i == 0 )
+            {
+                dis_score();
+                return 1;
+            }
+
+            //Restar sleected, remove window and return 0
+            else if ( i == 1)
+            {
+                werase(lastWin);
+                wrefresh(lastWin);
+                delwin(lastWin);
+                return 0;
+            }
+
+            //Quit selected, return negative value
+            else if ( i == 2 )
+            {
+                return -1;
+            }
+
+        //ESC was pressed, unpause game, erase menu window and return 1
+        case EXIT:
+          werase(lastWin);
+          wrefresh(lastWin);
+          delwin(lastWin);
+          return 1;
+      }
+      wattron(lastWin, A_STANDOUT);
+      sprintf(option, "%s",  options[i]);
+      mvwprintw(lastWin, i*2+14, lastWin_width/2-6, "%s", option);
+      wattroff(lastWin, A_STANDOUT);
+
+    }
+    return 1;
+
+}

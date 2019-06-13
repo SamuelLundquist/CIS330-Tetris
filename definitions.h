@@ -44,7 +44,7 @@ typedef struct score {
 	int level;
 } SCORE;
 
-extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *storeWin, *scoreWin, *controlsWin, *titleWin, *pauseWin, *lastWin;
+extern WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *storeWin, *scoreWin, *controlsWin, *titleWin, *pauseWin, *lastWin, *hScore;
 
 //2d array of integers representing color of block at that location
 extern unsigned int **block_data;
@@ -167,6 +167,8 @@ void initGameWindows();
 void updateBlockWindow();
 
 int pauseGame();
+
+int gameOver();
 
 //================
 //   score.cc
@@ -291,6 +293,11 @@ const int pauseWin_height = gameWin_height/4;
 const int pauseWin_width = gameWin_width/2;
 const int pauseWin_x = (gameWin_width - pauseWin_width)/2 + gameWin_x;
 const int pauseWin_y = (gameWin_height - pauseWin_height)/2 + gameWin_y;
+
+const int lastWin_height = blockWin_height*2+2;
+const int lastWin_width = blockWin_width*4+2;
+const int lastWin_x = 2;
+const int lastWin_y = 1;
 
 
 #endif

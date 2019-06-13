@@ -66,11 +66,20 @@ void initLevelAndScore(int level)
 void dis_score()
 {
   // display score when the game is over
-  werase(scoreWin);
-  mvwprintw(gameWin, 18, (gameWin_width/2)-6, "Your score is: \n");
-  mvwprintw(gameWin, 20, (gameWin_width/2)-6, "Points: %d \n", sc.pts);
-  mvwprintw(gameWin, 22, (gameWin_width/2)-6, "Lines: %d \n", sc.lns);
-  mvwprintw(gameWin, 24, (gameWin_width/2)-6, "Level: %d \n", sc.level);
+  ifstream input("highscores.txt");
+  int scr;
+  input >> scr;
+  char ch, str[15];
+  delwin(lastWin);
+  hScore = newwin(lastWin_height, lastWin_width, lastWin_y, lastWin_x);
+  box(hScore, 0, 0);
+  mvwprintw(lastWin, 12, lastWin_width/2 - 6, " High Score is: ");
+  mvwprintw(lastWin, 14, lastWin_width/2 - 6, " %d ", scr);
+  wrefresh(hScore);
+
+  getch();
+  //nodelay(stdscr, TRUE);
+  endwin();
 
 }
 
@@ -88,7 +97,9 @@ void store_score()
   {
     while(getline(myFile, name))
     {
-      mvwprintw(gameWin, 26 + i, (gameWin_width/2)-6, "test: %s \n", name);
+      mvwprintw(gameWin, 26 + i, (gameWin_width/2)-6, "test
+
+      : %s \n", name);
 
       i++;
     }
