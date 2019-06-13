@@ -231,13 +231,13 @@ void printOptions(int i)
 
 void printControls()
 {
-    char controls[5][25] = {"     Left: A  ", "    Right: D  ", " Rotate Right: W", "  Rotate Left: S", "Drop Block: SPACE"};
+    char controls[6][25] = {"    Left: A ", "   Right: D   ", "Rotate Right: W  ", "Rotate Left: S  ", "Drop Block: SPACE  ", "Store Block: F  "};
     char control[25];
     int x;
-    for ( x = 0; x < 5; x++) //print controls to menu window
+    for ( x = 0; x < 6; x++) //print controls to menu window
     {
         sprintf(control, "%s", controls[x]);
-        mvwprintw(menuWin, x*3+6, 24, "%s", control);
+        mvwprintw(menuWin, x*3+6, 25, "%s", control);
     }
     mvwprintw(menuWin, 30, 18, "--Press any key to go back --");
     wrefresh(menuWin);
