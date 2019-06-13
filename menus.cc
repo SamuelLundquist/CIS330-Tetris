@@ -15,11 +15,15 @@ int menu()
     initColors();
     initMenu();
 
+    //ch = inputted character by user to move over window
+    //i = row of menu selected
     char ch;
     int i;
     
+    //the currently selected option in menu to be printed with highlighted text
     char option[15];
 
+    //print all options, the cursor automatically starts at the top element
     for ( i = 0; i < numItems; i++)
     {
         if (i==0)
@@ -37,12 +41,13 @@ int menu()
     {
         //Updates options so only one option is highlighted at a time
         sprintf(option, "%s",  options[i]);
-		mvwprintw(menuWin, i*3+9, 27, "%s", option);
+	mvwprintw(menuWin, i*3+9, 27, "%s", option);
 
         switch(ch)
         {
             case MENU_UP:
                 i--;
+		//if reached the top, wrap back around
                 if( i < 0 ) { i = numItems - 1; }
                 break;
 
@@ -65,7 +70,9 @@ int menu()
                 //Controls selected, load controls guide
                 else if ( i == 1 )
                 {
+		    //print controls guide
                     printControls();
+		    //return to options menu with same cursor selected
                     printOptions(1);
                     break;
                 }
@@ -289,9 +296,11 @@ void settingsMenu()
                 break;
 
             case(MENU_SELECT):
+		//run over the cases for which setting is selected
                                 
                 if (x == 0)
                 {
+		//case: selected piece size max
                     sprintf(setting, "%s", settings[x]);
                     mvwprintw(menuWin, x*3+6, 16, "%s", setting);
                     wattron(menuWin, A_STANDOUT);
@@ -306,12 +315,15 @@ void settingsMenu()
                             case(MENU_UP):
                                 if(max_piece_size < 30)
                                 {
+				//allow piece sizes up until 30, program is capable of going
+				//above 30 but it can be risky, and some maximum must be set
                                     max_piece_size++;
                                     mvwprintw(menuWin, 6, 40, "%d", max_piece_size);
                                 }
                                 break;
 
                             case(MENU_DOWN):
+				//only allow max piece size to be greater than or equal to min piece size
                                 if(max_piece_size > min_piece_size)
                                 {
 
@@ -347,6 +359,7 @@ void settingsMenu()
 
                 else if (x == 1)
                 {
+		//case: selected piece size min
                     sprintf(setting, "%s", settings[x]);
                     mvwprintw(menuWin, x*3+6, 16, "%s", setting);
                     wattron(menuWin, A_STANDOUT);
@@ -400,6 +413,7 @@ void settingsMenu()
 
                 else if (x == 2)
                 {
+		//case: selected piece design
                     if(checkerboard)
                     {
                         checkerboard = 0;
