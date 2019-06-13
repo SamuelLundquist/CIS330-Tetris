@@ -282,7 +282,7 @@ int gameOver()
 {
     pauseWin = newwin(pauseWin_height, pauseWin_width, pauseWin_y, pauseWin_x);
     box(pauseWin,0,0);
-    mvwprintw(pauseWin, 0, pauseWin_width/2 - 4, " PAUSED ");
+    mvwprintw(pauseWin, 0, pauseWin_width/2 - 5, " GAME OVER ");
 
     char ch;
     int i, numItems;
