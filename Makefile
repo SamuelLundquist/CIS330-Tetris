@@ -3,7 +3,7 @@
 sources = $(wildcard *.cc)
 
 run:
-	./tetrs
+	./tetris
 
 build: $(sources)
 	g++ -o tetris $(sources) -lncurses -lpthread -g
