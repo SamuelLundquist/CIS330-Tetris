@@ -88,8 +88,11 @@ int game()
 	dropThread.join();
 	inputThread.join();
 
+	if(!restart)
+	{
+		restart = gameOver();
+	}
 
-	restart = gameOver();
 	return restart;
 }
 
