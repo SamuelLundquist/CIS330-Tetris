@@ -82,12 +82,12 @@ void initGameWindows()
     //Init Controls Win
     box(controlsWin,0,0);
     mvwprintw(controlsWin, 0, 5, " CONTROLS ");
-    mvwprintw(controlsWin, 1, 2, "Left: A");
-    mvwprintw(controlsWin, 3, 2, "Right: D");
-    mvwprintw(controlsWin, 5, 2, "Right Rotate: W");
-    mvwprintw(controlsWin, 7, 2, "Left Rotate: S");
-    mvwprintw(controlsWin, 9, 2, "Drop: SPACE");
-    mvwprintw(controlsWin, 11, 2, "Pause: P");
+    mvwprintw(controlsWin, 1, 2, "Left|Right: A | D");
+    mvwprintw(controlsWin, 3, 2, "Right Rotate: W");
+    mvwprintw(controlsWin, 5, 2, "Left Rotate: S");
+    mvwprintw(controlsWin, 7, 2, "Drop: SPACE");
+    mvwprintw(controlsWin, 9, 2, "Pause: P");
+    mvwprintw(controlsWin, 11, 2, "Store Block: F");
     wrefresh(controlsWin);
 }
 
