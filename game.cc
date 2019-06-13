@@ -89,30 +89,9 @@ int game()
 	inputThread.join();
 
 
-	werase(blockWin);   // remove block window
-	wrefresh(blockWin);
-	delwin(blockWin);
+	restart = gameOver();
 
-
-    //mvwprintw(gameWin, 14, (gameWin_width/2)-6, "# Game Over # ");   // game over window
-    //dis_score();      // display score
-   // store_score(); // mvwprintw(gameWin, 18, (gameWin_width/2)-6, "Your score is: xx");
-	/*lastWin = newwin(lastWin_height, lastWin_width, lastWin_y, lastWin_x);
-    box(lastWin,0,0);
-    mvwprintw(lastWin, 14, lastWin_width/2 - 6, " GAME OVER !!!");
-    wrefresh(lastWin);*/
-    int a = gameOver();
-
-    if (a == -1){
-    	getch();
-    	endwin();
-    } else if( a == 0){
-    	restartGame();
-    }
-    //getch();
-
-	//endwin();
-
+    endwin();
 	return restart;
 }
 

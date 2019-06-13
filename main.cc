@@ -15,7 +15,7 @@ unsigned int **block_data;
 int setLevel;
 int checkerboard = 0;
 unsigned int max_piece_size = 4;
-unsigned int min_piece_size = 1;
+unsigned int min_piece_size = 4;
 PIECE piece;
 
 SCORE sc = {0,0};
@@ -25,21 +25,27 @@ WINDOW *menuWin, *gameWin, *blockWin, *hintWin, *storeWin, *scoreWin, *controlsW
 
 int main()
 {
-  int restart = 0;
-  int x = menu(); //Returns negative if user decided to quit. Otherwise game will start.
+  gameloop:
+    int restart = 0;
+    int x = menu(); //Returns negative if user decided to quit. Otherwise game will start.
 
-  if( x < 0 )
-  {
+    if( x < 0 )
+    {
       endwin();
       return(0);
-  }
+    }
 
-  restart = game();
+    restart = game();
 
-  while(restart)
-  {
-     restart = restartGame();
-  }
+    while(restart > 0)
+    {
+      restart = restartGame();
+    }
+
+    if(restart == 0)
+    {
+      goto gameloop;
+    }
 
   return 0;
 }
