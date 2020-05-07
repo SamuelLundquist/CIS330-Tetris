@@ -1,2 +1,4 @@
 theme: jekyll-theme-cayman
+title: C++ Tetris
+description: A version of tetris using ncurses and C++
 show_downloads: true
